@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="6303aad4-cf03-48e5-ab3d-09450801b2fb" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <autoOutline />
+      <alert class="caution">
+        <para>You must have six cards in your hand after your turn.</para>
+      </alert>
+      <para>Market Open cards (10) enables the player to add peddles of cannabis to their stash
+      (provided there is no heat). In order to end the current hand/round, any player may play a
+      Market Close (5) on their own Market Open (provided there is no heat). The money for the
+      round is totalled and a new hand is dealt to each player.</para>
+      <para>
+        <mediaLinkInline><image xlink:href="Market-Open"/></mediaLinkInline>
+        <mediaLinkInline><image xlink:href="Market-Close"/></mediaLinkInline>
+      </para>
+    </introduction>
+
+    <section address="Peddle">
+      <title>Peddle Cards (28)</title>
+      <content>
+        <para>Peddle cards are cards which make up the money in the game, indicating the sale of
+        cannabis to a particular value. There are six types: Home grown (6), Mexico (6),
+        Colombia (5), Jamaica (5), Panama (5), and Dr. Feelgood (1).</para>
+        <para>
+          <mediaLinkInline><image xlink:href="Peddle-Homegrown"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Peddle-Mexico"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Peddle-Columbia"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Peddle-Jamaica"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Peddle-Panama"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Peddle-Dr.Feelgood"/></mediaLinkInline>
+        </para>
+      </content>
+    </section>
+
+    <section address="Protection">
+      <title>Protection Cards (6)</title>
+      <content>
+        <para>Protection cards allow a player to protect their peddle cards against skim cards.
+        There are three types: Catch a buzz (2), Grab a snack (2), and Lust conquers all (2).
+        Dr. Feelgood, the highest valued peddle card, may never be protected.</para>
+        <para>Any combination of unprotected peddle cards can be protected so long as they do
+        not exceed the protection value.</para>
+        <para>
+          <mediaLinkInline><image xlink:href="Protection-CatchaBuzz"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Protection-GrabaSnack"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Protection-LustConquersAll"/></mediaLinkInline>
+        </para>
+      </content>
+    </section>
+
+    <section address="HeatOn">
+      <title>Heat On Cards (12)</title>
+      <content>
+        <para>Heat on cards represent police activity and are made up of 4 different varieties:
+        Bust (3), Detained (3), Felony (3), and Search &amp; seizure (3). A Heat on card played on another
+        player's "Market open" card prevents that player from peddling cannabis (until the corresponding
+        "Heat off" card is played).</para>
+        <para>
+          <mediaLinkInline><image xlink:href="HeatOn-Bust"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="HeatOn-Detained"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="HeatOn-Felony"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="HeatOn-SearchAndSeizure"/></mediaLinkInline>
+        </para>
+      </content>
+    </section>
+
+    <section address="HeatOff">
+      <title>Heat Off Cards (24)</title>
+      <content>
+        <para>Heat off cards are made up of Bust (5), Detained (5), Felony (5), and Search &amp; seizure (5).
+        Any of these cards played on the corresponding "Heat on" card will remove the heat and enable
+        the player to continue putting down Peddle cards.</para>
+        <para>
+          <mediaLinkInline><image xlink:href="HeatOff-Bust"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="HeatOff-Detained"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="HeatOff-Felony"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="HeatOff-SearchAndSeizure"/></mediaLinkInline>
+        </para>
+        <para>Pay fine/Heat Off cards (4) are played somewhat differently from the four other Heat Off cards.<lineBreak/>
+        When played on your "heated" <literal>Hassle Pile</literal> it may be used to "un-heat" yourself by
+        paying a fine of the smallest tabled Peddle card in your <literal>Stash Pile</literal> to the <literal>Wasted Pile</literal>!
+        (If you have no Peddle cards in your <literal>Stash Pile</literal> you <phrase>may not</phrase> take
+        the heat off with this card.)</para>
+        <para>
+          <mediaLinkInline><image xlink:href="HeatOff-Payfine"/></mediaLinkInline>
+        </para>
+      </content>
+    </section>
+
+    <section address="Nirvana">
+      <title>Nirvana Cards (6)</title>
+      <content>
+        <para>Nirvana cards give bonuses to players. There are two types: Stonehigh (5) and Euphoria (1).
+        Either of these cards will provide extra turns (Stonehigh: 1 turn. Euphoria: 2 turns) and cancel
+        any "heat on" card active on the player. In addition, the player receives a peddle card from every
+        other player: Stonehigh requires every player to hand over their lowest tabled peddle, whereas
+        Euphoria requires player to hand over their highest tabled peddle.</para>
+        <para>
+          <mediaLinkInline><image xlink:href="Nirvana-Stonehigh"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Nirvana-Euphoria"/></mediaLinkInline>
+        </para>
+      </content>
+    </section>
+
+    <section address="Paranoia">
+      <title>Paranoia Cards (8)</title>
+      <content>
+        <para>Paranoia cards give penalties to players and come in three sickening varieties:
+        Sold out (4), Doublecrossed (3) and Utterly wiped out (1).</para>
+        <para>
+          <mediaLinkInline><image xlink:href="Paranoia-Soldout"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Paranoia-Doublecrossed"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Paranoia-UtterlyWipedOut"/></mediaLinkInline>
+        </para>
+         <list class="bullet">
+          <listItem><para>If any of these cards are played on the <literal>Wasted Pile</literal>,
+          Sold out forces the player to skip a turn and lose their lowest unprotected peddle; Doublecrossed
+          forces the player to skip two turns and lose their highest unprotected peddle; and Utterly wiped
+          out forces the player to skip two turns, put all peddle cards (including unprotected) on the
+          <literal>Wasted Pile</literal> and must reopen with a new Market Open card.</para></listItem>
+          <listItem><para>Whenever any of these cards are played on the <literal>Wasted Pile</literal>,
+          each player must pass a card from their hand to their neighbor: this can allow the play of
+          one of the less dangerous Paranoia cards to enable a player to pass on a more dangerous
+          one.</para></listItem>
+          <listItem><para>If the cards are found unplayed at the end of a hand, a score penalty is
+          assessed: $25,000 for Sold out, $50,000 for Doublecrossed, and $100,000 for Utterly wiped
+          out.</para></listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="Skim">
+      <title>Skim Cards (5)</title>
+      <content>
+        <para>Skim cards allow a player to steal peddle cards on the table from other players.
+        Steal your neighbor's pot (4) allows the player to take any peddle card from another
+        player, and The Banker (1) allows the player to steal 20 percent of every player's
+        unprotected tabled peddle money at the end of the round.</para>
+        <para>You cannot steal money from an opponent if you or they have heat on.</para>
+        <para>
+          <mediaLinkInline><image xlink:href="Skim-StealYourNeighborsPot"/></mediaLinkInline>
+          <mediaLinkInline><image xlink:href="Skim-TheBanker"/></mediaLinkInline>
+        </para>
+      </content>
+    </section>
+
+  </developerConceptualDocument>
+</topic>

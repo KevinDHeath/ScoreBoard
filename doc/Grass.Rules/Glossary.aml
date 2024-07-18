@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="e6677c12-f57b-405b-8bbc-a6454ff12779" revisionNumber="1">
+  <developerGlossaryDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <glossary>
+
+      <glossaryEntry>
+        <terms>
+          <term termId="GrassStack">Grass Stack</term>
+        </terms>
+        <definition>
+          <para>All Draw cards are obtained from here.</para>
+        </definition>
+      </glossaryEntry>
+
+      <glossaryEntry>
+        <terms>
+          <term>Hand</term>
+        </terms>
+        <definition>
+          <para>A game can consist of multiple hands until a winner is declared. It requires all the
+            cards to be thoroughly shuffled and placed face down. When all the cards in the pile are
+            used, or someone plays a Market Close, the hand is over.</para>
+        </definition>
+      </glossaryEntry>
+
+      <glossaryEntry>
+        <terms>
+          <term>Hassle Pile</term>
+        </terms>
+        <definition>
+          <para>Each player starts one with a Market Open card. Opponents put "heat" on your Hassle Pile.
+          You "un-heat" yourself with "heat of" cards so you can build your Stash with Peddle cards.</para>
+        </definition>
+      </glossaryEntry>
+
+      <glossaryEntry>
+        <terms>
+          <term>Round</term>
+        </terms>
+        <definition>
+          <para>A hand consists of multiple rounds where each player takes a card from the Grass Stack
+          and makes a play.</para>
+        </definition>
+      </glossaryEntry>
+
+      <glossaryEntry>
+        <terms>
+          <term termId="StashPile">Stash Pile</term>
+        </terms>
+        <definition>
+          <para>Each player's Peddle cards are placed here in full view of all players. This ia also
+          known as the player's marketplace.</para>
+        </definition>
+      </glossaryEntry>
+
+      <glossaryEntry>
+        <terms>
+          <term>Wasted Pile</term>
+        </terms>
+        <definition>
+          <para>All Discards go here. Only Nirvana and Paranoia cards come into play when placed here.</para>
+        </definition>
+      </glossaryEntry>
+
+    </glossary>
+  </developerGlossaryDocument>
+</topic>

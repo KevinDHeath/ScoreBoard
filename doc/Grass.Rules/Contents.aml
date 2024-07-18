@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="da61c3ff-8f7f-4fe0-a254-dd4e4a27416f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <summary>
+      <table>
+        <row>
+          <entry><para><mediaLinkInline><image xlink:href="Logo"/></mediaLinkInline></para></entry>
+          <entry><quote>The Grass logo is a Registered ® Trade mark.<lineBreak/>
+          Manufactured by <externalLink><linkText>Totalwell Enterprises, Inc</linkText><linkUri>https://totalwellenterprises.com/</linkUri></externalLink><lineBreak/>
+          #3, 8th Fl., Kuo Tung Bldg.<lineBreak/>
+          102 Tun Hwa S. Rd., Sec. 1<lineBreak/>
+          Taipei, Taiwan<lineBreak/>
+          Copyright © Jeff London 1979, 2019.
+          </quote></entry>
+        </row>
+      </table>
+    </summary>
+
+    <introduction>
+      <para><lineBreak/>Grass is an attack-strategy game, meaning that besides trying to be the first to achieve
+      the goal of a $250,000 score, each player tries to stop their competitors from getting rich. This may take
+      one or even up to seven or eight hands depending, of course, upon the competition. And like the real thing,
+      it's easy to learn.</para>
+    </introduction>
+
+    <relatedTopics>
+      <externalLink>
+          <linkText>Grass - The card game</linkText>
+          <linkUri>https://www.grasscardgame.com/</linkUri>
+      </externalLink>
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

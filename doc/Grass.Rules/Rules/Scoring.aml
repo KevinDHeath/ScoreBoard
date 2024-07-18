@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="09a5cd59-3792-459f-a75a-85fa6b6f32f2" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <list class="ordered">
+        <listItem><para>Each player totals the Peddle Money in their <literal>Stash Pile</literal>.</para></listItem>
+        <listItem><para>If the Banker card is held then that player skims 20% off the unprotected tabled Peddle cards in
+        each opponents' <literal>Stash Pile</literal>. Opponents subtract the skim amount from their scores.</para></listItem>
+        <listItem><para>Each player subtracts amount of the highest single Peddle card held in their hand.</para></listItem>
+        <listItem><para>Each player subtracts total of fines of the Paranoia cards held in their hand.</para></listItem>
+        <listItem><para>Total net score for the hand.</para></listItem>
+        <listItem><para>$25,000 bonus goes to the player with the highest net score for that hand.</para></listItem>
+      </list>
+      <para><ui>Gone broke?</ui> If your end-of-round total is less than zero, you can round it up to 0. If you're
+      in profit in a first round, but negative in the next, your total goes down accordingly. At the start of each
+      round, broke accounts are generously rounded up to 0.</para>
+     </introduction>
+
+    <relatedTopics>
+      <link xlink:href="4710c10c-447a-4f25-80a5-b4a891116195">Final Score for Sample Hand</link>
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

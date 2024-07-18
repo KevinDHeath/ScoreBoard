@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b0a2c855-eb57-48fb-b50c-ec7e897aa534" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <procedure>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para><phrase>Add</phrase> the following cards to the deck:<lineBreak/>
+            <ui>Protected cards:</ui> Lust conquers all (2), Grab a snack (2), and Catch a buzz (2);<lineBreak/>
+            <ui>Skim cards:</ui> Steal your neighbor's pot (4), and Banker (1).
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Shuffle thoroughly, deal, and play with the additional cards following these rules:<lineBreak/>
+            <ui>Steal your neighbor's pot</ui> cards when held may be placed on an opponent's <literal>Hassle
+            Pile</literal> to relieve him of his <phrase>largest</phrase> tabled Peddle card and place it in your
+            own <literal>Stash Pile</literal> pile (once you've made your haul the opponent places the original
+            top card back on top of his <literal>Hassle Pile</literal>).<lineBreak/>
+            You may not place this card on an opponent while the Heat is on your <literal>Hassle
+            Pile</literal>, but you may play it on an opponent while they are under Heat.<lineBreak/>
+            <ui>Protected</ui> cards allow you to protect your <literal>Stash Pile</literal> from <ui>Steal
+            your neighbor's pot</ui> cards. They can only protect, however, Peddle Money already tabled.<lineBreak/>
+            You may protect a $50,000 Peddle Money card or any combinations of $50,000 or less - but not for an
+            amount greater than $50,000. And a $25,000 Protected card works for only that amount, combination, or
+            less.<lineBreak/>
+            <ui>Banker card</ui>: Whoever holds this at the end of the hand can skim 20% of each opponent's
+            <phrase>unprotected</phrase> tabled Peddle cards. It may be discarded on the <literal>Wasted Pile</literal>
+            during a hand, in which case it wouldn't come into play during the hand, or it may be negotiated for
+            another card.<lineBreak/>
+            Note the <phrase>Scoring Rules</phrase> for proper calculations.</para>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+
+  </developerHowToDocument>
+</topic>

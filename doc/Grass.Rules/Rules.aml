@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2bc71aab-59b3-4100-a0c8-d9e9900dfe32" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>These are the official rules and guidelines for playing the game of <ui>Grass</ui>. Any disagreement or
+      misunderstanding must be referred to these pages.</para>
+      <para>In your convenient <ui>Grass</ui> baggie you will find an introduction, 104 cards and the scoring instructions
+      along with these rules. There are 27 different cards in 7 easy to learn suits. Headings of the cards come in 7
+      varieties of colors.</para>
+      <para>After <phrase>thoroughly</phrase> shuffling the deck the dealer deals each player six cards face down. The
+      first player to the left of the dealer opens the game by drawing from the <literal>Grass Stack</literal>.
+      Players continue to draw and play in turn moving clockwise around the table.</para>
+      <para><mediaLinkInline><image xlink:href="Terminology"/></mediaLinkInline></para>
+    </introduction>
+
+    <relatedTopics>
+      <link xlink:href="e6677c12-f57b-405b-8bbc-a6454ff12779" />
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

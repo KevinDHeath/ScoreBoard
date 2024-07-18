@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c258b88f-91e7-469f-816d-1cdcd8ae70b1" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>You may be wondering what all the fuss with this game is about at this point. Playing without the
+      missing cards and additional rules is holding you back from the full high - but more is coming soon.</para>
+      <para>With the same cards shuffle, deal and play the game with these additions:<lineBreak/>
+      You will find that sometimes you can't draw the cards you need (i.e. Market Open, the right Heat Off card, etc.).
+      Negotiating for needed cards with another player may be the answer. You may now negotiate to exchange with or
+      for any one card in the deck that someone is holding (a hand-to-hand exchange), or negotiate to exchange one
+      or more cards on the table (a stash-to-stash exchange), or negotiate both deals (hand-to-hand, stash-to-stash)
+      with the same player.</para>
+      <para><ui>Negotiating</ui> can only be initiated by or with the player who has drawn from the <literal>Grass
+      Stack</literal> and holds seven cards.<lineBreak/>
+      You may not negotiate for any cards in the <literal>Wasted Pile.</literal></para>
+      <para><ui>Remember!</ui> You may only have six cards in your hand at the end of each turn.</para>
+    </introduction>
+
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6fbb39b6-590e-4707-b8c9-94c0f84829d8" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <procedure>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>Remove the following cards from the deck:<lineBreak/>
+            Stonehigh (5), Euphoria (1), Lust conquers all (2) Grab a snack, (2), Catch a buzz (2),
+            Sold out (4), Doublecrossed (3), Utterly wiped out (1), Steal your Neighbor's pot (4), Banker (1).
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Shuffle the remainder of the deck <ui>thoroughly</ui> and deal:<lineBreak/>
+            Dealer begins with player to his left, deals six cards to each player (minimum of two players,
+            maximum of six). Place the remaining cards face down in a pile called the <literal>Grass Stack</literal>.
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Examine your hand:<lineBreak/>The objective of the game is to put down as many <ui>Peddle</ui>
+            cards (cards with dollar amounts on them) with as high a total as you can.<lineBreak/>
+            Before you can place Peddle cards down on the table (creating your <literal>Stash Pile</literal>)
+            you must have a <ui>Market Open</ui> card to begin with (which creates your <literal>Hassle Pile</literal>
+            when played in front of you).<lineBreak/>
+            Player to the dealer's left begins by drawing a card from the <literal>Grass Stack</literal>
+            (he now holds seven cards in his hand) and playing a card (if he has a Market Open card played in front to begin
+            his <literal>Hassle Pile</literal> or discarding into the <literal>Wasted Pile</literal>
+            (next to the <literal>Grass Stack</literal>).<lineBreak/>
+            At the end of a turn you can not have more or less then six cards in your hand.<lineBreak/>
+            You can not draw from the <literal>Wasted Pile</literal>.
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Play until one player can open his <literal>Hassle Pile</literal> with a Market Open card.<lineBreak/>
+            Once you've put down a Market Open card you must wait for your next turn to put down a Peddle (money)
+            card.<lineBreak/>
+            Any other player may stop you from tabling a Peddle card - even if the other player hasn't yet opened
+            with a Market Open card - by playing a <ui>Heat On</ui> card on your Market Open card.<lineBreak/>
+            You do not have to discard if you have played a card and only six cards remain in your hand.
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>How to reopen after Market Open card has been covered:<lineBreak/>
+            To be able to again put down Peddle cards the player with a Heat On card covering his Market Open card
+            must wait for a <ui>Heat Off</ui> card that <phrase>corresponds</phrase> with the Heat On card (these are four
+            varieties). Then move the Market Open card back to the top of the pile.<lineBreak/>
+            bitmap<lineBreak/>
+            Or you may reopen with a <ui>Pay fine/Heat Off</ui> card, <phrase>if</phrase> you already have Peddle cards down.
+            Place the Pay fine/Heat Off card on your <literal>Hassle Pile</literal> and pay a fine of your
+            smallest tabled Peddle card to the <literal>Wasted Pile</literal> (discard). Then move the
+            Market Open card back to the top of the pile.<lineBreak/>
+            You need only one Market Open card at this time so if you receive others you may safely discard them.<lineBreak/>
+            You may not reopen a <literal>Hassle Pile</literal> with a Market Open card.
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>How each hand ends:<lineBreak/>
+            When any player puts a <ui>Market Close</ui> card on top of his <literal>Hassle Pile</literal>
+            - which must be started and which cannot have a Heat On card on top of it - the hand ends.<lineBreak/>
+            Or it ends automatically when the <literal>Grass Stack</literal> dwindles to nothing.
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>How to score a hand:<lineBreak/>
+            Each player totals the Peddle Money in his <literal>Stash Pile</literal> (on the table) and
+            subtracts the amount of the highest single Peddle card still held in his hand.<lineBreak/>
+            A $25,000 bonus goes to the player with the highest score for that hand.
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+
+  </developerHowToDocument>
+</topic>

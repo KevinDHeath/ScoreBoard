@@ -1,0 +1,21 @@
+<Project>
+
+  <!-- CI builds -->
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <DeterministicSourcePaths Condition="'$(GITHUB_ACTIONS)' == 'true'">true</DeterministicSourcePaths> <!-- NuGet Health: Deterministic -->
+    <EmbedAllSources>true</EmbedAllSources> <!-- NuGet Health: Source Links -->
+  </PropertyGroup>
+
+  <!-- Package Information -->
+  <PropertyGroup Condition="'$(PackageReadmeFile)' != ''">
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(PackageReadmeFile)' != ''">
+    <None Include="..\..\docs\icon.png" Pack="true" PackagePath="" Visible="false" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics>
+  <Topic id="da61c3ff-8f7f-4fe0-a254-dd4e4a27416f" visible="True" isDefault="true" title="Introduction" />
+  <Topic id="2bc71aab-59b3-4100-a0c8-d9e9900dfe32" visible="True" isExpanded="true" title="Official Rules">
+    <Topic id="6303aad4-cf03-48e5-ab3d-09450801b2fb" visible="True" title="Playing Each Card" />
+    <Topic id="4710c10c-447a-4f25-80a5-b4a891116195" visible="True" title="A Sample Hand" />
+    <Topic id="09a5cd59-3792-459f-a75a-85fa6b6f32f2" visible="True" title="How to Score Each Hand" />
+    <Topic id="c0019bc3-807a-4eb6-8142-fbc2acda33ae" visible="True" title="Negotiation Regulations" />
+  </Topic>
+  <Topic id="bcf09500-a210-47cf-8728-a03611bb0d26" visible="True" isExpanded="true" title="How to Start Slowly">
+    <Topic id="6fbb39b6-590e-4707-b8c9-94c0f84829d8" visible="True" title="Your First Hand" />
+    <Topic id="c258b88f-91e7-469f-816d-1cdcd8ae70b1" visible="True" title="Second Hand" />
+    <Topic id="b0a2c855-eb57-48fb-b50c-ec7e897aa534" visible="True" title="Third Hand" />
+    <Topic id="f8138c71-b8dd-4bc9-85b0-8625c617dc16" visible="True" title="Fourth Hand" />
+  </Topic>
+  <Topic id="f3d1fbdd-238f-4154-b8c3-ae5ca8bd54b9" visible="True" isSelected="true" title="Sample games" />
+  <Topic id="e6677c12-f57b-405b-8bbc-a6454ff12779" visible="True" apiParentMode="InsertAfter" title="Glossary" />
+</Topics>

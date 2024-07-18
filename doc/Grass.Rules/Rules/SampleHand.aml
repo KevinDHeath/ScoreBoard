@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4710c10c-447a-4f25-80a5-b4a891116195" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>The object or goal of the <b>Grass</b> game is to be the first player to score $250,000 of Peddle Money
+      in one or a series of hands. If more than one player reaches $250,000 in the same hand the winner is the one
+      with the highest score.</para>
+    </introduction>
+
+    <section address="ScoringandStrategy">
+      <title>Scoring and Strategy</title>
+      <content>
+        <para>The following example is an excellent reference to aid you in all aspects of scoring as well as giving
+        you insights to some of the intricacies of strategy. The diagram shows a game that has just been ended by
+        Player #1 in a four hand game.</para>
+        <table>
+          <row>
+            <entry></entry>
+            <entry><quote><ui>Player #3</ui><lineBreak/>
+            Heat Off/Search &amp; seizure<lineBreak/>
+            Doublecrossed ($50,000 Fine)<lineBreak/>
+            $50,000 Peddle<lineBreak/>
+            $5,000 Peddle<lineBreak/>
+            $25,000 Peddle<lineBreak/>
+            Pay fine/Heat Off</quote></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry><quote><ui>Player #2</ui><lineBreak/>
+            Market Close<lineBreak/>
+            Protected $50,000<lineBreak/>
+            Sold out ($25,000 Fine)<lineBreak/>
+            Steal your neighbor's pot<lineBreak/>
+            Heat Off/Detained<lineBreak/>
+            Heat Off/Felony</quote></entry>
+            <entry></entry>
+            <entry><quote><ui>Player #4</ui><lineBreak/>
+            Utterly wiped out ($100,000 Fine)<lineBreak/>
+            Protected $25,000<lineBreak/>
+            Heat Off/Detained<lineBreak/>
+            Stonehigh<lineBreak/>
+            Market Open<lineBreak/>
+            $25,000 Peddle</quote></entry>
+          </row>
+         <row>
+            <entry></entry>
+            <entry><quote><ui>Player #1</ui><lineBreak/>
+            Market Open<lineBreak/>
+            Stonehigh<lineBreak/>
+            $5,000 Peddle<lineBreak/>
+            Banker<lineBreak/>
+            Heat Off/Bust<lineBreak/>
+            Pay Fine/Heat Off</quote></entry>
+            <entry></entry>
+          </row>
+        </table>
+      </content>
+    </section>
+
+    <section address="StrategyPoints">
+      <title>Strategy Points</title>
+      <content>
+        <para>This game was well into the <literal>Grass Stack</literal> when Player #1 decided to end
+        the game by playing a Market Close card on his <literal>Hassle Pile</literal>. Although
+        Player #3 had more tabled Peddle money, Player #1 ended the hand because:</para>
+        <list class="bullet">
+          <listItem><para>He had passed a Doublecrossed and the Utterly wiped out cards earlier and knew he might get
+          one back soon. Since those cards were in his competitors hands he knew that fines would bring down there net
+          scores. Better they should pay the fines than he!</para></listItem>
+          <listItem><para>He held the Banker card and a lot of Peddle money was on the table. His skim of 20% would be
+          substantial.</para></listItem>
+          <listItem><para>He had only $5,000 Peddle in hand and thus would have very little to subtract from his gross
+          Peddle.</para></listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="FinalScore">
+      <title>Final Score</title>
+      <content>
+        <alert class="note">
+          <para>The holder of the Banker card skims 20% from the unprotected tabled Peddle cards in each opponents stash.
+          Opponents subtract the skim amount from their score.</para>
+        </alert>
+        <table>
+          <row>
+            <entry></entry>
+            <entry><ui>Player #1</ui></entry>
+            <entry><ui>Player #2</ui></entry>
+            <entry><ui>Player #3</ui></entry>
+            <entry><ui>Player #4</ui></entry>
+          </row>
+          <row>
+            <entry><para>1. Peddle Money</para></entry>
+            <entry><para>$160,000</para></entry>
+            <entry><para>$65,000</para></entry>
+            <entry><para>$165,000</para></entry>
+            <entry><para>$75,000</para></entry>
+          </row>
+          <row>
+            <entry><para>2. Banker Skims 20%</para></entry>
+            <entry><para>41,000</para></entry>
+            <entry><para>(3,000)</para></entry>
+            <entry><para>(33,000)</para></entry>
+            <entry><para>(5,000)</para></entry>
+          </row>
+          <row>
+            <entry><para>3. Less Largest Held Peddle card in Hand</para></entry>
+            <entry><para>(5,000)</para></entry>
+            <entry><para>0</para></entry>
+            <entry><para>(50,000)</para></entry>
+            <entry><para>(25,000)</para></entry>
+          </row>
+          <row>
+            <entry><para>4. Less Paranoia Fines</para></entry>
+            <entry><para>0</para></entry>
+            <entry><para>(25,000)</para></entry>
+            <entry><para>(50,000)</para></entry>
+            <entry><para>(100,000)</para></entry>
+          </row>
+          <row>
+            <entry><para>5. Total Net Score For Hand</para></entry>
+            <entry><para>196,000</para></entry>
+            <entry><para>37,000</para></entry>
+            <entry><para>32,000</para></entry>
+            <entry><para>(55,000)</para></entry>
+          </row>
+          <row>
+            <entry><para>6. Bonus</para></entry>
+            <entry><para>25,000</para></entry>
+            <entry><para></para></entry>
+            <entry><para></para></entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry><para>Total Hand</para></entry>
+            <entry><para>$221,000</para></entry>
+            <entry><para>$37,000</para></entry>
+            <entry><para>$32,000</para></entry>
+            <entry><para>$(55,000)</para></entry>
+          </row>
+        </table>
+        <para>Yes, like Player #4 you can end up very much in the hole while playing this dangerous game! These scores
+        are added to the other hands and a running score is kept until the first person reaches $250,000. That person 
+        then becomes the winner of the game.<lineBreak/>
+        This may take one or even up to seven or eight hands depending, of course, upon the competition.</para>
+        <alert class="note">
+          <para>If you feel you are mastering the game of <ui>Grass</ui> and are in the ranks of pros who can handle big
+          deals then you may increase the goal of the game to $500,000 or even $1,000,000.</para>
+        </alert>
+        <para>The question is, who is capable of making the biggest <ui>Score</ui>?</para>
+      </content>
+    </section>
+
+  </developerConceptualDocument>
+</topic>

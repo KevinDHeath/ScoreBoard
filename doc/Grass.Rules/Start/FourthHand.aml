@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f8138c71-b8dd-4bc9-85b0-8625c617dc16" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <procedure>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para><phrase>Add</phrase> the following cards to the deck:<lineBreak/>
+            <ui>Nirvana cards:</ui> Stonehigh (5) and Euphoria (1).<lineBreak/>
+            <ui>Paranoia cards:</ui> Sold out (4), Doublecrossed (3), and Utterly wiped out (1).
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Shuffle thoroughly, deal, and play with the additional cards following these rules:<lineBreak/>
+            <ui>Nirvana cards: Stonehigh</ui> cards when played (you may want to hold them a while for strategy)
+            give you an extra turn (one more draw), eliminate any Heat On cards (put the Heat On card underneath
+            your <literal>Hassle Pile</literal> and return the Market Open card to the top, and require
+            each player to give you the <phrase>smallest</phrase> tabled Peddle card in their <literal>Stash Pile</literal>
+            (to be placed directly into your <literal>Stash Pile</literal>).<lineBreak/>
+            Place the Stonehigh card on the <literal>Wasted Pile</literal> to bring it into play. This is
+            not a discard.<lineBreak/>
+            The one <ui>Euphoria</ui> card works the same as a Stonehigh card, but you get the <phrase>highest</phrase>
+            tabled Peddle card from each player.<lineBreak/>
+            Protected cards <phrase>do</phrase> protect you from the Nirvana cards.<lineBreak/>
+            <ui>Paranoia cards:</ui> If any of the Paranoia cards is discarded onto the <literal>Wasted Pile</literal>
+            each player must pass one card from his hand, face down, to the player on his left.<lineBreak/>
+            <ui>But</ui><lineBreak/>
+            When <phrase>you</phrase> play a <ui>Sold out</ui> card you lose one turn and must put your <phrase>lowest</phrase>
+            tabled unprotected Peddle card (if none are tabled just lose one turn - this is true of all Paranoia cards)
+            on the <literal>Wasted Pile</literal>.<lineBreak/>
+            When you play a <ui>Doublecrossed</ui> card you lose two turns and you must put your <phrase>highest</phrase>
+            tabled unprotected Peddle card on the <literal>Wasted Pile</literal>.<lineBreak/>
+            When you play the <ui>Utterly wiped out</ui> card you lose two turns and you must put <phrase>all</phrase>
+            you tabled unprotected Peddle cards and <phrase>all</phrase> your <literal>Hassle Pile</literal>
+            cards on the <literal>Wasted Pile,</literal> and must reopen with a new Market Open card.<lineBreak/>
+            Remember! Protected cards <phrase>do</phrase> protect your tabled Peddle cards from Paranoia cards.
+            <lineBreak/><lineBreak/></para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Scoring when playing with the additional cards.<lineBreak/>
+            If your hand ends and you're holding any Paranoia cards, the fines for each card are as follows
+            (subtract the amount indicated below from your gross score):<lineBreak/>
+            <ui>Sold out</ui> $25,000<lineBreak/>
+            <ui>Doublecrossed</ui> $50,000<lineBreak/>
+            <ui>Utterly wiped out</ui> $100,000</para>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+
+  </developerHowToDocument>
+</topic>

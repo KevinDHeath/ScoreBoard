@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Import the common properties to support NuGet restore -->
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <!-- A target framework version is required by Visual Studio.  It can be any version with a targeting pack installed. -->
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <!-- The configuration and platform will be used to determine which assemblies to include from solution and
+				 project documentation sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3f32f5a0-10f2-4976-ad97-a20bdac00816}</ProjectGuid>
+    <SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>Documentation</Name>
+    <!-- SHFB properties -->
+    <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
+    <OutputPath>.\bin\score\</OutputPath>
+    <BuildLogFile>.\bin\Grass.Rules.log</BuildLogFile>
+    <HelpTitle>Grass game</HelpTitle>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <HelpFileFormat>Website</HelpFileFormat>
+    <PresentationStyle>Default2022</PresentationStyle>
+    <HtmlHelpName>Documentation</HtmlHelpName>
+    <Language>en-US</Language>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="..\src\Grass.Logic\bin\Debug\net8.0\Grass.Logic.dll" />
+      <DocumentationSource sourceFile="..\src\Grass.Logic\bin\Debug\net8.0\Grass.Logic.xml" />
+    </DocumentationSources>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="Grass.Logic" isDocumented="True">Provides classes that are used by the Grass game.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Grass.Logic.Models" isDocumented="True">Provides data model classes used by the Grass game.</NamespaceSummaryItem>
+    </NamespaceSummaries>
+    <NamingMethod>MemberName</NamingMethod>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <VisibleItems>ProtectedInternalAsProtected, NonBrowsable</VisibleItems>
+    <SyntaxFilters>None</SyntaxFilters>
+    <CleanIntermediates>True</CleanIntermediates>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <IndentHtml>False</IndentHtml>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <NamespaceGrouping>False</NamespaceGrouping>
+    <MaximumGroupParts>2</MaximumGroupParts>
+    <Preliminary>False</Preliminary>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <PlugInConfigurations>
+      <PlugInConfig id="Additional Content Only" enabled="True">
+        <configuration />
+      </PlugInConfig>
+    </PlugInConfigurations>
+  </PropertyGroup>
+  <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
+			 the build.  The others are optional common platform types that may appear. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <!-- Import the common build targets during NuGet restore because before the packages are being installed, $(SHFBROOT) is not set yet -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="'$(MSBuildRestoreSessionId)' != ''" />
+  <!-- Import the SHFB build targets during build -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" Condition="'$(MSBuildRestoreSessionId)' == ''" />
+  <!-- The pre-build and post-build event properties must appear *after* the targets file import in order to be
+			 evaluated correctly. -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Grass.Rules" />
+    <Folder Include="Grass.Rules\media\" />
+    <Folder Include="Grass.Rules\Rules\" />
+    <Folder Include="Grass.Rules\Start\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ContentLayout Include="Grass.Rules\Content Layout.content" />
+    <None Include="Grass.Rules\Samples.aml" />
+    <None Include="Grass.Rules\Glossary.aml" />
+    <None Include="Grass.Rules\Contents.aml" />
+    <None Include="Grass.Rules\Rules.aml" />
+    <None Include="Grass.Rules\Rules\Negotiation.aml" />
+    <None Include="Grass.Rules\Rules\Scoring.aml" />
+    <None Include="Grass.Rules\Rules\SampleHand.aml" />
+    <None Include="Grass.Rules\Rules\Playing.aml" />
+    <None Include="Grass.Rules\Start.aml" />
+    <None Include="Grass.Rules\Start\FirstHand.aml" />
+    <None Include="Grass.Rules\Start\SecondHand.aml" />
+    <None Include="Grass.Rules\Start\ThirdHand.aml" />
+    <None Include="Grass.Rules\Start\FourthHand.aml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Grass.Rules\media\Terminology.png">
+      <ImageId>Terminology</ImageId>
+      <AlternateText>Terminology</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Grass.gif">
+      <ImageId>Logo</ImageId>
+      <AlternateText>Logo</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOff-Bust.png">
+      <ImageId>HeatOff-Bust</ImageId>
+      <AlternateText>Bust</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOff-Detained.png">
+      <ImageId>HeatOff-Detained</ImageId>
+      <AlternateText>Detained</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOff-Felony.png">
+      <ImageId>HeatOff-Felony</ImageId>
+      <AlternateText>Felony</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOff-Payfine.png">
+      <ImageId>HeatOff-Payfine</ImageId>
+      <AlternateText>Pay fine</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOff-SearchAndSeizure.png">
+      <ImageId>HeatOff-SearchAndSeizure</ImageId>
+      <AlternateText>Search and seizure</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOn-Bust.png">
+      <ImageId>HeatOn-Bust</ImageId>
+      <AlternateText>Bust</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOn-Detained.png">
+      <ImageId>HeatOn-Detained</ImageId>
+      <AlternateText>Detained</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOn-Felony.png">
+      <ImageId>HeatOn-Felony</ImageId>
+      <AlternateText>Felony</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\HeatOn-SearchAndSeizure.png">
+      <ImageId>HeatOn-SearchAndSeizure</ImageId>
+      <AlternateText>Search and seizure</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Nirvana-Euphoria.png">
+      <ImageId>Nirvana-Euphoria</ImageId>
+      <AlternateText>Euphoria</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Nirvana-Stonehigh.png">
+      <ImageId>Nirvana-Stonehigh</ImageId>
+      <AlternateText>Stonehigh</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Market-Close.png">
+      <ImageId>Market-Close</ImageId>
+      <AlternateText>Market Close</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Market-Open.png">
+      <ImageId>Market-Open</ImageId>
+      <AlternateText>Market Open</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Paranoia-Doublecrossed.png">
+      <ImageId>Paranoia-Doublecrossed</ImageId>
+      <AlternateText>Doublecrossed</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Paranoia-Soldout.png">
+      <ImageId>Paranoia-Soldout</ImageId>
+      <AlternateText>Sold out</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Paranoia-UtterlyWipedOut.png">
+      <ImageId>Paranoia-UtterlyWipedOut</ImageId>
+      <AlternateText>Utterly wiped out</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Peddle-Columbia.png">
+      <ImageId>Peddle-Columbia</ImageId>
+      <AlternateText>Columbia</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Peddle-Dr.Feelgood.png">
+      <ImageId>Peddle-Dr.Feelgood</ImageId>
+      <AlternateText>Dr.Feelgood</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Peddle-Jamaica.png">
+      <ImageId>Peddle-Jamaica</ImageId>
+      <AlternateText>Jamaica</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Peddle-Homegrown.png">
+      <ImageId>Peddle-Homegrown</ImageId>
+      <AlternateText>Homegrown</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Peddle-Mexico.png">
+      <ImageId>Peddle-Mexico</ImageId>
+      <AlternateText>Mexico</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Peddle-Panama.png">
+      <ImageId>Peddle-Panama</ImageId>
+      <AlternateText>Panama</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Protection-CatchaBuzz.png">
+      <ImageId>Protection-CatchaBuzz</ImageId>
+      <AlternateText>Catch a buzz</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Protection-GrabaSnack.png">
+      <ImageId>Protection-GrabaSnack</ImageId>
+      <AlternateText>Grab a snack</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Protection-LustConquersAll.png">
+      <ImageId>Protection-LustConquersAll</ImageId>
+      <AlternateText>Lust conquers all</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Skim-StealYourNeighborsPot.png">
+      <ImageId>Skim-StealYourNeighborsPot</ImageId>
+      <AlternateText>Steal your neighbors pot</AlternateText>
+    </Image>
+    <Image Include="Grass.Rules\media\Skim-TheBanker.png">
+      <ImageId>Skim-TheBanker</ImageId>
+      <AlternateText>The Banker</AlternateText>
+    </Image>
+  </ItemGroup>
+</Project>

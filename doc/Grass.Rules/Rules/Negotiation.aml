@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c0019bc3-807a-4eb6-8142-fbc2acda33ae" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>You may negotiate with or for any card in the deck. Negotiations can only be initiated by or with the player
+      who has drawn from the <literal>Grass Stack</literal> and hold seven cards.</para>
+    </introduction>
+
+    <procedure>
+      <title>The basic negotiations open are:</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>Direct hand to hand, one card for one card exchanges. Remember, each player may only hold six cards
+            in his hand for play to continue.</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>You may negotiate for and with tabled Peddle money. In this case, payment is made only from one
+            <literal>Stash Pile</literal> to another <literal>Stash Pile</literal>.
+            (One or more Peddle cards may be exchanged.)</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>You may negotiate a combination deal of (1) and (2) but when completed, each player must still have
+            six cards in his hand.</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>You may <phrase>not</phrase> negotiate for any cards in the <literal>Wasted Pile</literal>.</para>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+
+  </developerHowToDocument>
+</topic>

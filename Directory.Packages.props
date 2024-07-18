@@ -1,0 +1,20 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- These packages have at least one vulnerability with high severity -->
+    <PackageVersion Include="System.Text.Json" Version="8.0.4" />                                      <!-- 07/2024 -->
+
+    <!-- These packages have at least one update -->
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" /> <!-- 03/2024 -->
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />             <!-- 03/2024 -->
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />                          <!-- 02/2024 -->
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.8" />                         <!-- 02/2024 -->
+    <PackageVersion Include="System.Memory" Version="4.5.5" />                                         <!-- 05/2022 -->
+  </ItemGroup>
+
+</Project>

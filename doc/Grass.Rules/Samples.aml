@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="f3d1fbdd-238f-4154-b8c3-ae5ca8bd54b9" revisionNumber="1">
+  <developerOrientationDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>These are examples of what the user interface would look like. The pages
+      have been generated using a test feature that has logic to act for each player
+      in determining how their cards are played. This makes decisions only on what is
+      visible to all players and the cards in their own hand.</para>
+      <list class="bullet">
+        <listItem><para><externalLink><linkText>Game over</linkText>
+          <linkUri>./samples/GameOver/Amy.html</linkUri></externalLink><lineBreak/>
+          Always shows the cards in hand for all players at the end of the game, and
+          the score cards for each hand played in the game.</para></listItem>
+        <listItem><para><externalLink><linkText>In progress</linkText>
+          <linkUri>./samples/InProgress/Amy.html</linkUri></externalLink><lineBreak/>
+          Only shows the specific players cards in hand, and the score cards for any
+          previous hands completed in the game. A button is provided to simulate what
+          the player would see when they display there own details.</para></listItem>
+        <listItem><para><externalLink><linkText>Long game</linkText>
+          <linkUri>./samples/LongGame/Amy.html</linkUri></externalLink><lineBreak/>
+          This is another completed game, however the target was set to $500,000 which
+          resulted in more hands having to be played.</para></listItem>
+      </list>
+    </introduction>
+  </developerOrientationDocument>
+</topic>
