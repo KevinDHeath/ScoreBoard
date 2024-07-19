@@ -1,7 +1,88 @@
-﻿@page "/"
+@page "/"
+@rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Games</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="columns m-1 is-multiline">
 
-Welcome to your new app.
+  <div class="column is-4-tablet is-4-desktop">
+    <div class="card">
+      <header class="card-header">
+        <span class="card-header-title is-centered">In progress...</span>
+      </header>
+      <div class="card mt-0 pt-0">
+        <div class="card-content">
+          <div class="content mt-0 pt-0">
+            <table class="table">
+              <tr><td>Date:</td><td>July 2, 2024 07:58 PM</td></tr>
+              <tr><td>Target:</td><td>$250,000</td></tr>
+              <tr><td>Hand:</td><td>1</td></tr>
+              <tr><td>Dealer:</td><td>Bob</td></tr>
+              <tr>
+                <td>Players:</td>
+                <td>
+                  <a asp-area="" asp-page="/InProgress/Amy">Amy</a><br />
+                  <a asp-area="" asp-page="/InProgress/John">John</a><br />
+                  <a asp-area="" asp-page="/InProgress/Janis">Janis</a><br />
+                  <a asp-area="" asp-page="/InProgress/Bob">Bob</a> - <i><small>round 7</small></i>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="column is-4-tablet is-4-desktop">
+    <div class="card">
+      <header class="card-header">
+        <span class="card-header-title is-centered">Game over</span>
+      </header>
+      <div class="card mt-0 pt-0">
+        <div class="card-content">
+          <div class="content mt-0 pt-0">
+            <table class="table">
+              <tr><td>Date:</td><td>July 1, 2024 10:59 AM</td></tr>
+              <tr><td>Target:</td><td>$250,000</td></tr>
+              <tr><td>Hands:</td><td>2</td></tr>
+              <tr><td>Winner:</td><td>Amy</td></tr>
+              <tr>
+                <td>Players:</td>
+                <td>
+                  <a asp-area="" asp-page="/GameOver/Amy">Amy</a><br />
+                  <a asp-area="" asp-page="/GameOver/Bob">Bob</a><br />
+                  <a asp-area="" asp-page="/GameOver/Janis">Janis</a><br />
+                  <a asp-area="" asp-page="/GameOver/John">John</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="column is-4-tablet is-4-desktop">
+    <div class="card">
+      <div class="card-content mt-0 pt-0">
+        <div class="content">
+          <div>
+            <img class="logo" title="Copyright © Jeff London 1979, 2019." src="./img/Grass.gif">
+          </div>
+          <p>
+            The Dealer is determined at random and the player to the Dealer's left starts, with play
+            moving clockwise after that. Play in any subsequent hand is counter-clockwise, and so on
+            alternating, with the winner of the previous hand becoming Dealer.
+          </p>
+          <p>
+            At the end of a hand, each player's profits are added up. Once a player reaches
+            or exceeds the target, the game ends and that player is declared the winner.<br />
+            If several players exceed the target in the same hand, the richest player wins.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
