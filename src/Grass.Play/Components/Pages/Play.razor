@@ -3,21 +3,23 @@
 
 <PageTitle>Play</PageTitle>
 
-<nav id="showInPlay" class="my-1 px-2 is-hidden" role="navigation">
-  <a id="inPlay" class="button" onclick="toggleInPlay()">Show in hand</a>
+<nav id="showInPlay" class="my-1 px-2" role="navigation">
+  <a id="inPlay" class="button" @onclick="active.Toggle">@active.Text</a>
 </nav>
 
 <div class="columns pl-2 pr-2">
+
   <div class="column">
     <nav class="menu sticky">
       <p class="menu-label"><strong>Amy</strong></p>
-      <ul id="InThisArticleMenu" class="menu-list">
-        <li class="is-hidden" id="inHandLink"><a>In hand</a></li>
-        <li><a>Stash pile</a></li>
-        <li class="is-hidden" id="scoreCardsLink"><a>Score cards</a></li>
+      <ul id="InThisArticleMenu" class="menu-list" style="list-style-type: none; margin-left: .25em;">
+        <li id="inHandLink" class="@active.Class"><a class="quickLink" href="/play#inHand">In hand</a></li>
+        <li><a class="quickLink" href="/play#stashPile">Stash pile</a></li>
+        <li id="scoreCardsLink" class="@hands.Class"><a class="quickLink" href="/play#scoreCards">Score cards</a></li>
       </ul>
     </nav>
   </div>
+
   <div class="column content is-8">
     <table id="HasslePile" class="table">
       <tr>
@@ -49,9 +51,9 @@
       </tr>
     </table>
 
-    <div id="inHand">
-      <h2 class="quickLinkHeader" @onclick="inHand.Toggle"><span class="icon toggleSection @inHand.IconClass"><i class="fa fa-angle-down"></i></span>In hand</h2>
-      <table class="table" style="@inHand.TableStyle">
+    <div id="inHand" class="@active.Class">
+      <h2 class="quickLinkHeader" @onclick="inHand.Toggle"><span class="icon toggleSection @inHand.Class"><i class="fa fa-angle-down"></i></span>In hand</h2>
+      <table class="table" style="@inHand.Style">
         <tr>
           <td class="game-card"><img class="image" src="./img/cards/Skim-StealYourNeighborsPot.png"></td>
           <td class="game-card"><img class="image" src="./img/cards/Market-Open.png"></td>
@@ -63,27 +65,29 @@
       </table>
     </div>
 
-    <h2 class="quickLinkHeader" @onclick="stash.Toggle"><span class="icon toggleSection @stash.IconClass"><i class="fa fa-angle-down"></i></span>Stash pile</h2>
-    <table class="table" style="@stash.TableStyle">
-      <tr>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Dr.Feelgood.png"></td>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Panama.png"></td>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Panama.png"></td>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Columbia.png"></td>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Columbia.png"></td>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Jamaica.png"></td>
-      </tr>
-      <tr>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Jamaica.png"></td>
-        <td class="game-card"><img class="image" title="played (round 3)" src="./img/cards/Protection-GrabaSnack.png"></td>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Mexico.png"></td>
-        <td class="game-card"><img class="image" src="./img/cards/Peddle-Mexico.png"></td>
-      </tr>
-    </table>
+    <div id="stashPile">
+      <h2 class="quickLinkHeader" @onclick="stash.Toggle"><span class="icon toggleSection @stash.Class"><i class="fa fa-angle-down"></i></span>Stash pile</h2>
+      <table class="table" style="@stash.Style">
+        <tr>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Dr.Feelgood.png"></td>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Panama.png"></td>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Panama.png"></td>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Columbia.png"></td>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Columbia.png"></td>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Jamaica.png"></td>
+        </tr>
+        <tr>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Jamaica.png"></td>
+          <td class="game-card"><img class="image" title="played (round 3)" src="./img/cards/Protection-GrabaSnack.png"></td>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Mexico.png"></td>
+          <td class="game-card"><img class="image" src="./img/cards/Peddle-Mexico.png"></td>
+        </tr>
+      </table>
+    </div>
 
-    <div id="scoreCards" class="">
-      <h2 class="quickLinkHeader" @onclick="score.Toggle"><span class="icon toggleSection @score.IconClass"><i class="fa fa-angle-down"></i></span>Score cards</h2>
-      <div class="columns is-multiline" style="@score.TableStyle">
+    <div id="scoreCards" class="@hands.Class">
+      <h2 class="quickLinkHeader" @onclick="score.Toggle"><span class="icon toggleSection @score.Class"><i class="fa fa-angle-down"></i></span>Score cards</h2>
+      <div class="columns is-multiline" style="@score.Style">
         <div class="column">
           <table class="score-card">
             <tr><th colspan='2'>2nd Hand</th></tr>
@@ -113,6 +117,7 @@
       </div>
     </div>
   </div>
+
   <div class="column">
     <nav class="menu sticky">
       <p class="menu-label"><strong>Players</strong></p>
@@ -126,8 +131,12 @@
   </div>
 </div>
 
-@code {
-  private ExpandCollapse inHand = new();
-  private ExpandCollapse stash = new();
-  private ExpandCollapse score = new();
+@code
+{
+  private CollapseExpand inHand = new();
+  private CollapseExpand stash = new();
+  private CollapseExpand score = new();
+
+  private HideShow active = new( "in Hand" );
+  private HideShow hands = new( hide: false );
 }

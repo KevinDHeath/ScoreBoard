@@ -8,6 +8,9 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .table { border: none !important; }
 .toggleSection { transition: transform .35s ease; transform-origin: center; margin-right: 0.25em; cursor: pointer; }
 .toggleCollapsed { transform: rotate(-90deg) }
+.quickLink { line-height: .75; }
+.toc-menu { list-style-type: none !important; margin-left: .25em; }
+
 
 .card-header { background-color: #0066cc; }
 .game-datetime { font-size: small; }

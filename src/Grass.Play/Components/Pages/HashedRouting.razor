@@ -1,0 +1,47 @@
+@page "/hashed-routing"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+<PageTitle>Hashed routing</PageTitle>
+
+<h1>Hashed routing to named elements</h1>
+
+<ul>
+    <li>
+        <a href="/hashed-routing#targetElement">
+            Anchor in this component
+        </a>
+    </li>
+    <li>
+        <a href="/counter#targetElement">
+            Anchor to the <code>Counter</code> component
+        </a>
+    </li>
+    <li>
+        <a href="/play#scoreCards">
+            Anchor to the <code>Play</code> component
+        </a>
+    </li>
+    <li>
+        <NavLink href="/hashed-routing#targetElement">
+            Use a `NavLink` component in this component
+        </NavLink>
+    </li>
+    <li>
+        <button @onclick="NavigateToElement">
+            Navigate with <code>NavigationManager</code> to the 
+            <code>Counter</code> component
+        </button>
+    </li>
+</ul>
+
+<div class="border border-info rounded bg-info" style="height:350px"></div>
+<h2 id="targetElement">Target H2 heading</h2>
+<p>Content!</p>
+
+@code {
+    private void NavigateToElement()
+    {
+        Navigation.NavigateTo("/counter#targetElement");
+    }
+}
