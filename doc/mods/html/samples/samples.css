@@ -1,0 +1,8 @@
+.table { border: none !important; }
+.table .game-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
+.score-card .align-right { text-align: right; }
+.player-current { font-style: italic; font-weight: bold; }
+.game-datetime { font-size: small; }
+.negative-value { color: red; }
+.hassle-history { font-size: smaller; margin: 0px !important; color: darkgray; }
+.fixedheader { padding-bottom: 5px; }

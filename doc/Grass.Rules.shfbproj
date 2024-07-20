@@ -20,7 +20,7 @@
     <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
     <OutputPath>.\bin\score\</OutputPath>
     <BuildLogFile>.\bin\Grass.Rules.log</BuildLogFile>
-    <HelpTitle>Grass game</HelpTitle>
+    <HelpTitle>Grass</HelpTitle>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <HelpFileFormat>Website</HelpFileFormat>
     <PresentationStyle>Default2022</PresentationStyle>

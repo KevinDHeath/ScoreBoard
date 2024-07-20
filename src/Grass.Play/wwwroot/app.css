@@ -9,8 +9,14 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .toggleSection { transition: transform .35s ease; transform-origin: center; margin-right: 0.25em; cursor: pointer; }
 .toggleCollapsed { transform: rotate(-90deg) }
 .quickLink { line-height: .75; }
-.toc-menu { list-style-type: none !important; margin-left: .25em; }
 
+.toc-menu { line-height: 2em; }
+.toc-menu a { color: dodgerblue; padding-left: 0.75em; border-radius: 2px; display: block; }
+.toc-menu a:hover { background-color: whitesmoke; color: #363636; }
+.toc-menu a.is-active { font-weight: bold; }
+.toc-menu li ul {
+  /*padding-left: 1em;*/
+}
 
 .card-header { background-color: #0066cc; }
 .game-datetime { font-size: small; }
