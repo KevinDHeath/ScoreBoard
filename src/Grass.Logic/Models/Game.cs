@@ -319,7 +319,7 @@ public class Game
 
 	internal bool Play()
 	{
-		if( Winner is not null ) { return true; } // Game already completed
+		if( Hand > 0 ) { return true; } // Game already populated
 		Actor? actor = Auto ? new( this ) : null;
 
 		while( Winner is null )

@@ -9,19 +9,28 @@ internal class Program
 
 	static void Main()
 	{
-		Game game = GameService.Setup( Samples.GetPlayers(), auto: true, comment: true,
-			reverse: true );
+		GameOptions options = new()
+		{
+			Players = Samples.GetPlayers(),
+			CardComments = true,
+			ReversePlay = true,
+			AutoPlay = true,
+			Sample = false,
+			EndGame = false
+		};
+
+		GameService svc = new();
+		Game game;
 		try
 		{
-			GameService svc = new( game );
-			//Game sample = Samples.Populate( svc, endgame: true ); // endgame:false will cause issue
-
+			game = svc.Setup( options );
 			sStopWatch.Start();
 			if( !AutoPlayAsync( svc ).Result ) { Console.WriteLine( "Failed to successfully auto-play game." ); }
 			else
 			{
 				sStopWatch.Stop();
 				Samples.ShowResults( game );
+
 				//HtmlBuilder.CreateHtml( game );
 
 				//Summary summary = Summary.BuildSummary( game );

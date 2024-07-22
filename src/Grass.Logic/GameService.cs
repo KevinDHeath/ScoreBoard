@@ -1,3 +1,5 @@
+// Ignore Spelling: json
+using System.Text.Json;
 using Grass.Logic.Models;
 using System.ComponentModel;
 namespace Grass.Logic;
@@ -5,33 +7,30 @@ namespace Grass.Logic;
 /// <summary>Service providing actions to be taken with cards during a Grass game.</summary>
 public class GameService : PassCardHandler
 {
-	internal readonly Game _game;
+	internal Game _game;
 	private bool _disposed;
 
 	/// <summary>Initializes a new instance of the <see cref="GameService"/> class.</summary>
-	/// <param name="game">Game to be played.</param>
-	public GameService( Game game )
+	public GameService() => _game = default!;
+
+	/// <summary>Setup a new Grass game.</summary>
+	/// <param name="options">Options for the Game.</param>
+	public Game Setup( GameOptions options )
 	{
-		_game = game;
+		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );
 		if( _game.Auto ) { _game.GameChanged += OnParanoiaPlayed; }
+		if( _game.Auto && options.Sample )
+		{
+			_game.Auto = false; // switch off auto-play when populating sample
+			Samples.Populate( _game, endgame: options.EndGame );
+		}
+		else if( _game.Auto ) { _game.Play(); }
+		return _game;
 	}
 
-	/// <summary>Initializes a new Grass game.</summary>
-	/// <param name="players">List of players in the game.</param>
-	/// <param name="target">Target for the game. The default is $250,000</param>
-	/// <param name="reverse">Indicates whether to reverse the play order ever alternate deal.
-	/// The default is <c>false</c>.</param>
-	/// <param name="comment">Indicates whether to add card comments. The default is <c>true</c>.</param>
-	/// <param name="auto">Indicates whether to use auto-play. The default is <c>false</c>.
-	/// <br/><b>Note:</b><i> This should only be set as <c>true</c> for testing purposes
-	/// as it automates the decision process of which card each player will play.</i></param>
-	/// <returns>An initialized game of Grass.</returns>
-	public static Game Setup( List<Player> players, int target = 250000,
-		bool reverse = false, bool comment = true, bool auto = false )
-	{
-		Game game = new( players, target, reverse, comment, auto );
-		return game;
-	}
+	/// <summary>Current game.</summary>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public Game Current => _game;
 
 	/// <summary>Play a game asynchronously.</summary>
 	/// <returns><c>true</c> is returned if the game was completed successfully.</returns>
@@ -102,6 +101,41 @@ public class GameService : PassCardHandler
 	/// <returns><see langword="true"/> if the card is successfully taken
 	/// from the stack and added to the players hand.</returns>
 	public bool Take( Hand hand ) => _game.Take( hand );
+
+	#endregion
+
+	#region Game Summaries
+
+	private readonly JsonSerializerOptions options = new() { WriteIndented = false };
+
+	/// <summary>Collection of Game summaries.</summary>
+	public List<Summary> Summaries { get; set; } = [];
+
+	/// <summary>Store a completed game as a summary.</summary>
+	/// <param name="game"></param>
+	public void StoreSummary( Game game )
+	{
+		Summaries.Add( Summary.BuildSummary( game ) );
+	}
+
+	/// <summary>Export a game summary.</summary>
+	/// <param name="summary">Summary to export.</param>
+	/// <param name="indent">Indicates whether to use JSON indentation.</param>
+	/// <returns>A string representing the game summary as JSON.</returns>
+	public string ExportSummary( Summary summary, bool indent = false )
+	{
+		options.WriteIndented = indent;
+		return JsonSerializer.Serialize( summary, options );
+	}
+
+	/// <summary>Import a game summary.</summary>
+	/// <param name="json">The JSON string.</param>
+	/// <returns>A <c>null</c> is returned if invalid JSON was provided.</returns>
+	public static Summary? ImportSummary( ref string json )
+	{
+		try { return JsonSerializer.Deserialize<Summary>( json ); }
+		catch { return null; }
+	}
 
 	#endregion
 }

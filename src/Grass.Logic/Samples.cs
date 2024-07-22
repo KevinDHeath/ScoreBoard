@@ -1,27 +1,24 @@
-﻿using Grass.Logic.Models;
+using Grass.Logic.Models;
 namespace Grass.Logic;
 
-/// <summary>Static Game</summary>
+/// <summary>Static data</summary>
 [System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 public class Samples
 {
-	private static Game sGame = default!;
-
 	/// <summary>Populate data</summary>
-	public static Game Populate( GameService service, bool endgame = false )
+	public static void Populate( Game game, bool endgame = false )
 	{
-		sGame = service._game;
-		sGame.Date = "July 9, 2024 10:31 PM";
-		Player? dealer = service._game.Players.FirstOrDefault( p => p.Name == "Bob" );
-		if( dealer is not null ) { service._game.Dealer = dealer; }
-		sGame.StartHand();
+		game.Date = "July 9, 2024 10:31 PM";
+		Player? dealer = game.Players.FirstOrDefault( p => p.Name == "Bob" );
+		if( dealer is not null ) { game.Dealer = dealer; }
+		game.StartHand();
 
 		// Put dealt cards back in the stack
-		foreach( Player p in sGame.PlayOrder ) { BackToStack( p.Current.Cards ); }
+		foreach( Player p in game.PlayOrder ) { BackToStack( game, p.Current.Cards ); }
 		Player? janis = null, john = null, amy = null, bob = null;
 
 		#region To end of round 13
-		foreach( Player player in sGame.Players )
+		foreach( Player player in game.Players )
 		{
 			Hand hand = player.Current;
 			hand.Round = 13;
@@ -31,123 +28,120 @@ public class Samples
 			{
 				case "Janis":
 					janis = player;
-					sGame.Take( hand, CardInfo.cClose );
-					sGame.Take( hand, CardInfo.cClose );
-					sGame.Take( hand, CardInfo.cBanker );
-					sGame.Take( hand, CardInfo.cOffFelony );
-					sGame.Take( hand, CardInfo.cSoldout );
-					sGame.Take( hand, CardInfo.cOffFelony );
+					game.Take( hand, CardInfo.cClose );
+					game.Take( hand, CardInfo.cClose );
+					game.Take( hand, CardInfo.cBanker );
+					game.Take( hand, CardInfo.cOffFelony );
+					game.Take( hand, CardInfo.cSoldout );
+					game.Take( hand, CardInfo.cOffFelony );
 					card = hand.Cards.LastOrDefault( c => c.Id == CardInfo.cOffFelony );
 					card?.AddComment( "passed by Bob to Janis (round 9)" );
 
 					to = hand.HasslePile;
-					Add( hand, CardInfo.cOpen, to, "(round 1)" );
+					Add( game, hand, CardInfo.cOpen, to, "(round 1)" );
 
 					to = hand.StashPile;
-					Add( hand, CardInfo.cMexico, to );
-					Add( hand, CardInfo.cColumbia, to );
+					Add( game, hand, CardInfo.cMexico, to );
+					Add( game, hand, CardInfo.cColumbia, to );
 					break;
 
 				case "John":
 					john = player;
-					sGame.Take( hand, CardInfo.cSteal );
-					sGame.Take( hand, CardInfo.cPayFine );
-					sGame.Take( hand, CardInfo.cStonehigh );
-					sGame.Take( hand, CardInfo.cPayFine );
-					sGame.Take( hand, CardInfo.cOpen );
-					sGame.Take( hand, CardInfo.cOffDetained );
+					game.Take( hand, CardInfo.cSteal );
+					game.Take( hand, CardInfo.cPayFine );
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cPayFine );
+					game.Take( hand, CardInfo.cOpen );
+					game.Take( hand, CardInfo.cOffDetained );
 
 					to = hand.HasslePile;
-					Add( hand, CardInfo.cOnBust, to, "by Bob stash was 60,000 (round 9)" );
-					Add( hand, CardInfo.cOffBust, to, "played (round 10)" );
-					Add( hand, CardInfo.cOnSearch, to, "by Janis stash was 60,000 (round 11)" );
-					Add( hand, CardInfo.cOffSearch, to, "played (round 11)" );
-					Add( hand, CardInfo.cOpen, to, "(round 6)" );
+					Add( game, hand, CardInfo.cOnBust, to, "by Bob stash was 60,000 (round 9)" );
+					Add( game, hand, CardInfo.cOffBust, to, "played (round 10)" );
+					Add( game, hand, CardInfo.cOnSearch, to, "by Janis stash was 60,000 (round 11)" );
+					Add( game, hand, CardInfo.cOffSearch, to, "played (round 11)" );
+					Add( game, hand, CardInfo.cOpen, to, "(round 6)" );
 
 					to = hand.StashPile;
-					Add( hand, CardInfo.cMexico, to );
-					Add( hand, CardInfo.cHomegrown, to );
-					Add( hand, CardInfo.cPanama, to );
-					Add( hand, CardInfo.cPanama, to );
+					Add( game, hand, CardInfo.cMexico, to );
+					Add( game, hand, CardInfo.cHomegrown, to );
+					Add( game, hand, CardInfo.cPanama, to );
+					Add( game, hand, CardInfo.cPanama, to );
 					break;
 
 				case "Amy":
 					amy = player;
-					sGame.Take( hand, CardInfo.cOffFelony );
+					game.Take( hand, CardInfo.cOffFelony );
 					card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cOffFelony );
 					card?.AddComment( "passed by John to Amy (round 5)" );
-					sGame.Take( hand, CardInfo.cOpen );
-					sGame.Take( hand, CardInfo.cOnDetained );
-					sGame.Take( hand, CardInfo.cEuphoria );
-					sGame.Take( hand, CardInfo.cDoublecross );
-					sGame.Take( hand, CardInfo.cClose );
+					game.Take( hand, CardInfo.cOpen );
+					game.Take( hand, CardInfo.cOnDetained );
+					game.Take( hand, CardInfo.cEuphoria );
+					game.Take( hand, CardInfo.cDoublecross );
+					game.Take( hand, CardInfo.cClose );
 
 					to = hand.HasslePile;
-					Add( hand, CardInfo.cOnSearch, to, "by John stash was 100,000 (round 12)" );
-					Add( hand, CardInfo.cOffSearch, to, "played (round 12)" );
-					Add( hand, CardInfo.cOpen, to, "trade with John (round 7)" );
+					Add( game, hand, CardInfo.cOnSearch, to, "by John stash was 100,000 (round 12)" );
+					Add( game, hand, CardInfo.cOffSearch, to, "played (round 12)" );
+					Add( game, hand, CardInfo.cOpen, to, "trade with John (round 7)" );
 
 					to = hand.StashPile;
-					Add( hand, CardInfo.cColumbia, to, "protected (round 9)", protect: true );
-					Add( hand, CardInfo.cGrabaSnack, to, "played (round 9)" );
-					Add( hand, CardInfo.cColumbia, to, "protected (round 13)", protect: true );
-					Add( hand, CardInfo.cPanama, to );
-					Add( hand, CardInfo.cGrabaSnack, to, "played (round 13)" );
+					Add( game, hand, CardInfo.cColumbia, to, "protected (round 9)", protect: true );
+					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 9)" );
+					Add( game, hand, CardInfo.cColumbia, to, "protected (round 13)", protect: true );
+					Add( game, hand, CardInfo.cPanama, to );
+					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 13)" );
 					break;
 
 				case "Bob":
 					bob = player;
-					sGame.Take( hand, CardInfo.cOffSearch );
-					sGame.Take( hand, CardInfo.cStonehigh );
-					sGame.Take( hand, CardInfo.cOnBust );
-					sGame.Take( hand, CardInfo.cSteal );
-					sGame.Take( hand, CardInfo.cJamaica );
-					sGame.Take( hand, CardInfo.cOffDetained );
+					game.Take( hand, CardInfo.cOffSearch );
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cOnBust );
+					game.Take( hand, CardInfo.cSteal );
+					game.Take( hand, CardInfo.cJamaica );
+					game.Take( hand, CardInfo.cOffDetained );
 
 					to = hand.HasslePile;
-					Add( hand, CardInfo.cOpen, to, "(round 1)" );
+					Add( game, hand, CardInfo.cOpen, to, "(round 1)" );
 
 					to = hand.StashPile;
-					Add( hand, CardInfo.cHomegrown, to );
-					Add( hand, CardInfo.cPanama, to, "protected (round 12)", protect: true );
-					Add( hand, CardInfo.cLustConquers, to, "played (round 12)" );
-					Add( hand, CardInfo.cJamaica, to );
-					Add( hand, CardInfo.cDrFeelgood, to );
+					Add( game, hand, CardInfo.cHomegrown, to );
+					Add( game, hand, CardInfo.cPanama, to, "protected (round 12)", protect: true );
+					Add( game, hand, CardInfo.cLustConquers, to, "played (round 12)" );
+					Add( game, hand, CardInfo.cJamaica, to );
+					Add( game, hand, CardInfo.cDrFeelgood, to );
 					break;
 			}
 		}
 		#endregion
-		if( endgame ) { PlayRound14( amy, bob, janis, john ); }
-
-		return sGame;
+		if( endgame ) { PlayRound14( game, amy, bob, janis, john ); }
 	}
 
-	private static void PlayRound14( Player? amy, Player? bob, Player? janis, Player? john )
+	private static void PlayRound14( Game game, Player? amy, Player? bob, Player? janis, Player? john )
 	{
 		if( amy is null || bob is null || janis is null || john is null ) return;
 		int round = 14;
 
 		Hand hand = janis.Current;
 		hand.Round = round;
-		sGame.Take( hand, CardInfo.cLustConquers ); // Pick-up
+		game.Take( hand, CardInfo.cLustConquers ); // Pick-up
 		Card? card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cSoldout );
-		if( card is not null ) { _ = sGame.Play( janis, card ); }
+		if( card is not null ) { _ = game.Play( janis, card ); }
 
 		hand = john.Current;
 		hand.Round = round;
-		sGame.Take( hand, CardInfo.cMexico ); // Pick-up
+		game.Take( hand, CardInfo.cMexico ); // Pick-up
 		Transfer( hand.Cards, hand.StashPile, CardInfo.cMexico ); // Play
 
 		hand = amy.Current;
 		hand.Round = round;
-		sGame.Take( hand, CardInfo.cSteal ); // Pick-up (turn 1)
+		game.Take( hand, CardInfo.cSteal ); // Pick-up (turn 1)
 		card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cEuphoria );
-		if( card is not null ) { _ = sGame.Play( amy, card ); } // Play (turn 1)
-		sGame.Take( hand, CardInfo.cOnFelony ); // Pick-up (turn 2)
+		if( card is not null ) { _ = game.Play( amy, card ); } // Play (turn 1)
+		game.Take( hand, CardInfo.cOnFelony ); // Pick-up (turn 2)
 		Transfer( hand.Cards, hand.HasslePile, CardInfo.cClose, "(round 14)" ); // Play (turn 2)
 
-		sGame.EndHand();
-		ShowResults( sGame );
+		game.EndHand();
 	}
 
 	#region Helper Functions
@@ -162,16 +156,16 @@ public class Samples
 		}
 	}
 
-	private static void BackToStack( List<Card> cards )
+	private static void BackToStack( Game game, List<Card> cards )
 	{
 		List<Card> temp = new( cards );
-		foreach( Card card in temp ) { Card.TransferCard( cards, sGame.GrassStack, card ); }
+		foreach( Card card in temp ) { Card.TransferCard( cards, game.GrassStack, card ); }
 	}
 
-	private static void Add( Hand hand, string cardName, List<Card> to,
+	private static void Add( Game game, Hand hand, string cardName, List<Card> to,
 		string? msg = null, bool protect = false )
 	{
-		sGame.Take( hand, cardName );
+		game.Take( hand, cardName );
 		if( hand.Cards.Count > 6 )
 		{
 			Card? card = hand.Cards.LastOrDefault();

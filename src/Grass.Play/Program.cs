@@ -1,3 +1,4 @@
+using Grass.Logic;
 using Grass.Play;
 using Grass.Play.Components;
 
@@ -7,7 +8,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder( args );
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<GameStore>();
+builder.Services.AddSingleton<GameService>();
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
