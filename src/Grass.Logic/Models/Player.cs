@@ -1,11 +1,15 @@
-﻿namespace Grass.Logic.Models;
+namespace Grass.Logic.Models;
 
 /// <summary>Initializes a new instance of the Player class.</summary>
 /// <param name="name">Player name.</param>
+/// <param name="id">Player Id.</param>
 [System.Diagnostics.DebuggerDisplay( "{Name}" )]
-public class Player( string name )
+public class Player( string name, int id = 0 )
 {
 	#region Properties
+
+	/// <summary>Identifier of the player.</summary>
+	public int Id { get; set; } = id;
 
 	/// <summary>Name of the player.</summary>
 	public string Name { get; set; } = name;
@@ -35,6 +39,13 @@ public class Player( string name )
 	/// <inheritdoc/>
 	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 	public override string ToString() => $"{Name} game total {Total:$###,##0}";
+
+	internal void Reset()
+	{
+		Total = 0;
+		ResetCurrent();
+		Completed.Clear();
+	}
 
 	#endregion
 }

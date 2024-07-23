@@ -16,8 +16,9 @@ internal class HideShow
 
 	internal string Text => Hidden ? $"Hide {_text}".Trim() : $"Show {_text}".Trim();
 
-	internal void Toggle()
-	{
-		if( Hidden ) { Class = cClass; } else { Class = string.Empty; }
-	}
+	internal void Toggle() => Class = Hidden ? cClass : string.Empty;
+
+	internal void Hide() => Class = cClass;
+
+	internal void Show() => Class = string.Empty;
 }

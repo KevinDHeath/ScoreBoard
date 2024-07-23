@@ -182,10 +182,10 @@ public class Samples
 
 	/// <summary>Get players</summary>
 	public static List<Player> GetPlayers() => [
-			new( "Amy" ),
-			new( "Bob" ),
-			new( "Janis" ),
-			new( "John" ),
+			new( "Amy", 1 ),
+			new( "Bob", 2 ),
+			new( "Janis", 3 ),
+			new( "John", 4 ),
 		];
 
 	#region Results to Console

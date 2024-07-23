@@ -3,7 +3,7 @@
 @inject NavigationManager Navigation
 @inject GameService Service
 
-<PageTitle>Games</PageTitle>
+<PageTitle>Game</PageTitle>
 
 <div class="columns m-1 is-multiline">
 
@@ -15,26 +15,26 @@
       <div class="card mt-0 pt-0">
         <div class="card-content">
           <div class="content mt-0 pt-0">
-            <table class="table" style="width: 100%">
+            <table class="table" style="width: 100%;">
               <tr><td>Date:</td><td>@Current?.Date</td></tr>
-              <tr><td>Target:</td><td>@Current?.Target.ToString( "c0" )</td></tr>
+              <tr><td>Target:</td><td>@Home.FormatAmt( @Current?.Target )</td></tr>
               <tr><td>Hands:</td><td>@Current?.Hand</td></tr>
-              @if( HasWinner)
+              @if( HasWinner )
               {
+                string reason = Current?.StackCount == 0 ? "Stack ran out" : "Market closed";
                 <tr><td>Winner:</td><td>@Current?.Winner?.Name</td></tr>
-                <tr><td>Total:</td><td>@Current?.Winner?.Total.ToString( "c0" )</td></tr>
+                <tr><td>Total:</td><td>@Home.FormatAmt( @Current?.Winner?.Total )</td></tr>
+                <tr><td>Reason:</td><td>@reason</td></tr>
               }
-              <tr>
+             <tr>
                 <td>Players:</td>
                 <td>
                   <ol class="mt-0 ml-5">
                     @if( Current is not null )
                     {
-                      Count = 1;
-                      @foreach( var player in Current.PlayOrder )
+                      @foreach( Player player in Current.PlayOrder )
                       {
-                        <li><NavLink href="@($"play/{Count}")">@player.Name</NavLink></li>
-                        Count++;
+                        <li><NavLink href="@($"play/{@player.Id}")">@player.Name</NavLink></li>
                       }
                     }
                   </ol>
@@ -50,21 +50,21 @@
   <div class="column is-4-tablet is-4-desktop">
     <div class="card">
       <header class="card-header">
-        <span class="card-header-title is-centered">New Game</span>
+        <span class="card-header-title is-centered">Options</span>
       </header>
       <div class="card mt-0 pt-0">
         <div class="card-content">
           <div class="content mt-0 pt-0">
-            <EditForm Model="Model" OnSubmit="Submit" FormName="NewGame">
+            <EditForm Model="Options" OnSubmit="Submit" FormName="NewGame">
               <table>
-                <tr><td><label for="Target">Target:</label></td><td><InputNumber id="Target" @bind-Value="Model!.Target"></InputNumber></td></tr>
-                <tr><td><label for="ReversePlay">Reverse Play:</label></td><td><InputCheckbox id="ReversePlay" @bind-Value="Model!.ReversePlay"></InputCheckbox></td></tr>
-                <tr><td><label for="CardComments">Card Comments:</label></td><td><InputCheckbox id="CardComments" @bind-Value="Model!.CardComments"></InputCheckbox></td></tr>
+                <tr><td><label for="Target">Target:</label></td><td><InputNumber id="Target" @bind-Value="Options!.Target"></InputNumber></td></tr>
+                <tr><td><label for="ReversePlay">Reverse Play:</label></td><td><InputCheckbox id="ReversePlay" @bind-Value="Options!.ReversePlay"></InputCheckbox></td></tr>
+                <tr><td><label for="CardComments">Card Comments:</label></td><td><InputCheckbox id="CardComments" @bind-Value="Options!.CardComments"></InputCheckbox></td></tr>
                 @if( AllowTests )
                 {
-                  <tr><td><label for="AutoPlay">Auto-Play:</label></td><td><InputCheckbox id="AutoPlay" @bind-Value="Model!.AutoPlay"></InputCheckbox></td></tr>
-                  <tr><td><label for="Sample">Sample game:</label></td><td><InputCheckbox id="Sample" @bind-Value="Model!.Sample"></InputCheckbox></td></tr>
-                  <tr><td><label for="EndGame">End game:</label></td><td><InputCheckbox id="EndGame" @bind-Value="Model!.EndGame"></InputCheckbox></td></tr>
+                  <tr><td><label for="AutoPlay">Auto-Play:</label></td><td><InputCheckbox id="AutoPlay" @bind-Value="Options!.AutoPlay"></InputCheckbox></td></tr>
+                  <tr><td><label for="Sample">Sample game:</label></td><td><InputCheckbox id="Sample" @bind-Value="Options!.Sample"></InputCheckbox></td></tr>
+                  <tr><td><label for="EndGame">End game:</label></td><td><InputCheckbox id="EndGame" @bind-Value="Options!.EndGame"></InputCheckbox></td></tr>
                 }
                 <tr><td colspan="2">
                   <button class="btn btn-primary" style="width: 100px;" type="submit">Start</button>
@@ -87,14 +87,14 @@
           <p>
             The Dealer is determined at random and the player to the Dealer's left starts, with play
             moving clockwise after that. In any subsequent hand the winner of the previous hand
-            becomes Dealer.<br />
-            If the 'Reverse Play' option is selected, the next hand is played counter-clockwise,
-            alternating with each hand.
+            becomes the Dealer.<br>
+            If the <i>Reverse Play</i> option is selected, the next hand is played counter-clockwise,
+            then alternating with each subsequent hand.
           </p>
           <p>
             At the end of a hand, each player's profits are added up. Once a player reaches
-            or exceeds the target, the game ends and that player is declared the winner.<br />
-            If several players exceed the target in the same hand, the richest player wins.
+            or exceeds the target, the game ends and that player is declared the winner.<br>
+            If several players exceed the target in the same hand, the richest player wins!
           </p>
         </div>
       </div>

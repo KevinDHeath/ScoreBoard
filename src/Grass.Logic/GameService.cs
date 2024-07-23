@@ -8,16 +8,29 @@ namespace Grass.Logic;
 public class GameService : PassCardHandler
 {
 	internal Game _game;
+	private GameOptions _options = default!;
 	private bool _disposed;
 
 	/// <summary>Initializes a new instance of the <see cref="GameService"/> class.</summary>
 	public GameService() => _game = default!;
 
+	/// <summary>Current game options.</summary>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public GameOptions Options => _options;
+
+	/// <summary>Current game.</summary>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public Game Current => _game;
+
 	/// <summary>Setup a new Grass game.</summary>
 	/// <param name="options">Options for the Game.</param>
 	public Game Setup( GameOptions options )
 	{
+		foreach( var player in options.Players ) { player.Reset(); }
+		_options = options;
 		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );
+
+		// Play the game
 		if( _game.Auto ) { _game.GameChanged += OnParanoiaPlayed; }
 		if( _game.Auto && options.Sample )
 		{
@@ -27,10 +40,6 @@ public class GameService : PassCardHandler
 		else if( _game.Auto ) { _game.Play(); }
 		return _game;
 	}
-
-	/// <summary>Current game.</summary>
-	[EditorBrowsable( EditorBrowsableState.Never )]
-	public Game Current => _game;
 
 	/// <summary>Play a game asynchronously.</summary>
 	/// <returns><c>true</c> is returned if the game was completed successfully.</returns>

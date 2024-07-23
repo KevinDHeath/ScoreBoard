@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components;
 using Grass.Logic.Models;
 using Grass.Logic;
 
@@ -5,43 +6,69 @@ namespace Grass.Play.Components.Pages;
 
 public partial class Home
 {
-	private GameOptions? Model { get; set; }
+	[Inject]
+	private IConfiguration? Configuration { get; set; }
+
+	private bool AllowTests { get; set; } = false;
+
+	private GameOptions? Options { get; set; }
 
 	private Game? Current { get; set; }
 
 	private bool HasWinner => Current is not null && Current.Winner is not null;
 
-	private bool AllowTests { get; set; } = true;
-
 	private string Title { get; set; } = "Not started";
-
-	private int Count {  get; set; }
 
 	protected override void OnInitialized()
 	{
 		// Why are Blazor life-cycle methods getting executed twice?
 		// https://stackoverflow.com/questions/58075628/why-are-blazor-lifecycle-methods-getting-executed-twice
-		Model ??= new();
-		Model.Players = Samples.GetPlayers();
-		if( AllowTests )
+		// https://learn.microsoft.com/en-us/aspnet/core/blazor/components/lifecycle?view=aspnetcore-8.0
+		// https://learn.microsoft.com/en-us/training/modules/blazor-build-rich-interactive-components/4-improve-app-interactivity-lifecycle-events
+
+		if( Configuration is not null )
 		{
-			Model.AutoPlay = true;
-			Model.Sample = true;
-			Model.EndGame = true;
+			string? val = Configuration["AllowTests"];
+			AllowTests = val != null && bool.Parse( val );
+			Configuration = null;
 		}
-		if( Current is null && Service.Current is not null )
+
+		Options = Service.Options;
+		if( Options is null )
 		{
-			Current = Service.Current;
+			Options = new() { Players = Samples.GetPlayers() };
+			if( AllowTests )
+			{
+				Options.AutoPlay = true;
+				Options.Sample = false;
+				Options.EndGame = false;
+			}
+		}
+
+		Current = Service.Current;
+		if( Current is not null )
+		{
 			Title = HasWinner ? "Game over" : "In progress...";
 		}
 	}
 
 	private void Submit()
 	{
-		if( Model is not null )
+		if( Options is not null )
 		{
-			Current = Service.Setup( Model );
+			Current = Service.Setup( Options );
 			Title = HasWinner ? "Game over" : "In progress...";
 		}
+	}
+
+	internal static MarkupString FormatAmt( int? amt, bool dollar = true )
+	{
+		if( amt == null ) { return (MarkupString)string.Empty; }
+		bool neg = amt < 0;
+		if( neg ) { amt = Math.Abs( amt.Value ); }
+		string rtn = neg ? "<span class=\"negative-value\">" : string.Empty;
+		rtn += dollar ? amt.Value.ToString( "$###,##0" ) : amt.Value.ToString( "###,##0" );
+		rtn += neg ? "</span>" : string.Empty;
+		return (MarkupString)rtn;
 	}
 }

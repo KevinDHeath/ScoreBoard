@@ -25,8 +25,6 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .player-current { font-style: italic; font-weight: bold; }
 .score-card .align-right { text-align: right; }
 .table .game-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
-.top-row { height: 3.5rem; background-color: #333333; padding-top: 5px; border-bottom: 1px solid groove;
-  justify-content: left; display: flex; align-items: center; }
 
 /* Bulma overrides */
 .menu-label { color: black; background-color: #FF8C00; padding: 5pt; }
@@ -34,37 +32,17 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .navbar-brand { padding-top: .75rem; padding-right: 1rem; color: #90EE90; font-weight: bold; }
 .nav-link { color: white; }
 
+/* MainLayout overrides */
+.top-row { height: 3.5rem; background-color: #333333; padding-top: 5px; border-bottom: 1px solid groove;
+  justify-content: left; display: flex; align-items: center; }
+
 /* Blazor App */
-a, .btn-link {
-  color: #006bb7;
-}
-
-.btn {
-  padding: 0.375rem
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
+a, .btn-link { color: #006bb7; }
+.btn { padding: 0.375rem }
+.btn-primary { color: #fff; background-color: #1b6ec2; border-color: #1861ac; }
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-.valid.modified:not([type=checkbox]) {
-  outline: 1px solid #26b050;
-}
-
-.invalid {
-  outline: 1px solid #e50000;
-}
-
-.validation-message {
-  color: #e50000;
-}
-
-.darker-border-checkbox.form-check-input {
-  border-color: #929292;
-}
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb; }
+.darker-border-checkbox.form-check-input { border-color: #929292; }
+.valid.modified:not([type=checkbox]) { outline: 1px solid #26b050; }
+.invalid { outline: 1px solid #e50000; }
+.validation-message { color: #e50000; }

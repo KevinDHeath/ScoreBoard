@@ -13,7 +13,7 @@ internal class CollapseExpand
 		}
 	}
 
-	internal string Style => ( isOpen is not null && isOpen.Value == false )
+	internal string Style => ( isOpen is not null && !isOpen.Value )
 		? "display: none;" : string.Empty;
 
 	internal void Toggle()

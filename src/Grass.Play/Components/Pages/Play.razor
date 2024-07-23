@@ -1,122 +1,49 @@
-@page "/play"
 @page "/play/{id:int}"
 @rendermode InteractiveServer
 @inject GameService Service
 
 <PageTitle>Play</PageTitle>
 
-<nav id="showInPlay" class="my-1 px-2" role="navigation">
+<nav id="showInPlay" class="my-1 px-2 @button.Class" role="navigation">
   <a id="inPlay" class="button" @onclick="active.Toggle">@active.Text</a>
-  @Id
 </nav>
 
 <div class="columns pl-2 pr-2">
 
   <div class="column">
     <nav class="menu sticky">
-      <p class="menu-label"><strong>Amy</strong></p>
+      <p class="menu-label"><strong>@Player?.Name</strong></p>
       <ul id="InThisArticleMenu" class="menu-list" style="list-style-type: none; margin-left: .25em;">
-        <li id="inHandLink" class="@active.Class"><a class="quickLink" href="/play#inHand">In hand</a></li>
-        <li><a class="quickLink" href="/play#stashPile">Stash pile</a></li>
-        <li id="scoreCardsLink" class="@hands.Class"><a class="quickLink" href="/play#scoreCards">Score cards</a></li>
+        <li id="inHandLink" class="@active.Class"><a class="quickLink" href="/play/@Id#inHand">In hand</a></li>
+        <li><a class="quickLink" href="/play/@Id#stashPile">Stash pile</a></li>
+        <li id="scoreCardsLink" class="@scores.Class"><a class="quickLink" href="/play/@Id#scoreCards">Score cards</a></li>
       </ul>
     </nav>
   </div>
 
   <div class="column content is-8">
     <table id="HasslePile" class="table">
-      <tr>
-        <td class="game-card"><img class="image" title="by Bob when stash was 335,000 (round 20)" src="./img/cards/HeatOn-Bust.png"></td>
-        <td>
-          <p style="margin-bottom: 0px;">Game total: $312,000<br />Stash total: $335,000</p>
-          <div style="height: 110px; overflow: auto;">
-            <table style="height: 110px;" class="table">
-              <tr>
-                <td>
-                  <ul style="margin-left: 9px; margin-top: 0px;">
-                    <li class="hassle-history">Heat on Bust by Bob when stash was 335,000 (round 20)</li>
-                    <li class="hassle-history">Heat off Search and seizure played (round 19)</li>
-                    <li class="hassle-history">Heat on Search and seizure by John when stash was 330,000 (round 18)</li>
-                    <li class="hassle-history">Heat off Pay fine played (round 16)</li>
-                    <li class="hassle-history">Heat on Bust by Bob when stash was 135,000 (round 15)</li>
-                    <li class="hassle-history">Heat off Pay fine played (round 12)</li>
-                    <li class="hassle-history">Heat on Felony by Janis when stash was 90,000 (round 11)</li>
-                    <li class="hassle-history">Heat off Search and seizure played (round 11)</li>
-                    <li class="hassle-history">Heat on Search and seizure by Janis when stash was 90,000 (round 10)</li>
-                    <li class="hassle-history">Heat off Detained played (round 9)</li>
-                    <li class="hassle-history">Heat on Detained by Bob when stash was 90,000 (round 8)</li>
-                  </ul>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </td>
-      </tr>
+      @((MarkupString)HasslePileHtml())
     </table>
 
     <div id="inHand" class="@active.Class">
-      <h2 class="quickLinkHeader" @onclick="inHand.Toggle"><span class="icon toggleSection @inHand.Class"><i class="fa fa-angle-down"></i></span>In hand</h2>
+      <h3 class="quickLinkHeader" @onclick="inHand.Toggle"><span class="icon toggleSection @inHand.Class"><i class="fa fa-angle-down"></i></span>In hand</h3>
       <table class="table" style="@inHand.Style">
-        <tr>
-          <td class="game-card"><img class="image" src="./img/cards/Skim-StealYourNeighborsPot.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Market-Open.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Skim-StealYourNeighborsPot.png"></td>
-          <td class="game-card"><img class="image" title="passed by John (round 19)" src="./img/cards/Market-Open.png"></td>
-          <td class="game-card"><img class="image" title="passed by John (round 20)" src="./img/cards/HeatOff-SearchAndSeizure.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Market-Close.png"></td>
-        </tr>
+        @((MarkupString)InHandHtml())
       </table>
     </div>
 
-    <div id="stashPile">
-      <h2 class="quickLinkHeader" @onclick="stash.Toggle"><span class="icon toggleSection @stash.Class"><i class="fa fa-angle-down"></i></span>Stash pile</h2>
+    <div id="stashPile" class="mt-2">
+      <h3 class="quickLinkHeader" @onclick="stash.Toggle"><span class="icon toggleSection @stash.Class"><i class="fa fa-angle-down"></i></span>Stash pile</h3>
       <table class="table" style="@stash.Style">
-        <tr>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Dr.Feelgood.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Panama.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Panama.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Columbia.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Columbia.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Jamaica.png"></td>
-        </tr>
-        <tr>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Jamaica.png"></td>
-          <td class="game-card"><img class="image" title="played (round 3)" src="./img/cards/Protection-GrabaSnack.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Mexico.png"></td>
-          <td class="game-card"><img class="image" src="./img/cards/Peddle-Mexico.png"></td>
-        </tr>
+        @((MarkupString)StashPileHtml())
       </table>
     </div>
 
-    <div id="scoreCards" class="@hands.Class">
-      <h2 class="quickLinkHeader" @onclick="score.Toggle"><span class="icon toggleSection @score.Class"><i class="fa fa-angle-down"></i></span>Score cards</h2>
+    <div id="scoreCards" class="mt-2 @scores.Class">
+      <h3 class="quickLinkHeader" @onclick="score.Toggle"><span class="icon toggleSection @score.Class"><i class="fa fa-angle-down"></i></span>Score cards</h3>
       <div class="columns is-multiline" style="@score.Style">
-        <div class="column">
-          <table class="score-card">
-            <tr><th colspan='2'>2nd Hand</th></tr>
-            <tr><td>Protected profit</td><td class="align-right">25,000</td></tr>
-            <tr><td>+ At risk profit</td><td class="align-right">310,000</td></tr>
-            <tr><td>- Banker's skim /+ bonus</td><td class="align-right"><span class="negative-value">62,000</span></td></tr>
-            <tr><td>- Highest Peddle in hand</td><td class="align-right">0</td></tr>
-            <tr><td>- Paranoia</td><td class="align-right">0</td></tr>
-            <tr><td>= Net profit</td><td class="align-right">273,000</td></tr>
-            <tr><td nowrap>+ Bonus for winner of hand</td><td class='align-right'>25,000</td></tr>
-            <tr><td>Total</td><td class="align-right">298,000</td></tr>
-          </table>
-        </div>
-        <div class="column">
-          <table class="score-card">
-            <tr><th colspan='2'>1st Hand</th></tr>
-            <tr><td>Protected profit</td><td class="align-right">0</td></tr>
-            <tr><td>+ At risk profit</td><td class="align-right">80,000</td></tr>
-            <tr><td>- Banker's skim /+ bonus</td><td class="align-right"><span class="negative-value">16,000</span></td></tr>
-            <tr><td>- Highest Peddle in hand</td><td class="align-right">50,000</td></tr>
-            <tr><td>- Paranoia</td><td class="align-right">0</td></tr>
-            <tr><td>= Net profit</td><td class="align-right">14,000</td></tr>
-            <tr><td nowrap>+ Bonus for winner of hand</td><td class='align-right'>0</td></tr>
-            <tr><td>Total</td><td class="align-right">14,000</td></tr>
-          </table>
-        </div>
+        @((MarkupString)ScoreCardsHtml())
       </div>
     </div>
   </div>
@@ -125,15 +52,15 @@
     <nav class="menu sticky">
       <p class="menu-label"><strong>Players</strong></p>
       <ul class="toc-menu" style="list-style-type: none;">
-        <li><a class="player-current">Amy</a></li>
-        <li><a>Bob</a></li>
-        <li><a>Janis</a></li>
-        <li><a>John</a></li>
+        @if( Service.Current is not null )
+        {
+          @foreach( Player player in Service.Current.PlayOrder )
+          {
+            @if( player == Player ) { <li><a class="player-current">@player.Name</a></li> }
+            else { <li><a href="@($"play/{@player.Id}")">@player.Name</a></li> }
+          }
+        }
       </ul>
     </nav>
   </div>
 </div>
-
-@code {
-
-}
