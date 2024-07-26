@@ -1,4 +1,4 @@
-﻿namespace Grass.Logic;
+namespace Grass.Logic;
 
 /// <summary>Grass logic extensions.</summary>
 [System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]

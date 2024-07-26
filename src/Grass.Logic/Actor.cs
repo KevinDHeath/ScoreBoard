@@ -191,7 +191,7 @@ internal class Actor : PassCardHandler
 		PlayResult res = Rules.CanPlay( data.Player.Current, rtn );
 		if( res != PlayResult.Success ) { return null; } // Cannot play
 
-		Dictionary<Player, Card?> steal = Decision.Steal( others );
+		Dictionary<Player, Card?> steal = Decision.Steal( data, others );
 		if( steal.Count == 0 ) { return null; }
 
 		KeyValuePair<Player, Card?> test = steal.First();
@@ -221,6 +221,4 @@ internal class Actor : PassCardHandler
 	}
 
 	#endregion
-
-	internal static List<CardInfo> ImageInfo() => CardInfo.Info();
 }

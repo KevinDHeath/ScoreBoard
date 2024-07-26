@@ -1,4 +1,4 @@
-﻿namespace Grass.Logic;
+namespace Grass.Logic;
 
 /// <summary>Represents a container for the results of a play request.</summary>
 public class PlayResult

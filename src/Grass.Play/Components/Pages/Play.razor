@@ -4,6 +4,13 @@
 
 <PageTitle>Play</PageTitle>
 
+<SectionContent SectionId="MainLayout.MessageSection">
+  @Message
+</SectionContent>
+<SectionContent SectionId="MainLayout.DateSection">
+  @Service.Current.Date
+</SectionContent>
+
 <nav id="showInPlay" class="my-1 px-2 @button.Class" role="navigation">
   <a id="inPlay" class="button" @onclick="active.Toggle">@active.Text</a>
 </nav>

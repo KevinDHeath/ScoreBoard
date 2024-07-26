@@ -102,6 +102,17 @@ public class Game
 	/// <returns>If the game is not completed the value is <c>null</c>.</returns>
 	public Player? Winner { get; internal set; }
 
+	/// <summary>Reason why the game ended.</summary>
+	public string EndReason
+	{
+		get
+		{
+			if( Winner is null ) { return string.Empty; }
+			string by = LastPlayer is not null ? "by " + LastPlayer.Name : string.Empty;
+			return StackCount == 0 ? "Stack ran out" : $"Market closed {by}".Trim();
+		}
+	}
+
 	/// <summary>List of cards in the wasted pile.</summary>
 	public List<Card> WastedPile { get; private set; } = [];
 
@@ -110,6 +121,8 @@ public class Game
 	internal bool ReversePlay { get; set; }
 
 	internal List<Card> GrassStack { get; set; } = [];
+
+	private Player? LastPlayer { get; set; }
 
 	#endregion
 
@@ -140,9 +153,10 @@ public class Game
 	}
 
 	/// <summary>End a hand of the game.</summary>
+	/// <param name="last">Last player in case of market close.</param>
 	/// <remarks>Calculates the net scores for each player, assigns the bonus to the player
 	/// with the highest net score, and checks if there is a winner of the game.</remarks>
-	internal void EndHand()
+	internal void EndHand( Player? last )
 	{
 		// Calculate net scores
 		Player? banker = GetBanker();
@@ -177,7 +191,11 @@ public class Game
 		{
 			if( player.Total > high ) { high = player.Total; Winner = player; }
 		}
-		if( Winner is not null ) { _gameChanged = null; } // Clear paranoia play listener
+		if( Winner is not null )
+		{
+			_gameChanged = null; // Clear paranoia play listener
+			LastPlayer = last;
+		}
 		else
 		{
 			// If no winner reset for the next hand
@@ -325,13 +343,14 @@ public class Game
 		while( Winner is null )
 		{
 			if( !StartHand() ) { return false; }
-			if( actor is not null ) { PlayHand( actor ); }
-			EndHand();
+			Player? last = null;
+			if( actor is not null ) { last = PlayHand( actor ); }
+			EndHand( last );
 		}
 		return true;
 	}
 
-	private bool PlayHand( Actor? actor )
+	private Player? PlayHand( Actor? actor )
 	{
 		int round = 0;
 		while( GrassStack.Count > 0 )
@@ -355,8 +374,8 @@ public class Game
 					if( actor is not null ) { played = actor.Play( hand ); }
 					if( !played )
 					{
-						if( GrassStack.Count == 0 ) { return true; } // End of grass stack
-						else { return true; } // Market close played
+						if( GrassStack.Count == 0 ) { return null; } // End of grass stack
+						else { return player; } // Market close played
 					}
 
 					// Extra turns due to playing Nirvana
@@ -369,7 +388,7 @@ public class Game
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
 	#endregion

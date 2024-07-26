@@ -24,6 +24,10 @@ public class Summary
 	[JsonInclude]
 	public string Winner { get; private set; } = string.Empty;
 
+	/// <summary>Reason why the game finished.</summary>
+	[JsonInclude]
+	public string EndReason { get; private set; } = string.Empty;
+
 	/// <summary>Players and score cards.</summary>
 	[JsonInclude]
 	public Dictionary<string, List<Score>> Players { get; internal set; } = [];
@@ -36,7 +40,7 @@ public class Summary
 	/// <seealso href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/immutability">
 	/// Use immutable types and properties</seealso>
 
-	public static Summary BuildSummary( Game game )
+	internal static Summary BuildSummary( Game game )
 	{
 		Summary rtn = new()
 		{
@@ -49,6 +53,7 @@ public class Summary
 		{
 			rtn.Winner = game.Winner.Name;
 			rtn.Total = game.Winner.Total;
+			rtn.EndReason = game.EndReason;
 		}
 
 		foreach( Player player in game.PlayOrder )

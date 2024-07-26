@@ -1,4 +1,4 @@
-﻿namespace Grass.Logic.Models;
+namespace Grass.Logic.Models;
 
 /// <summary>Playing card type information.</summary>
 public class CardInfo

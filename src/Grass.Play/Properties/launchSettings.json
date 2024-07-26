@@ -27,12 +27,12 @@
           "ASPNETCORE_ENVIRONMENT": "Development"
         }
       },
-      "IIS Express": {
+      "Grass Play": {
         "commandName": "IISExpress",
-        "launchBrowser": true,
-        "environmentVariables": {
-          "ASPNETCORE_ENVIRONMENT": "Development"
-        }
-      }
+        "launchBrowser": true
+      //  "environmentVariables": {
+      //    "ASPNETCORE_ENVIRONMENT": "Development"
+      //  }
     }
   }
+}

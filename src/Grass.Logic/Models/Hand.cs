@@ -1,4 +1,4 @@
-﻿namespace Grass.Logic.Models;
+namespace Grass.Logic.Models;
 
 /// <summary>Provides the details of a players hand.</summary>
 [System.Diagnostics.DebuggerDisplay( "{Player}" )]
@@ -25,13 +25,13 @@ public class Hand
 	/// <summary>List of peddle and protection cards currently in the stash pile.</summary>
 	public List<Card> StashView { get { return GetStashView(); } }
 
-	/// <summary>Highest peddle card value held at the end of the hand.</summary>
+	/// <summary>Highest peddle card value held in hand.</summary>
 	public int HighestPeddle { get { return GetHighValue( Cards ); } }
 
-	/// <summary>Total of unprotected cards in the stash at the end of the hand.</summary>
+	/// <summary>Total of unprotected cards currently in the stash pile.</summary>
 	public int UnProtected { get { return TotalStash( StashPile, false ); } }
 
-	/// <summary>Total of protected cards in the stash at the end of the hand.</summary>
+	/// <summary>Total of protected cards currently in the stash pile.</summary>
 	public int Protected { get { return TotalStash( StashPile, true ); } }
 
 	/// <summary>The current round number.</summary>

@@ -38,6 +38,9 @@ public class GameService : PassCardHandler
 			Samples.Populate( _game, endgame: options.EndGame );
 		}
 		else if( _game.Auto ) { _game.Play(); }
+
+		StoreSummary( _game );
+
 		return _game;
 	}
 
@@ -120,9 +123,7 @@ public class GameService : PassCardHandler
 	/// <summary>Collection of Game summaries.</summary>
 	public List<Summary> Summaries { get; set; } = [];
 
-	/// <summary>Store a completed game as a summary.</summary>
-	/// <param name="game"></param>
-	public void StoreSummary( Game game )
+	private void StoreSummary( Game game )
 	{
 		Summaries.Add( Summary.BuildSummary( game ) );
 	}

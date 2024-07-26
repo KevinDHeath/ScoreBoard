@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Feelgood, rtn
+// Ignore Spelling: Feelgood, rtn
 using Grass.Logic.Models;
 namespace Grass.Logic;
 
@@ -13,21 +13,19 @@ internal class Decision
 
 	internal Player Player { get; private set; }
 	internal Hand Hand { get; private set; }
-	internal int TotalTabled => Hand.Protected + Hand.UnProtected;
 	internal bool NotOpen => Hand.HasslePile.Count == 0;
-	internal bool DrFeelgood => CardInfo.GetCards( Hand.StashPile, CardInfo.cDrFeelgood ).Any();
+
+	internal int TotalTabled => Hand.Protected + Hand.UnProtected;
 	private Card? LowUnprotected => Hand.LowestUnProtected;
 	private int LowValue => LowUnprotected is not null ? LowUnprotected.Info.Value : 0;
 	private Card? HighUnprotected => Hand.HighestUnProtected;
 	private int HighValue => HighUnprotected is not null ? HighUnprotected.Info.Value : 0;
+	internal bool DrFeelgood => HighUnprotected is not null && HighUnprotected.Info.Id == CardInfo.cDrFeelgood;
 
 	internal Decision( Player player )
 	{
 		Player = player;
 		Hand = player.Current;
-		//Card? card = Hand.StashPile.FirstOrDefault( c => c.Name == CardInfo.cDrFeelgood );
-		//if( card is not null ) { DrFeelgood = true; }
-		//bool test = CardInfo.GetCards( Hand.StashPile, CardInfo.cDrFeelgood ).Any();
 	}
 
 	#endregion
@@ -142,19 +140,22 @@ internal class Decision
 
 	internal static Card? Peddle( Decision data )
 	{
-		// Don't play Dr. Feelgood if no other unprotected cards in stack
-		Card? rtn = data.Hand.UnProtected == 0
+		Card? rtn = data.LowValue == 0
 			? Card.GetLowPeddle( data.Hand.Cards )
 			: Card.GetHighPeddle( data.Hand.Cards );
+
+		// Don't play Dr. Feelgood if no other unprotected cards in stack
+		//return rtn is not null && rtn.Info.Id == CardInfo.cDrFeelgood ? null : rtn;
 
 		return rtn;
 	}
 
-	internal static Dictionary<Player, Card?> Steal( List<Decision> others )
+	internal static Dictionary<Player, Card?> Steal( Decision data, List<Decision> others )
 	{
 		Dictionary<Player, Card?> rtn = [];
 
-		// Don't steal Dr. Feelgood if no other unprotected cards in stack
+		// Don't steal if no other unprotected cards in stack
+		if( data.LowValue == 0 ) { return rtn; }
 
 		// Currently only works for Dr. Feelgood 
 		if( FeelgoodInPlay is null ) { return rtn; }

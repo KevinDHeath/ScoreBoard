@@ -2,17 +2,31 @@
 
 <div class="page">
   <main>
-
     <div class="top-row px-4">
-      <span class="navbar-brand">Grass</span>
-      <div class="nav-item px-3">
-        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-          <span aria-hidden="true"></span>Game
-        </NavLink>
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item pt-3">
+            <div class="navbar-brand">Grass</div>
+          </div>
+          <div class="level-item pb-4">
+            <a class="nav-link pl-3" href="/">Game</a>
+          </div>
+          <div class="level-item pb-4">
+            <a class="nav-link pl-3" href="http://localhost:8080/score" target="_blank">Rules</a>
+          </div>
+        </div>
+        <div class="level-center">
+          <div class="level-item mb-4">
+            <SectionOutlet SectionId="MessageSection" />
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item mb-4 game-datetime">
+            <SectionOutlet SectionId="DateSection" />
+          </div>
+        </div>
       </div>
-      <a class="nav-link pl-3" href="http://localhost:8080/score" target="_blank">Rules</a>
     </div>
-
     <article class="content px-4">
       @Body
     </article>
@@ -24,3 +38,8 @@
   <a href="" class="reload">Reload</a>
   <a class="dismiss">🗙</a>
 </div>
+
+@code {
+  internal static object DateSection = new();
+  internal static object MessageSection = new();
+}

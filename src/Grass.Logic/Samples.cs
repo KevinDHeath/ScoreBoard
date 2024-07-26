@@ -141,7 +141,7 @@ public class Samples
 		game.Take( hand, CardInfo.cOnFelony ); // Pick-up (turn 2)
 		Transfer( hand.Cards, hand.HasslePile, CardInfo.cClose, "(round 14)" ); // Play (turn 2)
 
-		game.EndHand();
+		game.EndHand( amy );
 	}
 
 	#region Helper Functions
@@ -200,8 +200,7 @@ public class Samples
 		{
 			Console.WriteLine( $"{winner.Name} won with {winner.Total:$#,###,##0}" );
 			Console.WriteLine( $"{winner.Completed.Count} hand(s) played" );
-			string reason = game.StackCount == 0 ? "Stack ran out" : "Market closed";
-			Console.WriteLine( $"{winner.Current.Round} rounds played in final hand - {reason}" );
+			Console.WriteLine( $"{winner.Current.Round} rounds played in final hand - {game.EndReason}" );
 		}
 		Console.WriteLine( $"{game.Dealer.Name} was the Dealer" );
 		Player? banker = game.GetBanker();

@@ -29,12 +29,11 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 /* Bulma overrides */
 .menu-label { color: black; background-color: #FF8C00; padding: 5pt; }
 .menu-label strong { color: black; }
-.navbar-brand { padding-top: .75rem; padding-right: 1rem; color: #90EE90; font-weight: bold; }
-.nav-link { color: white; }
+.navbar-brand { padding-right: 1rem; color: LightGreen; font-weight: bold; }
+.nav-link { color: dodgerblue; font-weight: bold; }
 
 /* MainLayout overrides */
-.top-row { height: 3.5rem; background-color: #333333; padding-top: 5px; border-bottom: 1px solid groove;
-  justify-content: left; display: flex; align-items: center; }
+.top-row { height: 3.5rem; background-color: #333333; padding-top: 5px; border-bottom: 1px solid groove; }
 
 /* Blazor App */
 a, .btn-link { color: #006bb7; }

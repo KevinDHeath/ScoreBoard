@@ -1,4 +1,4 @@
-﻿using Grass.Logic.Models;
+using Grass.Logic.Models;
 namespace Grass.Logic;
 
 internal class Rules
@@ -86,6 +86,7 @@ internal class Rules
 		switch( card.Type )
 		{
 			case CardInfo.cPeddle:
+				//if( comment ) { card.AddComment( $"played (round {hand.Round})" ); }
 				ok = Card.TransferCard( hand.Cards, hand.StashPile, card );
 				if( ok ) { return res; }
 				break;
@@ -140,9 +141,10 @@ internal class Rules
 				//if( !hand.MarketIsOpen || !otherHand.MarketIsOpen ) { return false; }
 				if( CanPlay( hand, card ) != PlayResult.Success ) { return new( cNotOpen ); }
 				if( !wHand.StashPile.Remove( other ) ) { return new( "Card to steal not found." ); }
-				Card.TransferCard( hand.Cards, wHand.StashPile, card );
-				hand.StashPile.Add( other );
+				Card.TransferCard( hand.Cards, wHand.HasslePile, card );
 				if( comment ) { card.AddComment( player.Name + $" stole {other.Info.Caption} (round {hand.Round})" ); }
+				hand.StashPile.Add( other );
+				//if( comment ) { other.AddComment( $"stole from {with.Name} (round {hand.Round})" ); }
 				break;
 			default: // Heat On
 				if( card.Type is CardInfo.cHeatOn )
@@ -152,7 +154,7 @@ internal class Rules
 					if( comment )
 					{
 						int total = wHand.Protected + wHand.UnProtected;
-						card.AddComment( $"by {player.Name} stash was {total:###,##0} (round {hand.Round})" );
+						card.AddComment( $"by {player.Name}, stash was {total:###,##0} (round {hand.Round})" );
 					}
 					break;
 				}
@@ -190,7 +192,7 @@ internal class Rules
 		foreach( Card c in peddles )
 		{
 			c.Protected = true;
-			if( game.Comment ) { c.AddComment( $"protected (round {hand.Round})" ); }
+			//if( game.Comment ) { c.AddComment( $"protected (round {hand.Round})" ); }
 		}
 		Card.TransferCard( hand.Cards, hand.StashPile, card );
 		if( game.Comment ) { card.AddComment( $"played (round {hand.Round})" ); }
@@ -227,6 +229,7 @@ internal class Rules
 			{
 				names.Add( $"{other.Name}: {steal.Info.Value:#,###,##0}" );
 				Card.TransferCard( other.Current.StashPile, hand.StashPile, steal );
+				//if( comment ) { steal.AddComment( $"from {other.Name} (round {hand.Round})" ); }
 			}
 			else { names.Add( $"{other.Name}: nothing" ); }
 		}

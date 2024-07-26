@@ -13,6 +13,8 @@ public partial class Play
 
 	private Hand? Hand { get; set; }
 
+	private string? Message { get; set; }
+
 	// Collapsible sections
 	private readonly CollapseExpand inHand = new();
 	private readonly CollapseExpand stash = new();
@@ -36,9 +38,17 @@ public partial class Play
 	private void SetPage( Player player )
 	{
 		// Show the in-hand section when game-over so hide toggle button
-		if( Service.Current.Winner is not null ) { button.Hide(); active.Show(); }
+		if( Service.Current.Winner is not null )
+		{
+			button.Hide(); active.Show();
+			Message = Service.Current.Winner != Player ? Service.Current.Winner.Name + " won" : "You won!";
+		}
 		// Hide the score cards when in-play and on 1st hand
-		else if( player.Current.Count == 1 ) { scores.Hide(); }
+		else
+		{
+			if( player.Current.Count == 1 ) { scores.Hide(); }
+			Message = string.Empty;
+		}
 	}
 
 	private string HasslePileHtml()

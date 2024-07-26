@@ -21,10 +21,9 @@
               <tr><td>Hands:</td><td>@Current?.Hand</td></tr>
               @if( HasWinner )
               {
-                string reason = Current?.StackCount == 0 ? "Stack ran out" : "Market closed";
                 <tr><td>Winner:</td><td>@Current?.Winner?.Name</td></tr>
                 <tr><td>Total:</td><td>@Home.FormatAmt( @Current?.Winner?.Total )</td></tr>
-                <tr><td>Reason:</td><td>@reason</td></tr>
+                <tr><td>Reason:</td><td>@Current?.EndReason</td></tr>
               }
              <tr>
                 <td>Players:</td>
@@ -34,7 +33,7 @@
                     {
                       @foreach( Player player in Current.PlayOrder )
                       {
-                        <li><NavLink href="@($"play/{@player.Id}")">@player.Name</NavLink></li>
+                        <li><NavLink class="nav-link" href="@($"play/{@player.Id}")">@player.Name</NavLink></li>
                       }
                     }
                   </ol>

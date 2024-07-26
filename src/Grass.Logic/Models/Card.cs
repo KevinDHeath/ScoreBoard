@@ -1,4 +1,4 @@
-﻿namespace Grass.Logic.Models;
+namespace Grass.Logic.Models;
 
 /// <summary>Provides the details of a playing card.</summary>
 [System.Diagnostics.DebuggerDisplay( "{Id}" )]
