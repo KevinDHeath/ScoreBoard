@@ -87,7 +87,7 @@ internal class Decision
 		List<Card> list = CardInfo.GetCards( data.Hand.Cards, CardInfo.cHeatOff ).ToList();
 		if( list.Count == 0 ) { return null; } // No cards in hand
 
-		// Match heat off card with heat on
+		// Match heat-off card with heat-on
 		Card? rtn = heatOn.Id switch
 		{
 			CardInfo.cOnBust => CardInfo.GetFirst( list, CardInfo.cOffBust ),

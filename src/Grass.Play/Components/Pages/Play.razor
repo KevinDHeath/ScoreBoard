@@ -1,6 +1,7 @@
 @page "/play/{id:int}"
 @rendermode InteractiveServer
 @inject GameService Service
+@inject PlayState PlayState
 
 <PageTitle>Play</PageTitle>
 
@@ -11,16 +12,16 @@
   @Service.Current.Date
 </SectionContent>
 
-<nav id="showInPlay" class="my-1 px-2 @button.Class" role="navigation">
-  <a id="inPlay" class="button" @onclick="active.Toggle">@active.Text</a>
-</nav>
 
 <div class="columns pl-2 pr-2">
 
   <div class="column">
     <nav class="menu sticky">
       <p class="menu-label"><strong>@Player?.Name</strong></p>
-      <ul id="InThisArticleMenu" class="menu-list" style="list-style-type: none; margin-left: .25em;">
+      <nav id="showInPlay" class="my-1 px-2 @button.Class" role="navigation">
+        <a id="inPlay" class="button is-danger is-dark" @onclick="active.Toggle">@active.Text</a>
+      </nav>
+      <ul class="menu-list" style="list-style-type: none; margin-left: .25em;">
         <li id="inHandLink" class="@active.Class"><a class="quickLink" href="/play/@Id#inHand">In hand</a></li>
         <li><a class="quickLink" href="/play/@Id#stashPile">Stash pile</a></li>
         <li id="scoreCardsLink" class="@scores.Class"><a class="quickLink" href="/play/@Id#scoreCards">Score cards</a></li>
@@ -35,10 +36,43 @@
 
     <div id="inHand" class="@active.Class">
       <h3 class="quickLinkHeader" @onclick="inHand.Toggle"><span class="icon toggleSection @inHand.Class"><i class="fa fa-angle-down"></i></span>In hand</h3>
-      <table class="table" style="@inHand.Style">
-        @((MarkupString)InHandHtml())
-      </table>
+      @if( Hand is not null )
+      {
+        @if( Hand.InHand.Count == GameService.cMaxNumber && !Played )
+        {
+          <a id="take" class="button ml-1 @button.Class" @onclick="TakeCard">Take Card</a>
+        }
+        <table class="table" style="@inHand.Style">
+          <tr>
+            @foreach( var card in Hand?.InHand! )
+            {
+              @if( Service.Current.Winner is null )
+              {
+                <td class="play-card">
+                  <img @onclick="@(() => PlayState.ShowChooseActionDialog( Hand, card ) )"
+                       class="image" title="@card.Comment" src="./img/cards/@card.Image">
+                </td>
+              }
+              else
+              {
+                <td class="game-card">
+                  <img class="image" title="@card.Comment" src="./img/cards/@card.Image">
+                </td>
+              }
+            }
+          </tr>
+        </table>
+      }
     </div>
+
+    @if( PlayState.ShowingDialog )
+    {
+      <CardActionsDialog Card="PlayState.ChosenCard"
+                         Hand="Hand"
+                         OnCancel="PlayState.CancelChooseActionDialog"
+                         OnPlay="PlayCard"
+                         OnDiscard="Discard" />
+    }
 
     <div id="stashPile" class="mt-2">
       <h3 class="quickLinkHeader" @onclick="stash.Toggle"><span class="icon toggleSection @stash.Class"><i class="fa fa-angle-down"></i></span>Stash pile</h3>

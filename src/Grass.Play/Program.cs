@@ -8,6 +8,8 @@ builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<GameService>();
+builder.Services.AddScoped<PlayState>();
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.

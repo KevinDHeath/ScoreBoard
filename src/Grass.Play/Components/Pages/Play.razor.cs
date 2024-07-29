@@ -1,7 +1,6 @@
 using System.Text;
 using Grass.Logic;
 using Grass.Logic.Models;
-
 namespace Grass.Play.Components.Pages;
 
 public partial class Play
@@ -22,8 +21,10 @@ public partial class Play
 
 	// In-hand button
 	private readonly HideShow button = new( hide: false );
-	private readonly HideShow active = new( "In hand" );
+	private readonly HideShow active = new( "my hand" );
 	private readonly HideShow scores = new( hide: false );
+
+	internal bool Played { get; set; } = false;
 
 	protected override void OnInitialized()
 	{
@@ -51,6 +52,35 @@ public partial class Play
 		}
 	}
 
+	private void TakeCard()
+	{
+		if( Hand is not null && Hand.InHand.Count == GameService.cMaxNumber )
+		{
+			bool res = Service.Take( Hand );
+		}
+	}
+
+	private void PlayCard()
+	{
+		if( Player is not null && Hand is not null && Hand.InHand.Count > GameService.cMaxNumber )
+		{
+			Card? card = PlayState.ChosenCard;
+			PlayState.ChosenCard = null;
+			PlayResult res = Service.Play( Player, card! );
+			Played = res == PlayResult.Success;
+		}
+	}
+
+	private void Discard()
+	{
+		if( Player is not null && Hand is not null && Hand.InHand.Count > GameService.cMaxNumber )
+		{
+			Card? card = PlayState.ChosenCard;
+			PlayState.ChosenCard = null;
+			Played = Service.Discard( Player, card! );
+		}
+	}
+
 	private string HasslePileHtml()
 	{
 		if( Hand is null ) { return "<tr></tr>"; }
@@ -59,7 +89,7 @@ public partial class Play
 		Card? card = Hand.HasslePile.LastOrDefault();
 		string wrk = card is not null
 			? GameCard( card, showTitle: false )
-			: "<td class='game-card' style='vertical-align: middle; border: 1px solid;'><i>Market not Open</i></td>";
+			: "<td class='game-card' style='vertical-align: middle; border: 1px solid;'><i>Market not Active</i></td>";
 		_ = rtn.AppendLine( wrk ) 
 
 		.Append( $"<td><p style=\"margin-bottom: 0px; font-size: larger;\">Game total: {Home.FormatAmt( Player?.Total, true )}<br>" )
@@ -87,19 +117,6 @@ public partial class Play
 		}
 		_ = rtn.AppendLine( "</tr>" );
 
-		return rtn.ToString();
-	}
-
-	private string InHandHtml()
-	{
-		if( Hand is null ) { return string.Empty; }
-
-		StringBuilder rtn = new( "<tr>" );
-		foreach( Card card in Hand.InHand )
-		{
-			_ = rtn.AppendLine( GameCard( card ) );
-		}
-		rtn.Append( "</tr>" );
 		return rtn.ToString();
 	}
 
@@ -134,13 +151,14 @@ public partial class Play
 		foreach( Hand hand in scores )
 		{
 			int total = hand.NetScore + hand.Bonus;
+			int peddle = -hand.HighestPeddle;
 			_ = rtn.AppendLine( "<div class=\"column\">" )
 			.AppendLine( "<table class=\"score-card\">" )
 			.AppendLine( $"<tr><th colspan=\"2\">{hand.Count.DisplayWithSuffix()} Hand</th></tr>" )
 			.AppendLine( $"<tr><td>Protected profit{sep}{Home.FormatAmt( hand.Protected )}</td></tr>" )
 			.AppendLine( $"<tr><td>+ At risk profit{sep}{Home.FormatAmt( hand.UnProtected )}</td></tr>" )
 			.AppendLine( $"<tr><td>- Banker's skim /+ bonus{sep}{Home.FormatAmt( hand.Skimmed )}</td></tr>" )
-			.AppendLine( $"<tr><td>- Highest Peddle in hand{sep}{Home.FormatAmt( hand.HighestPeddle )}</td></tr>" )
+			.AppendLine( $"<tr><td>- Highest Peddle in hand{sep}{Home.FormatAmt( peddle )}</td></tr>" )
 			.AppendLine( $"<tr><td>- Paranoia{sep}{Home.FormatAmt( hand.ParanoiaFines )}</td></tr>" )
 			.AppendLine( $"<tr><td>= Net profit{sep}{Home.FormatAmt( hand.NetScore )}</td></tr>" )
 			.AppendLine( $"<tr><td nowrap>+ Bonus for winner of hand{sep}{Home.FormatAmt( hand.Bonus )}</td></tr>" )
@@ -155,6 +173,6 @@ public partial class Play
 	{
 		string caption = card.Comment;
 		string title = showTitle && caption.Length > 0 ? $"title=\"{card.Comment}\" " : string.Empty;
-		return $"<td class=\"game-card\"><img class=\"image\" {title}src=\"./img/cards/{card.Id}.png\"></td>";
+		return $"<td class=\"game-card\"><img class=\"image\" {title}src=\"./img/cards/{card.Image}\"></td>";
 	}
 }

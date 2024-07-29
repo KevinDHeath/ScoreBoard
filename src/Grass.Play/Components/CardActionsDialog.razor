@@ -1,0 +1,71 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head is-background-info-dark">
+      <p class="modal-card-title">Card in-hand action</p>
+      <button class="delete is-large" @onclick="OnCancel" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+
+      <table class="table">
+        <tr>
+          <td class="game-card"><img class="image" title="@Card.Comment" src="./img/cards/@Card.Image"></td>
+          <td>
+            @Message
+          </td>
+        </tr>
+      </table>
+    </section>
+    <footer class="modal-card-foot">
+      <div class="container">
+        @if( Hand.InHand.Count > GameService.cMaxNumber )
+        {
+          <form>
+            @if( CanPlay )
+            {
+              <div class="field">
+                <button class="button is-success is-pulled-left" style="min-width: 100px;" @onclick="OnPlay">Play</button>
+              </div>
+            }
+            <div class="field">
+              <button class="button is-warning is-pulled-right" style="min-width: 100px;" @onclick="OnDiscard">Discard</button>
+            </div>
+          </form>
+        }
+      </div>
+    </footer>
+  </div>
+</div>
+
+@code {
+  [Parameter, EditorRequired]
+  public required Card Card { get; set; }
+  [Parameter, EditorRequired]
+  public required Hand Hand { get; set; }
+  [Parameter, EditorRequired]
+  public EventCallback OnCancel { get; set; }
+  [Parameter, EditorRequired]
+  public EventCallback OnPlay { get; set; }
+  [Parameter, EditorRequired]
+  public EventCallback OnDiscard { get; set; }
+
+  private bool CanPlay { get; set; } = false;
+  private string Message { get; set; } = string.Empty;
+
+  protected override void OnInitialized()
+  {
+    if( Hand.InHand.Count > GameService.cMaxNumber )
+    {
+      PlayResult res = GameService.CanPlay( Hand, Card );
+      CanPlay = res == PlayResult.Success;
+      if( !CanPlay )
+      {
+        Message = " Cannot play - " + res.ToString();
+      }
+    }
+    else
+    {
+      Message = " Cannot play - Not enough cards in hand.";
+    }
+  }
+}

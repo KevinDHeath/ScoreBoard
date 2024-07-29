@@ -21,6 +21,9 @@ public class Card
 	/// each card type but there can be multiple playing cards with the same Id.</remarks>
 	public string Id => Info.Id;
 
+	/// <summary>Card type image filename.</summary>
+	public string Image => Id + ".png";
+
 	/// <summary>Indicates whether a peddle card is protected in the players stash.</summary>
 	public bool Protected { get; set; }
 

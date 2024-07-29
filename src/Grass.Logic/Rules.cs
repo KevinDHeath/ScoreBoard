@@ -37,9 +37,11 @@ internal class Rules
 
 	private const string cNotOpen = "Market is not open.";
 	private const string cNoHeatOn = "No heat on.";
+	private const string cNoHeatOnMatch = "No matching heat on.";
 	private const string cNotActive = "Market must be active.";
 	private const string cIsActive = "Market is already active.";
 	private const string cNoMoney = "No money to pay fine.";
+	private const string cDiscard = "Can only discard.";
 
 	internal static PlayResult CanPlay( Hand hand, Card card )
 	{
@@ -50,9 +52,18 @@ internal class Rules
 				if( !hand.MarketIsOpen ) { return new( cNotOpen ); }
 				break;
 			case CardInfo.cHeatOff:
+				if( hand.HasslePile.Count == 0 ) { return new( cNotActive ); }
 				if( hand.MarketIsOpen ) { return new( cNoHeatOn ); }
-				if( card.Id == CardInfo.cPayFine && hand.LowestUnProtected is null )
-				{ return new( cNoMoney ); }
+				if( card.Id == CardInfo.cPayFine ) // Must have money to pay fine
+				{
+					if( hand.LowestUnProtected is null ) { return new( cNoMoney ); }
+				}
+				else // Must have corresponding heat-on
+				{
+					string heatOn = card.Id.Replace( CardInfo.cHeatOff, CardInfo.cHeatOn );
+					Card? heat = hand.HasslePile.LastOrDefault();
+					if( heat is not null && heat.Id != heatOn ) { return new( cNoHeatOnMatch ); }
+				}
 				break;
 			case CardInfo.cNirvana:
 				if( hand.HasslePile.Count == 0 ) { return new( cNotActive ); }
@@ -67,6 +78,7 @@ internal class Rules
 				{ return new( cIsActive ); }
 				if( card.Id is CardInfo.cClose or CardInfo.cSteal )
 				{ if( !hand.MarketIsOpen ) { return new( cNotOpen ); } }
+				if( card.Id == CardInfo.cBanker ) { return new( cDiscard ); }
 				break;
 		}
 		return PlayResult.Success!;

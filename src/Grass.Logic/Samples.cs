@@ -43,6 +43,7 @@ public class Samples
 					to = hand.StashPile;
 					Add( game, hand, CardInfo.cMexico, to );
 					Add( game, hand, CardInfo.cColumbia, to );
+					hand.Round = 14;
 					break;
 
 				case "John":
@@ -66,6 +67,7 @@ public class Samples
 					Add( game, hand, CardInfo.cHomegrown, to );
 					Add( game, hand, CardInfo.cPanama, to );
 					Add( game, hand, CardInfo.cPanama, to );
+					hand.Round = 14;
 					break;
 
 				case "Amy":
@@ -90,6 +92,7 @@ public class Samples
 					Add( game, hand, CardInfo.cColumbia, to, "protected (round 13)", protect: true );
 					Add( game, hand, CardInfo.cPanama, to );
 					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 13)" );
+					hand.Round = 14;
 					break;
 
 				case "Bob":
@@ -110,6 +113,7 @@ public class Samples
 					Add( game, hand, CardInfo.cLustConquers, to, "played (round 12)" );
 					Add( game, hand, CardInfo.cJamaica, to );
 					Add( game, hand, CardInfo.cDrFeelgood, to );
+					hand.Round = 14;
 					break;
 			}
 		}
@@ -120,21 +124,17 @@ public class Samples
 	private static void PlayRound14( Game game, Player? amy, Player? bob, Player? janis, Player? john )
 	{
 		if( amy is null || bob is null || janis is null || john is null ) return;
-		int round = 14;
 
 		Hand hand = janis.Current;
-		hand.Round = round;
 		game.Take( hand, CardInfo.cLustConquers ); // Pick-up
 		Card? card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cSoldout );
 		if( card is not null ) { _ = game.Play( janis, card ); }
 
 		hand = john.Current;
-		hand.Round = round;
 		game.Take( hand, CardInfo.cMexico ); // Pick-up
 		Transfer( hand.Cards, hand.StashPile, CardInfo.cMexico ); // Play
 
 		hand = amy.Current;
-		hand.Round = round;
 		game.Take( hand, CardInfo.cSteal ); // Pick-up (turn 1)
 		card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cEuphoria );
 		if( card is not null ) { _ = game.Play( amy, card ); } // Play (turn 1)

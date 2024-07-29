@@ -25,6 +25,8 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .player-current { font-style: italic; font-weight: bold; }
 .score-card .align-right { text-align: right; }
 .table .game-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
+.table .play-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
+.play-card > img:hover { transform: scale(1.04); }
 
 /* Bulma overrides */
 .menu-label { color: black; background-color: #FF8C00; padding: 5pt; }

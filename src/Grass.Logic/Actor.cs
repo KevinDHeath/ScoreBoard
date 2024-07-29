@@ -85,7 +85,7 @@ internal class Actor : PassCardHandler
 
 	private static Card? HeatOff( Game game, Decision data, List<Decision> others )
 	{
-		if( data.Hand.MarketIsOpen ) { return null; } // Market must have no heat
+		if( data.Hand.MarketIsOpen ) { return null; } // Market must have heat
 
 		Card? heat = data.Hand.HasslePile.LastOrDefault();
 		if( heat is null ) { return null; }

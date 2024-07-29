@@ -11,6 +11,9 @@ public class GameService : PassCardHandler
 	private GameOptions _options = default!;
 	private bool _disposed;
 
+	/// <summary>Maximum number of players in a game and cards in hand.</summary>
+	public const int cMaxNumber = Rules.cMaxNumber;
+
 	/// <summary>Initializes a new instance of the <see cref="GameService"/> class.</summary>
 	public GameService() => _game = default!;
 
@@ -24,6 +27,7 @@ public class GameService : PassCardHandler
 
 	/// <summary>Setup a new Grass game.</summary>
 	/// <param name="options">Options for the Game.</param>
+	/// <returns>An initialized game.</returns>
 	public Game Setup( GameOptions options )
 	{
 		foreach( var player in options.Players ) { player.Reset(); }
@@ -51,6 +55,14 @@ public class GameService : PassCardHandler
 	/// Asynchronous programming scenarios</seealso>
 	public Task<bool> GameAsync() => Task.Run( () => { return _game.Play(); } );
 
+	/// <summary>Checks whether a card can be played.</summary>
+	/// <param name="hand">Hand containing the card.</param>
+	/// <param name="card">The card to play.</param>
+	/// <returns>The <c>null</c> value is used to indicate success. Consumers of
+	/// <see cref="PlayResult"/>s should compare the values to
+	/// <see cref="PlayResult.Success" /> rather than checking for <c>null</c>.</returns>
+	public static PlayResult CanPlay( Hand hand, Card card ) => Rules.CanPlay( hand, card );
+
 	/// <inheritdoc/>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public override void Dispose()
@@ -63,14 +75,14 @@ public class GameService : PassCardHandler
 
 	#region Action Methods
 
-	/// <summary>Add card to pass due to paranoia being played.</summary>
+	/// <summary>Add a card to pass due to paranoia being played.</summary>
 	/// <param name="player">Player object.</param>
 	/// <param name="card">Card object.</param>
 	/// <returns><see langword="false"/> if the player has already added a card or
 	/// the card is not in the players hand.</returns>
-	public bool AddCardToPass( Player player, Card card ) => _game.AddCardToPass( player, card );
+	public bool CardToPass( Player player, Card card ) => _game.AddCardToPass( player, card );
 
-	/// <summary>Discard a card.</summary>
+	/// <summary>Discard a card in the players current hand.</summary>
 	/// <param name="player">Current player.</param>
 	/// <param name="card">Card to discard.</param>
 	/// <returns><see langword="true"/> if the card is successfully discarded.</returns>
@@ -132,7 +144,7 @@ public class GameService : PassCardHandler
 	/// <param name="summary">Summary to export.</param>
 	/// <param name="indent">Indicates whether to use JSON indentation.</param>
 	/// <returns>A string representing the game summary as JSON.</returns>
-	public string ExportSummary( Summary summary, bool indent = false )
+	internal string ExportSummary( Summary summary, bool indent = false )
 	{
 		options.WriteIndented = indent;
 		return JsonSerializer.Serialize( summary, options );
@@ -141,7 +153,7 @@ public class GameService : PassCardHandler
 	/// <summary>Import a game summary.</summary>
 	/// <param name="json">The JSON string.</param>
 	/// <returns>A <c>null</c> is returned if invalid JSON was provided.</returns>
-	public static Summary? ImportSummary( ref string json )
+	internal static Summary? ImportSummary( ref string json )
 	{
 		try { return JsonSerializer.Deserialize<Summary>( json ); }
 		catch { return null; }
