@@ -27,20 +27,19 @@ public class GameOptions
 	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 	public bool AutoPlay { get; set; } = false;
 
+	/// <summary>Indicates whether to populate a game for in-progress testing. The default is <c>false</c>.</summary>
+	/// <remarks>
+	/// <b>Important:</b><i> This depends on the <c>AutoPlay</c> property being set as <c>true</c>.</i>
+	/// </remarks>
+	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
+	public bool InProgress { get; set; } = false;
+
 	/// <summary>Indicates whether to populate a sample game. The default is <c>false</c>.</summary>
 	/// <remarks>
 	/// <b>Important:</b><i> This depends on the <c>AutoPlay</c> property being set as <c>true</c>.</i>
 	/// </remarks>
 	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 	public bool Sample { get; set; } = false;
-
-	/// <summary>Indicates whether to populate the sample game to the end.
-	/// The default is <c>true</c>.</summary>
-	/// <remarks>
-	/// <b>Important:</b><i> This depends on the <c>Sample</c> property being set as <c>false</c>.</i>
-	/// </remarks>
-	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
-	public bool EndGame { get; set; } = false;
 
 	#endregion
 }

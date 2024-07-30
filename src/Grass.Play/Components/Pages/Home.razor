@@ -56,14 +56,15 @@
           <div class="content mt-0 pt-0">
             <EditForm Model="Options" OnSubmit="Submit" FormName="NewGame">
               <table>
-                <tr><td><label for="Target">Target:</label></td><td><InputNumber id="Target" @bind-Value="Options!.Target"></InputNumber></td></tr>
+                <tr><td><label for="Target">Target:</label></td><td><InputNumber id="Target" @bind-Value="Options!.Target"
+                  style="max-width: 75px;" Step="250000" EnableMinMax="true" Min="250000" Max="1000000"></InputNumber></td></tr>
                 <tr><td><label for="ReversePlay">Reverse Play:</label></td><td><InputCheckbox id="ReversePlay" @bind-Value="Options!.ReversePlay"></InputCheckbox></td></tr>
                 <tr><td><label for="CardComments">Card Comments:</label></td><td><InputCheckbox id="CardComments" @bind-Value="Options!.CardComments"></InputCheckbox></td></tr>
                 @if( AllowTests )
                 {
                   <tr><td><label for="AutoPlay">Auto-Play:</label></td><td><InputCheckbox id="AutoPlay" @bind-Value="Options!.AutoPlay"></InputCheckbox></td></tr>
+                  <tr><td><label for="InProgress">In-progress:</label></td><td><InputCheckbox id="InProgress" @bind-Value="Options!.InProgress"></InputCheckbox></td></tr>
                   <tr><td><label for="Sample">Sample game:</label></td><td><InputCheckbox id="Sample" @bind-Value="Options!.Sample"></InputCheckbox></td></tr>
-                  <tr><td><label for="EndGame">End game:</label></td><td><InputCheckbox id="EndGame" @bind-Value="Options!.EndGame"></InputCheckbox></td></tr>
                 }
                 <tr><td colspan="2">
                   <button class="btn btn-primary" style="width: 100px;" type="submit">Start</button>

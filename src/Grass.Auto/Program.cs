@@ -15,8 +15,8 @@ internal class Program
 			CardComments = true,
 			ReversePlay = true,
 			AutoPlay = true,
-			Sample = false,
-			EndGame = false
+			InProgress = false,
+			Sample = false
 		};
 
 		GameService svc = new();
@@ -33,9 +33,13 @@ internal class Program
 
 				//HtmlBuilder.CreateHtml( game );
 
-				//Summary summary = Summary.BuildSummary( game );
-				//string json = System.Text.Json.JsonSerializer.Serialize( summary );
-				//Summary? obj = System.Text.Json.JsonSerializer.Deserialize<Summary>( json );
+				if( svc.Summaries.Count > 0 )
+				{
+					Console.WriteLine();
+					Console.WriteLine( "Exported Game Summary:" );
+					string json = svc.ExportSummary( svc.Summaries[0], true );
+					Console.WriteLine( json );
+				}
 			}
 		}
 		catch( Exception ex ) { Console.WriteLine( ex.ToString() ); }

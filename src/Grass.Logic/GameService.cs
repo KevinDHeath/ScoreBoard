@@ -36,10 +36,16 @@ public class GameService : PassCardHandler
 
 		// Play the game
 		if( _game.Auto ) { _game.GameChanged += OnParanoiaPlayed; }
-		if( _game.Auto && options.Sample )
+
+		if( _game.Auto && options.InProgress )
+		{
+			_game.Auto = false; // switch off auto-play when populating tests
+			Samples.InProgress( _game );
+		}
+		else if( _game.Auto && options.Sample )
 		{
 			_game.Auto = false; // switch off auto-play when populating sample
-			Samples.Populate( _game, endgame: options.EndGame );
+			Samples.Populate( _game, endgame: true );
 		}
 		else if( _game.Auto ) { _game.Play(); }
 
@@ -144,7 +150,7 @@ public class GameService : PassCardHandler
 	/// <param name="summary">Summary to export.</param>
 	/// <param name="indent">Indicates whether to use JSON indentation.</param>
 	/// <returns>A string representing the game summary as JSON.</returns>
-	internal string ExportSummary( Summary summary, bool indent = false )
+	public string ExportSummary( Summary summary, bool indent = false )
 	{
 		options.WriteIndented = indent;
 		return JsonSerializer.Serialize( summary, options );

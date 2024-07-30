@@ -68,7 +68,7 @@ public class Summary
 					Protected = hand.Protected,
 					UnProtected = hand.UnProtected,
 					Skimmed = hand.Skimmed,
-					HighestPeddle = hand.HighestPeddle,
+					HighestPeddle = -hand.HighestPeddle,
 					ParanoiaFines = hand.ParanoiaFines,
 					NetProfit = hand.NetScore,
 					Bonus = hand.Bonus

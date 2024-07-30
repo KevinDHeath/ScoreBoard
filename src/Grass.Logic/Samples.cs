@@ -5,6 +5,108 @@ namespace Grass.Logic;
 [System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 public class Samples
 {
+	/// <summary>Populate in-progress testing data</summary>
+	public static void InProgress( Game game )
+	{
+		Player? dealer = game.Players.FirstOrDefault( p => p.Name == "Bob" );
+		if( dealer is not null ) { game.Dealer = dealer; }
+		game.StartHand();
+
+		// Put dealt cards back in the stack
+		foreach( Player p in game.PlayOrder ) { BackToStack( game, p.Current.Cards ); }
+		Player? janis = null, john = null, amy = null, bob = null;
+
+		foreach( Player player in game.Players )
+		{
+			Hand hand = player.Current;
+			hand.Round = 13;
+			Card? card = null;
+			List<Card> to = [];
+			switch( player.Name )
+			{
+				case "Janis":
+					janis = player;
+					game.Take( hand, CardInfo.cOpen );
+					game.Take( hand, CardInfo.cClose );
+					game.Take( hand, CardInfo.cBanker );
+					game.Take( hand, CardInfo.cOffFelony );
+					game.Take( hand, CardInfo.cColumbia );
+					game.Take( hand, CardInfo.cPayFine );
+
+					hand.Round++;
+					break;
+
+				case "John":
+					john = player;
+					game.Take( hand, CardInfo.cSteal );
+					game.Take( hand, CardInfo.cPayFine );
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cPayFine );
+					game.Take( hand, CardInfo.cOpen );
+					game.Take( hand, CardInfo.cOffDetained );
+
+					to = hand.HasslePile;
+					Add( game, hand, CardInfo.cOnBust, to, "by Bob stash was 60,000 (round 9)" );
+					Add( game, hand, CardInfo.cOffBust, to, "played (round 10)" );
+					Add( game, hand, CardInfo.cOpen, to, "(round 6)" );
+					Add( game, hand, CardInfo.cOnSearch, to, "by Janis stash was 60,000 (round 11)" );
+
+					to = hand.StashPile;
+					Add( game, hand, CardInfo.cMexico, to );
+					Add( game, hand, CardInfo.cHomegrown, to );
+					Add( game, hand, CardInfo.cPanama, to );
+					Add( game, hand, CardInfo.cPanama, to );
+					hand.Round++;
+					break;
+
+				case "Amy":
+					amy = player;
+					game.Take( hand, CardInfo.cOffFelony );
+					card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cOffFelony );
+					card?.AddComment( "passed by John to Amy (round 5)" );
+					game.Take( hand, CardInfo.cOpen );
+					game.Take( hand, CardInfo.cOnDetained );
+					game.Take( hand, CardInfo.cEuphoria );
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cClose );
+
+					to = hand.HasslePile;
+					Add( game, hand, CardInfo.cOpen, to, "trade with John (round 7)" );
+					Add( game, hand, CardInfo.cOnSearch, to, "by John stash was 100,000 (round 12)" );
+
+					to = hand.StashPile;
+					Add( game, hand, CardInfo.cColumbia, to, "protected (round 9)", protect: true );
+					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 9)" );
+					Add( game, hand, CardInfo.cColumbia, to, "protected (round 13)", protect: true );
+					Add( game, hand, CardInfo.cPanama, to );
+					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 13)" );
+					hand.Round++;
+					break;
+
+				case "Bob":
+					bob = player;
+					game.Take( hand, CardInfo.cOffSearch );
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cOnBust );
+					game.Take( hand, CardInfo.cSteal );
+					game.Take( hand, CardInfo.cJamaica );
+					game.Take( hand, CardInfo.cOffDetained );
+
+					to = hand.HasslePile;
+					Add( game, hand, CardInfo.cOpen, to, "(round 1)" );
+
+					to = hand.StashPile;
+					Add( game, hand, CardInfo.cHomegrown, to );
+					Add( game, hand, CardInfo.cPanama, to, "protected (round 12)", protect: true );
+					Add( game, hand, CardInfo.cLustConquers, to, "played (round 12)" );
+					Add( game, hand, CardInfo.cJamaica, to );
+					Add( game, hand, CardInfo.cDrFeelgood, to );
+					hand.Round++;
+					break;
+			}
+		}
+	}
+
 	/// <summary>Populate data</summary>
 	public static void Populate( Game game, bool endgame = false )
 	{
