@@ -33,7 +33,6 @@ public class Samples
 					game.Take( hand, CardInfo.cColumbia );
 					game.Take( hand, CardInfo.cPayFine );
 
-					hand.Round++;
 					break;
 
 				case "John":
@@ -56,7 +55,6 @@ public class Samples
 					Add( game, hand, CardInfo.cHomegrown, to );
 					Add( game, hand, CardInfo.cPanama, to );
 					Add( game, hand, CardInfo.cPanama, to );
-					hand.Round++;
 					break;
 
 				case "Amy":
@@ -80,7 +78,6 @@ public class Samples
 					Add( game, hand, CardInfo.cColumbia, to, "protected (round 13)", protect: true );
 					Add( game, hand, CardInfo.cPanama, to );
 					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 13)" );
-					hand.Round++;
 					break;
 
 				case "Bob":
@@ -101,7 +98,6 @@ public class Samples
 					Add( game, hand, CardInfo.cLustConquers, to, "played (round 12)" );
 					Add( game, hand, CardInfo.cJamaica, to );
 					Add( game, hand, CardInfo.cDrFeelgood, to );
-					hand.Round++;
 					break;
 			}
 		}

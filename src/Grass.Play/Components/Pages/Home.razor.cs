@@ -39,8 +39,7 @@ public partial class Home
 			if( AllowTests )
 			{
 				Options.AutoPlay = true;
-				Options.InProgress = true;
-				Options.Sample = false;
+				Options.InProgress = false;
 			}
 		}
 

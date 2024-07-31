@@ -18,20 +18,20 @@
     </section>
     <footer class="modal-card-foot">
       <div class="container">
-        @if( Hand.InHand.Count > GameService.cMaxNumber )
-        {
-          <form>
-            @if( CanPlay )
-            {
-              <div class="field">
-                <button class="button is-success is-pulled-left" style="min-width: 100px;" @onclick="OnPlay">Play</button>
-              </div>
-            }
+        <form>
+          @if( CanPlay )
+          {
+            <div class="field">
+              <button class="button is-success is-pulled-left" style="min-width: 100px;" @onclick="OnPlay">Play</button>
+            </div>
+          }
+          @if( CanDiscard )
+          {
             <div class="field">
               <button class="button is-warning is-pulled-right" style="min-width: 100px;" @onclick="OnDiscard">Discard</button>
             </div>
-          </form>
-        }
+          }
+        </form>
       </div>
     </footer>
   </div>
@@ -41,7 +41,7 @@
   [Parameter, EditorRequired]
   public required Card Card { get; set; }
   [Parameter, EditorRequired]
-  public required Hand Hand { get; set; }
+  public required Player Player { get; set; }
   [Parameter, EditorRequired]
   public EventCallback OnCancel { get; set; }
   [Parameter, EditorRequired]
@@ -49,23 +49,36 @@
   [Parameter, EditorRequired]
   public EventCallback OnDiscard { get; set; }
 
+  private bool CanDiscard { get; set; } = true;
   private bool CanPlay { get; set; } = false;
   private string Message { get; set; } = string.Empty;
 
   protected override void OnInitialized()
   {
-    if( Hand.InHand.Count > GameService.cMaxNumber )
+    if( Player.Play )
     {
-      PlayResult res = GameService.CanPlay( Hand, Card );
+      PlayResult res = GameService.CanPlay( Player.Current, Card );
       CanPlay = res == PlayResult.Success;
       if( !CanPlay )
       {
-        Message = " Cannot play - " + res.ToString();
+        Message = "Cannot play - " + res.ToString();
+      }
+      else
+      {
+        // Hide discard button for certain scenarios
+        if((Card.Id == "Market-Open" && !Player.Current.MarketIsOpen ) ||
+         (Card.Id.StartsWith( "Peddle" ) && Player.Current.MarketIsOpen) ||
+         Card.Id.StartsWith( "Nirvana" ) ||
+         Card.Id.StartsWith( "Paranoia" )) { CanDiscard = false; }
       }
     }
-    else
+    else if( Player.Pass )
     {
-      Message = " Cannot play - Not enough cards in hand.";
+      //Message = "Cannot play - Not enough cards in hand.";
+    }
+    else 
+    {
+      Message = "Cannot play - It's not your turn.";
     }
   }
 }

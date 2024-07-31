@@ -15,8 +15,7 @@ internal class Program
 			CardComments = true,
 			ReversePlay = true,
 			AutoPlay = true,
-			InProgress = false,
-			Sample = false
+			InProgress = false
 		};
 
 		GameService svc = new();

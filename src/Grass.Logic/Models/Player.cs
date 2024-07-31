@@ -6,6 +6,22 @@ namespace Grass.Logic.Models;
 [System.Diagnostics.DebuggerDisplay( "{Name}" )]
 public class Player( string name, int id = 0 )
 {
+	internal enum Action
+	{
+		Nothing = 0,
+		Play = 1,
+		Pass = 2,
+		Trade = 3
+	}
+
+	internal Action ToDo { get; set; }
+
+	/// <summary>Indicates whether the player needs to play a card in hand.</summary>
+	public bool Play => ToDo == Action.Play;
+
+	/// <summary>Indicates whether the player needs to pass a card in hand.</summary>
+	public bool Pass => ToDo == Action.Pass;
+
 	#region Properties
 
 	/// <summary>Identifier of the player.</summary>
@@ -45,6 +61,7 @@ public class Player( string name, int id = 0 )
 		Total = 0;
 		ResetCurrent();
 		Completed.Clear();
+		ToDo = Action.Nothing;
 	}
 
 	#endregion

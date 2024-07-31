@@ -212,6 +212,7 @@ public class Game
 		if( dict.ContainsKey( player ) ) { return false; }
 		if( !player.Current.Cards.Contains( card ) ) { return false; }
 		cardsToPass.Add( new KeyValuePair<Player, Card>( player, card ) );
+		player.ToDo = Player.Action.Nothing;
 		return true;
 	}
 
@@ -370,7 +371,7 @@ public class Game
 
 				while( hand.Turns >= 0 )
 				{
-					bool played = false;  // TODO: card must be played real-time
+					bool played = false;
 					if( actor is not null ) { played = actor.Play( hand ); }
 					if( !played )
 					{

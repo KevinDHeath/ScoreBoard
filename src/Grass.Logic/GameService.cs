@@ -11,9 +11,6 @@ public class GameService : PassCardHandler
 	private GameOptions _options = default!;
 	private bool _disposed;
 
-	/// <summary>Maximum number of players in a game and cards in hand.</summary>
-	public const int cMaxNumber = Rules.cMaxNumber;
-
 	/// <summary>Initializes a new instance of the <see cref="GameService"/> class.</summary>
 	public GameService() => _game = default!;
 
@@ -39,19 +36,75 @@ public class GameService : PassCardHandler
 
 		if( _game.Auto && options.InProgress )
 		{
-			_game.Auto = false; // switch off auto-play when populating tests
+			_game.Auto = false; // switch off auto-play when populating in-progress sample
 			Samples.InProgress( _game );
+			SetNextPlayer();
 		}
-		else if( _game.Auto && options.Sample )
+		else if( _game.Auto ) { _game.Play(); StoreSummary( _game ); }
+		else
 		{
-			_game.Auto = false; // switch off auto-play when populating sample
-			Samples.Populate( _game, endgame: true );
+			_game.GameChanged += OnParanoiaPlayed;
+			_game.StartHand();
+			SetNextPlayer();
 		}
-		else if( _game.Auto ) { _game.Play(); }
-
-		StoreSummary( _game );
 
 		return _game;
+	}
+
+	private void SetNextPlayer( Player? current = null )
+	{
+		Player? next = null;
+		if( current is null ) { next = _game.PlayOrder.First(); }
+		else
+		{
+			// Check for end of stack
+			if( _game.StackCount == 0 )
+			{
+				HandFinished( current );
+				return;
+			}
+
+			// Extra turns due to playing Nirvana
+			if( current.Current.Turns > 0 )
+			{
+				current.Current.Turns--;
+				_game.Take( current.Current );
+				return;
+			}
+
+			current.ToDo = Player.Action.Nothing;
+			int idx = _game.PlayOrder.FindIndex( x => x == current ) + 1;
+			while( next is null )
+			{
+				if( idx == _game.Players.Count ) { idx = 0; }
+				next = _game.PlayOrder[idx];
+
+				// Miss turns due to previously playing Paranoia
+				if( next.Current.Turns < 0 )
+				{
+					next.Current.Turns++;
+					next.Current.Round++;
+					next = null;
+					idx++;
+				}
+			}
+		}
+
+		next.Current.Round++;
+		_game.Take( next.Current );
+		next.ToDo = Player.Action.Play;
+	}
+
+	private void HandFinished( Player player )
+	{
+		_game.EndHand( player );
+		player.ToDo = Player.Action.Nothing;
+		if( _game.Winner is null )
+		{
+			_game.StartHand();
+			SetNextPlayer();
+		}
+		else { StoreSummary( _game ); }
 	}
 
 	/// <summary>Play a game asynchronously.</summary>
@@ -92,7 +145,12 @@ public class GameService : PassCardHandler
 	/// <param name="player">Current player.</param>
 	/// <param name="card">Card to discard.</param>
 	/// <returns><see langword="true"/> if the card is successfully discarded.</returns>
-	public bool Discard( Player player, Card card ) => _game.Discard( player, card );
+	public bool Discard( Player player, Card card )
+	{
+		bool rtn = _game.Discard( player, card );
+		if( rtn ) { SetNextPlayer( player ); }
+		return rtn;
+	}
 
 	/// <summary>Play a card in the players current hand.</summary>
 	/// <param name="player">Current player.</param>
@@ -101,7 +159,16 @@ public class GameService : PassCardHandler
 	/// of the play.</returns>
 	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
 	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
-	public PlayResult Play( Player player, Card card ) => _game.Play( player, card );
+	public PlayResult Play( Player player, Card card )
+	{
+		PlayResult rtn = _game.Play( player, card );
+		if( rtn == PlayResult.Success )
+		{
+			if( card.Id == CardInfo.cClose ) { HandFinished( player ); }
+			else { SetNextPlayer( player ); }
+		}
+		return rtn;
+	}
 
 	/// <summary>Play a card in the players current hand with another player.</summary>
 	/// <param name="player">Current player.</param>
@@ -125,12 +192,6 @@ public class GameService : PassCardHandler
 	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
 	public PlayResult Protect( Player player, Card card, List<Card> peddles ) =>
 		_game.Protect( player, card, peddles );
-
-	/// <summary>Take the next card from the stack.</summary>
-	/// <param name="hand">Current player hand to add the card to.</param>
-	/// <returns><see langword="true"/> if the card is successfully taken
-	/// from the stack and added to the players hand.</returns>
-	public bool Take( Hand hand ) => _game.Take( hand );
 
 	#endregion
 

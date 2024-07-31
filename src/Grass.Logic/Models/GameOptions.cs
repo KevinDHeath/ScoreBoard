@@ -34,12 +34,5 @@ public class GameOptions
 	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 	public bool InProgress { get; set; } = false;
 
-	/// <summary>Indicates whether to populate a sample game. The default is <c>false</c>.</summary>
-	/// <remarks>
-	/// <b>Important:</b><i> This depends on the <c>AutoPlay</c> property being set as <c>true</c>.</i>
-	/// </remarks>
-	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
-	public bool Sample { get; set; } = false;
-
 	#endregion
 }

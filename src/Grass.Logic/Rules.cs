@@ -264,8 +264,8 @@ internal class Rules
 				if( hand.HighestUnProtected is not null ) { lose.Add( hand.HighestUnProtected ); }
 				break;
 			case CardInfo.cWipedOut:
-				hand.Turns -= 2; // Miss 2 turns
-				lose.AddRange( hand.StashPile ); // Lose everything in stash pile
+				hand.Turns -= 2; // Miss 2 turns and all unprotected in stash pile
+				lose.AddRange( hand.StashPile.Where( c => c.Id.StartsWith( CardInfo.cPeddle ) && !c.Protected ).ToList() );
 				break;
 		}
 

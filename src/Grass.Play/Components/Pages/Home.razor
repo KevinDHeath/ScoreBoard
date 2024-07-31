@@ -33,7 +33,10 @@
                     {
                       @foreach( Player player in Current.PlayOrder )
                       {
-                        <li><NavLink class="nav-link" href="@($"play/{@player.Id}")">@player.Name</NavLink></li>
+                        <li><NavLink class="nav-link" href="@($"play/{@player.Id}")">@player.Name</NavLink> @if( player.Play )
+                          {
+                            <span> - in play</span>
+                          }</li>
                       }
                     }
                   </ol>
@@ -64,7 +67,6 @@
                 {
                   <tr><td><label for="AutoPlay">Auto-Play:</label></td><td><InputCheckbox id="AutoPlay" @bind-Value="Options!.AutoPlay"></InputCheckbox></td></tr>
                   <tr><td><label for="InProgress">In-progress:</label></td><td><InputCheckbox id="InProgress" @bind-Value="Options!.InProgress"></InputCheckbox></td></tr>
-                  <tr><td><label for="Sample">Sample game:</label></td><td><InputCheckbox id="Sample" @bind-Value="Options!.Sample"></InputCheckbox></td></tr>
                 }
                 <tr><td colspan="2">
                   <button class="btn btn-primary" style="width: 100px;" type="submit">Start</button>

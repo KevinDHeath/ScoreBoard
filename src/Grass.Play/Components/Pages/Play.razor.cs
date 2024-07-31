@@ -21,10 +21,8 @@ public partial class Play
 
 	// In-hand button
 	private readonly HideShow button = new( hide: false );
-	private readonly HideShow active = new( "my hand" );
+	private readonly HideShow active = new( "it's me" );
 	private readonly HideShow scores = new( hide: false );
-
-	internal bool Played { get; set; } = false;
 
 	protected override void OnInitialized()
 	{
@@ -52,32 +50,23 @@ public partial class Play
 		}
 	}
 
-	private void TakeCard()
-	{
-		if( Hand is not null && Hand.InHand.Count == GameService.cMaxNumber )
-		{
-			bool res = Service.Take( Hand );
-		}
-	}
-
 	private void PlayCard()
 	{
-		if( Player is not null && Hand is not null && Hand.InHand.Count > GameService.cMaxNumber )
+		if( Player is not null && Player.Play )
 		{
 			Card? card = PlayState.ChosenCard;
 			PlayState.ChosenCard = null;
-			PlayResult res = Service.Play( Player, card! );
-			Played = res == PlayResult.Success;
+			Service.Play( Player, card! );
 		}
 	}
 
 	private void Discard()
 	{
-		if( Player is not null && Hand is not null && Hand.InHand.Count > GameService.cMaxNumber )
+		if( Player is not null && Player.Play )
 		{
 			Card? card = PlayState.ChosenCard;
 			PlayState.ChosenCard = null;
-			Played = Service.Discard( Player, card! );
+			Service.Discard( Player, card! );
 		}
 	}
 

@@ -18,13 +18,13 @@
   <div class="column">
     <nav class="menu sticky">
       <p class="menu-label"><strong>@Player?.Name</strong></p>
-      <nav id="showInPlay" class="my-1 px-2 @button.Class" role="navigation">
-        <a id="inPlay" class="button is-danger is-dark" @onclick="active.Toggle">@active.Text</a>
+      <nav class="my-1 px-2 @button.Class" role="navigation">
+        <a class="button is-danger is-dark" @onclick="active.Toggle">@active.Text</a>
       </nav>
       <ul class="menu-list" style="list-style-type: none; margin-left: .25em;">
-        <li id="inHandLink" class="@active.Class"><a class="quickLink" href="/play/@Id#inHand">In hand</a></li>
+        <li class="@active.Class"><a class="quickLink" href="/play/@Id#inHand">In hand</a></li>
         <li><a class="quickLink" href="/play/@Id#stashPile">Stash pile</a></li>
-        <li id="scoreCardsLink" class="@scores.Class"><a class="quickLink" href="/play/@Id#scoreCards">Score cards</a></li>
+        <li class="@scores.Class"><a class="quickLink" href="/play/@Id#scoreCards">Score cards</a></li>
       </ul>
     </nav>
   </div>
@@ -38,10 +38,6 @@
       <h3 class="quickLinkHeader" @onclick="inHand.Toggle"><span class="icon toggleSection @inHand.Class"><i class="fa fa-angle-down"></i></span>In hand</h3>
       @if( Hand is not null )
       {
-        @if( Hand.InHand.Count == GameService.cMaxNumber && !Played )
-        {
-          <a id="take" class="button ml-1 @button.Class" @onclick="TakeCard">Take Card</a>
-        }
         <table class="table" style="@inHand.Style">
           <tr>
             @foreach( var card in Hand?.InHand! )
@@ -68,7 +64,7 @@
     @if( PlayState.ShowingDialog )
     {
       <CardActionsDialog Card="PlayState.ChosenCard"
-                         Hand="Hand"
+                         Player="Player"
                          OnCancel="PlayState.CancelChooseActionDialog"
                          OnPlay="PlayCard"
                          OnDiscard="Discard" />
@@ -98,7 +94,7 @@
           @foreach( Player player in Service.Current.PlayOrder )
           {
             @if( player == Player ) { <li><a class="player-current">@player.Name</a></li> }
-            else { <li><a href="@($"play/{@player.Id}")">@player.Name</a></li> }
+            else { <li><a href="@($"play/{@player.Id}#top")">@player.Name</a></li> }
           }
         }
       </ul>
