@@ -37,10 +37,10 @@ public class Samples
 
 				case "John":
 					john = player;
-					game.Take( hand, CardInfo.cSteal );
+					game.Take( hand, CardInfo.cSoldout );
 					game.Take( hand, CardInfo.cPayFine );
 					game.Take( hand, CardInfo.cStonehigh );
-					game.Take( hand, CardInfo.cPayFine );
+					game.Take( hand, CardInfo.cOffSearch );
 					game.Take( hand, CardInfo.cOpen );
 					game.Take( hand, CardInfo.cOffDetained );
 
@@ -48,7 +48,7 @@ public class Samples
 					Add( game, hand, CardInfo.cOnBust, to, "by Bob stash was 60,000 (round 9)" );
 					Add( game, hand, CardInfo.cOffBust, to, "played (round 10)" );
 					Add( game, hand, CardInfo.cOpen, to, "(round 6)" );
-					Add( game, hand, CardInfo.cOnSearch, to, "by Janis stash was 60,000 (round 11)" );
+					Add( game, hand, CardInfo.cOnSearch, to, "by Janis stash was 110,000 (round 11)" );
 
 					to = hand.StashPile;
 					Add( game, hand, CardInfo.cMexico, to );

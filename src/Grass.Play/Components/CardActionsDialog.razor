@@ -59,18 +59,8 @@
     {
       PlayResult res = GameService.CanPlay( Player.Current, Card );
       CanPlay = res == PlayResult.Success;
-      if( !CanPlay )
-      {
-        Message = "Cannot play - " + res.ToString();
-      }
-      else
-      {
-        // Hide discard button for certain scenarios
-        if((Card.Id == "Market-Open" && !Player.Current.MarketIsOpen ) ||
-         (Card.Id.StartsWith( "Peddle" ) && Player.Current.MarketIsOpen) ||
-         Card.Id.StartsWith( "Nirvana" ) ||
-         Card.Id.StartsWith( "Paranoia" )) { CanDiscard = false; }
-      }
+      if( !CanPlay ) { Message = res.ToString(); }
+      else { CanDiscard = GameService.AllowDiscard( Player.Current, Card ); }
     }
     else if( Player.Pass )
     {
@@ -78,7 +68,8 @@
     }
     else 
     {
-      Message = "Cannot play - It's not your turn.";
+      CanDiscard = false;
+      Message = "It's not your turn.";
     }
   }
 }

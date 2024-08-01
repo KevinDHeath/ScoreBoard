@@ -43,7 +43,7 @@ public class GameService : PassCardHandler
 		else if( _game.Auto ) { _game.Play(); StoreSummary( _game ); }
 		else
 		{
-			_game.GameChanged += OnParanoiaPlayed;
+			_game.GameChanged += OnParanoiaPlayed; 
 			_game.StartHand();
 			SetNextPlayer();
 		}
@@ -121,6 +121,26 @@ public class GameService : PassCardHandler
 	/// <see cref="PlayResult"/>s should compare the values to
 	/// <see cref="PlayResult.Success" /> rather than checking for <c>null</c>.</returns>
 	public static PlayResult CanPlay( Hand hand, Card card ) => Rules.CanPlay( hand, card );
+
+	/// <summary>Indicates whether a card should be allowed to be discarded.</summary>
+	/// <param name="hand">Hand containing the card.</param>
+	/// <param name="card">The card to play.</param>
+	/// <returns>False if the card should not be discarded.</returns>
+	/// <remarks>It is assumed that the card has been checked that it can be played.</remarks>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public static bool AllowDiscard( Hand hand, Card card )
+	{
+		bool rtn = true;
+
+		if( card.Id.StartsWith( CardInfo.cParanoia ) ||
+			card.Id.StartsWith( CardInfo.cNirvana ) ||
+			card.Id.Equals( CardInfo.cOpen ) ||
+			card.Id.StartsWith( CardInfo.cPeddle ) ||
+			card.Id.StartsWith( CardInfo.cHeatOff ) )
+		{ rtn = false; }
+
+		return rtn;
+	}
 
 	/// <inheritdoc/>
 	[EditorBrowsable( EditorBrowsableState.Never )]
