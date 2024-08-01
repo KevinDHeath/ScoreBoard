@@ -32,79 +32,26 @@ public class GameService : PassCardHandler
 		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );
 
 		// Play the game
-		if( _game.Auto ) { _game.GameChanged += OnParanoiaPlayed; }
-
 		if( _game.Auto && options.InProgress )
 		{
 			_game.Auto = false; // switch off auto-play when populating in-progress sample
 			Samples.InProgress( _game );
-			SetNextPlayer();
+			_game.GameChanged += OnParanoiaInteractive;
+			_game.SetNextPlayer();
 		}
-		else if( _game.Auto ) { _game.Play(); StoreSummary( _game ); }
+		else if( _game.Auto )
+		{
+			_game.GameChanged += OnParanoiaPlayed;
+			_game.Play(); StoreSummary( _game );
+		}
 		else
 		{
-			_game.GameChanged += OnParanoiaPlayed; 
+			_game.GameChanged += OnParanoiaInteractive; 
 			_game.StartHand();
-			SetNextPlayer();
+			_game.SetNextPlayer();
 		}
 
 		return _game;
-	}
-
-	private void SetNextPlayer( Player? current = null )
-	{
-		Player? next = null;
-		if( current is null ) { next = _game.PlayOrder.First(); }
-		else
-		{
-			// Check for end of stack
-			if( _game.StackCount == 0 )
-			{
-				HandFinished( current );
-				return;
-			}
-
-			// Extra turns due to playing Nirvana
-			if( current.Current.Turns > 0 )
-			{
-				current.Current.Turns--;
-				_game.Take( current.Current );
-				return;
-			}
-
-			current.ToDo = Player.Action.Nothing;
-			int idx = _game.PlayOrder.FindIndex( x => x == current ) + 1;
-			while( next is null )
-			{
-				if( idx == _game.Players.Count ) { idx = 0; }
-				next = _game.PlayOrder[idx];
-
-				// Miss turns due to previously playing Paranoia
-				if( next.Current.Turns < 0 )
-				{
-					next.Current.Turns++;
-					next.Current.Round++;
-					next = null;
-					idx++;
-				}
-			}
-		}
-
-		next.Current.Round++;
-		_game.Take( next.Current );
-		next.ToDo = Player.Action.Play;
-	}
-
-	private void HandFinished( Player player )
-	{
-		_game.EndHand( player );
-		player.ToDo = Player.Action.Nothing;
-		if( _game.Winner is null )
-		{
-			_game.StartHand();
-			SetNextPlayer();
-		}
-		else { StoreSummary( _game ); }
 	}
 
 	/// <summary>Play a game asynchronously.</summary>
@@ -168,7 +115,7 @@ public class GameService : PassCardHandler
 	public bool Discard( Player player, Card card )
 	{
 		bool rtn = _game.Discard( player, card );
-		if( rtn ) { SetNextPlayer( player ); }
+		if( rtn ) { _game.SetNextPlayer( player ); }
 		return rtn;
 	}
 
@@ -184,8 +131,10 @@ public class GameService : PassCardHandler
 		PlayResult rtn = _game.Play( player, card );
 		if( rtn == PlayResult.Success )
 		{
-			if( card.Id == CardInfo.cClose ) { HandFinished( player ); }
-			else { SetNextPlayer( player ); }
+			bool over = false;
+			if( card.Id == CardInfo.cClose ) { over = _game.HandFinished( player ); }
+			else if( card.Type != CardInfo.cParanoia ) { over = _game.SetNextPlayer( player ); }
+			if( over ) { StoreSummary( _game ); }
 		}
 		return rtn;
 	}
@@ -222,7 +171,7 @@ public class GameService : PassCardHandler
 	/// <summary>Collection of Game summaries.</summary>
 	public List<Summary> Summaries { get; set; } = [];
 
-	private void StoreSummary( Game game )
+	internal void StoreSummary( Game game )
 	{
 		Summaries.Add( Summary.BuildSummary( game ) );
 	}

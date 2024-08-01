@@ -67,6 +67,7 @@ public class Game
 			{
 				Rules.PassCards( this, new( cardsToPass ) );
 				cardsToPass.Clear();
+				if( !Auto ) { SetNextPlayer( ParanoiaPlayer ); }
 				ParanoiaPlayer = null;
 			}
 		}
@@ -328,6 +329,63 @@ public class Game
 			if( card is not null ) { return player; }
 		}
 		return null;
+	}
+
+	#endregion
+
+	#region Interactive-Play
+
+	// Returns true if game over
+	internal bool SetNextPlayer( Player? current = null )
+	{
+		Player? next = null;
+		if( current is null ) { next = PlayOrder.First(); }
+		else
+		{
+			// Check for end of stack
+			if( StackCount == 0 ) { return HandFinished( current ); }
+
+			if( current.Current.Turns > 0 ) // Extra turns due to playing Nirvana
+			{
+				current.Current.Turns--;
+				Take( current.Current );
+				return false;
+			}
+
+			current.ToDo = Player.Action.Nothing;
+			int idx = PlayOrder.FindIndex( x => x == current ) + 1;
+			while( next is null )
+			{
+				if( idx == Players.Count ) { idx = 0; }
+				next = PlayOrder[idx];
+				if( next.Current.Turns < 0 ) // Miss turns due to previously playing Paranoia
+				{
+					next.Current.Turns++;
+					next.Current.Round++;
+					next = null;
+					idx++;
+				}
+			}
+		}
+
+		next.Current.Round++;
+		Take( next.Current );
+		next.ToDo = Player.Action.Play;
+		return false;
+	}
+
+	// Returns true if game over
+	internal bool HandFinished( Player player )
+	{
+		EndHand( player );
+		player.ToDo = Player.Action.Nothing;
+		if( Winner is null )
+		{
+			StartHand();
+			SetNextPlayer();
+			return false; 
+		}
+		return true;
 	}
 
 	#endregion

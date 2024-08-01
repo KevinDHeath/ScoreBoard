@@ -60,6 +60,16 @@ public partial class Play
 		}
 	}
 
+	private void PassCard()
+	{
+		if( Player is not null && Player.Pass )
+		{
+			Card? card = PlayState.ChosenCard;
+			PlayState.ChosenCard = null;
+			Service.CardToPass( Player, card! );
+		}
+	}
+
 	private void Discard()
 	{
 		if( Player is not null && Player.Play )

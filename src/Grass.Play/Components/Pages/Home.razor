@@ -34,7 +34,8 @@
                       @foreach( Player player in Current.PlayOrder )
                       {
                         <li><NavLink class="nav-link" href="@($"play/{@player.Id}")">@player.Name</NavLink>
-                          @if( player.Play ) { <i> &lt;= playing</i> }</li>
+                          @if( player.Play ) { <i> &lt;= playing</i> }
+                          else if( player.Pass ) { <i> pass card</i> }</li>
                       }
                     }
                   </ol>

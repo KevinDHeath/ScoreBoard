@@ -6,7 +6,6 @@
       <button class="delete is-large" @onclick="OnCancel" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-
       <table class="table">
         <tr>
           <td class="game-card"><img class="image" title="@Card.Comment" src="./img/cards/@Card.Image"></td>
@@ -23,6 +22,12 @@
           {
             <div class="field">
               <button class="button is-success is-pulled-left" style="min-width: 100px;" @onclick="OnPlay">Play</button>
+            </div>
+          }
+          @if( CanPass )
+          {
+            <div class="field">
+              <button class="button is-success is-pulled-left" style="min-width: 100px;" @onclick="OnPass">Pass</button>
             </div>
           }
           @if( CanDiscard )
@@ -47,10 +52,13 @@
   [Parameter, EditorRequired]
   public EventCallback OnPlay { get; set; }
   [Parameter, EditorRequired]
+  public EventCallback OnPass { get; set; }
+  [Parameter, EditorRequired]
   public EventCallback OnDiscard { get; set; }
 
   private bool CanDiscard { get; set; } = true;
   private bool CanPlay { get; set; } = false;
+  private bool CanPass { get; set; } = false;
   private string Message { get; set; } = string.Empty;
 
   protected override void OnInitialized()
@@ -64,7 +72,8 @@
     }
     else if( Player.Pass )
     {
-      //Message = "Cannot play - Not enough cards in hand.";
+      CanPass = true;
+      CanDiscard = false;
     }
     else 
     {
