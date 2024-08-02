@@ -1,3 +1,5 @@
+@using Grass.Play.Components.Pages
+
 <div class="modal is-active">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -6,47 +8,64 @@
       <button class="delete is-large" @onclick="OnCancel" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-      <table class="table">
-        <tr>
-          <td class="game-card"><img class="image" title="@Card.Comment" src="./img/cards/@Card.Image"></td>
-          <td>
-            @Message
-          </td>
-        </tr>
-      </table>
+      <EditForm Model="Options" OnSubmit="OnPlay" FormName="PlayCard">
+        <table class="table" width="100%">
+          <tr>
+            <td class="game-card"><img class="image" title="@Card?.Comment" src="./img/cards/@Card?.Image"></td>
+            <td>
+              @if( Decision.Count == 0 ) { @Message }
+              else
+              {
+                <div>
+                  <InputSelect @bind-Value="Options.OtherId">
+                    <option value="0">
+                      Select other player...
+                    </option>
+                    @foreach( Player key in Decision.Keys )
+                    {
+                      int amt = Decision[key];
+                      <option checked="@(Options.OtherId == key.Id)" value="@key.Id">
+                        <span>@key.Name: @Home.FormatAmt( amt )</span>
+                      </option>
+                    }
+                  </InputSelect>
+                </div>
+              }
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+                @if( CanPlay )
+                {
+                  <div class="field">
+                    <button class="button is-success is-pulled-left" type="submit" style="min-width: 100px;" @onclick="OnPlay">Play</button>
+                  </div>
+                }
+                @if( CanPass )
+                {
+                  <div class="field">
+                  <button class="button is-success is-pulled-left" type="button" style="min-width: 100px;" @onclick="OnPass">Pass</button>
+                  </div>
+                }
+                @if( CanDiscard )
+                {
+                  <div class="field">
+                    <button class="button is-warning is-pulled-right" type="button" style="min-width: 100px;" @onclick="OnDiscard">Discard</button>
+                  </div>
+                }
+            </td>
+          </tr>
+        </table>
+      </EditForm>
     </section>
-    <footer class="modal-card-foot">
-      <div class="container">
-        <form>
-          @if( CanPlay )
-          {
-            <div class="field">
-              <button class="button is-success is-pulled-left" style="min-width: 100px;" @onclick="OnPlay">Play</button>
-            </div>
-          }
-          @if( CanPass )
-          {
-            <div class="field">
-              <button class="button is-success is-pulled-left" style="min-width: 100px;" @onclick="OnPass">Pass</button>
-            </div>
-          }
-          @if( CanDiscard )
-          {
-            <div class="field">
-              <button class="button is-warning is-pulled-right" style="min-width: 100px;" @onclick="OnDiscard">Discard</button>
-            </div>
-          }
-        </form>
-      </div>
-    </footer>
   </div>
 </div>
 
 @code {
   [Parameter, EditorRequired]
-  public required Card Card { get; set; }
+  public required PlayOptions Options { get; set; }
   [Parameter, EditorRequired]
-  public required Player Player { get; set; }
+  public required GameService Service { get; set; }
   [Parameter, EditorRequired]
   public EventCallback OnCancel { get; set; }
   [Parameter, EditorRequired]
@@ -56,21 +75,40 @@
   [Parameter, EditorRequired]
   public EventCallback OnDiscard { get; set; }
 
+  private Card? Card { get; set; }
+
   private bool CanDiscard { get; set; } = true;
   private bool CanPlay { get; set; } = false;
   private bool CanPass { get; set; } = false;
   private string Message { get; set; } = string.Empty;
+  private Dictionary<Player, int> Decision { get; set; } = [];
+  private int? OtherPlayer { get; set; } = null;
+
+  private void OnOther()
+  {
+    OtherPlayer = 2;
+    OnPlay.InvokeAsync();
+  }
 
   protected override void OnInitialized()
   {
-    if( Player.Play )
+    if( Decision.Count > 0 ) { Decision.Clear(); }
+    if( Options.Player is null || Options.ChosenCard is null ) { return; }
+    Player player = Options.Player;
+    Card = Options.ChosenCard;
+
+    if( player.Play )
     {
-      PlayResult res = GameService.CanPlay( Player.Current, Card );
+      PlayResult res = GameService.CanPlay( player.Current, Card );
       CanPlay = res == PlayResult.Success;
       if( !CanPlay ) { Message = res.ToString(); }
-      else { CanDiscard = GameService.AllowDiscard( Player.Current, Card ); }
+      else
+      {
+        CanDiscard = GameService.AllowDiscard( Card );
+        Decision = Service.Decision( Options );
+      }
     }
-    else if( Player.Pass )
+    else if( player.Pass )
     {
       CanPass = true;
       CanDiscard = false;

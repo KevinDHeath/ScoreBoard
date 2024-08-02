@@ -3,20 +3,18 @@ namespace Grass.Play.Components;
 
 internal class PlayState
 {
-	internal bool ShowingDialog => ChosenCard is not null;
+	internal PlayOptions Options { get; set; } = new();
 
-	internal Card? ChosenCard { get; set; }
+	internal bool IsOpen => Options.ChosenCard is not null;
 
-	internal Hand? Hand { get; private set; }
-
-	internal void ShowChooseActionDialog( Hand? hand, Card card )
+	internal void Show( Player? player, Card card )
 	{
-		Hand = hand;
-		ChosenCard = card;
+		Options.ChosenCard = card;
+		Options.Player = player;
 	}
 
-	internal void CancelChooseActionDialog()
+	internal void Cancel()
 	{
-		ChosenCard = null;
+		Options.ChosenCard = null;
 	}
 }

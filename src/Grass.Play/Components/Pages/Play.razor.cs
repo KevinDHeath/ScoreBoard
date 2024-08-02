@@ -50,13 +50,32 @@ public partial class Play
 		}
 	}
 
+	private Card? ResetChosen()
+	{
+		Card? rtn = PlayState.Options.ChosenCard;
+		PlayState.Options.OtherId = 0;
+		PlayState.Options.ChosenCard = null;
+		return rtn;
+	}
+
 	private void PlayCard()
 	{
 		if( Player is not null && Player.Play )
 		{
-			Card? card = PlayState.ChosenCard;
-			PlayState.ChosenCard = null;
-			Service.Play( Player, card! );
+			PlayResult res = PlayResult.Success!;
+			if( PlayState.Options.OtherId > 0 )
+			{
+				var other = Service.Current.Players.Find( p => p.Id == PlayState.Options.OtherId );
+				if( other is not null )
+				{
+					res = Service.Play( Player, PlayState.Options.ChosenCard!, other, ResetChosen()! );
+				}
+			}
+			else { res = Service.Play( Player, ResetChosen()! ); }
+			if( res != PlayResult.Success )
+			{
+				string msg = res.ToString();
+			}
 		}
 	}
 
@@ -64,19 +83,16 @@ public partial class Play
 	{
 		if( Player is not null && Player.Pass )
 		{
-			Card? card = PlayState.ChosenCard;
-			PlayState.ChosenCard = null;
-			Service.CardToPass( Player, card! );
+			Service.CardToPass( Player, ResetChosen()! );
 		}
 	}
 
 	private void Discard()
 	{
+		var test = PlayState.Options;
 		if( Player is not null && Player.Play )
 		{
-			Card? card = PlayState.ChosenCard;
-			PlayState.ChosenCard = null;
-			Service.Discard( Player, card! );
+			Service.Discard( Player, ResetChosen()! );
 		}
 	}
 

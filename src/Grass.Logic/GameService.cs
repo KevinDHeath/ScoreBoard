@@ -70,12 +70,11 @@ public class GameService : PassCardHandler
 	public static PlayResult CanPlay( Hand hand, Card card ) => Rules.CanPlay( hand, card );
 
 	/// <summary>Indicates whether a card should be allowed to be discarded.</summary>
-	/// <param name="hand">Hand containing the card.</param>
 	/// <param name="card">The card to play.</param>
 	/// <returns>False if the card should not be discarded.</returns>
 	/// <remarks>It is assumed that the card has been checked that it can be played.</remarks>
 	[EditorBrowsable( EditorBrowsableState.Never )]
-	public static bool AllowDiscard( Hand hand, Card card )
+	public static bool AllowDiscard( Card card )
 	{
 		bool rtn = true;
 
@@ -86,6 +85,42 @@ public class GameService : PassCardHandler
 			card.Id.StartsWith( CardInfo.cHeatOff ) )
 		{ rtn = false; }
 
+		return rtn;
+	}
+	/// <summary>Provides decision data.</summary>
+	/// <param name="options">Card play options.</param>
+	/// <returns>Collection of amounts and players that can be used to make a decision.</returns>
+	/// <remarks>It is assumed that the card has been checked that it can be played.</remarks>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public Dictionary<Player, int> Decision( PlayOptions options )
+	{
+		Dictionary<Player, int> rtn = [];
+		if( options.Player is null || options.ChosenCard is null ) { return rtn; }
+
+		if( options.ChosenCard.Type == CardInfo.cHeatOn || options.ChosenCard.Id == CardInfo.cSteal )
+		{
+			foreach( Player other in _game.Players )
+			{
+				if( options.Player == other || !other.Current.MarketIsOpen ) { continue; }
+				if( options.ChosenCard.Type == CardInfo.cHeatOn )
+				{
+					int total = other.Total + other.Current.Protected + other.Current.UnProtected;
+					if( total > 0 ) { rtn.Add( other, total ); }
+				}
+				else
+				{
+					if( other.Current.HighestUnProtected is not null )
+					{
+						int total = other.Current.HighestUnProtected.Info.Value;
+						if( total >= 50000 )
+						{
+							rtn.Add( other, total );
+							options.OtherCards.Add( other.Current.HighestUnProtected );
+						}
+					}
+				}
+			}
+		}
 		return rtn;
 	}
 
@@ -148,8 +183,16 @@ public class GameService : PassCardHandler
 	/// of the play.</returns>
 	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
 	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
-	public PlayResult Play( Player player, Card card, Player with, Card other ) =>
-		_game.Play( player, card, with, other );
+	public PlayResult Play( Player player, Card card, Player with, Card other )
+	{
+		PlayResult rtn = _game.Play( player, card, with, other );
+		if( rtn == PlayResult.Success ) 
+		{
+			bool over = _game.SetNextPlayer( player ); ;
+			if( over ) { StoreSummary( _game ); }
+		}
+		return rtn;
+	}
 
 	/// <summary>Protect the players peddle cards.</summary>
 	/// <param name="player">Current player.</param>

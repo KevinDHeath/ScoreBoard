@@ -45,7 +45,7 @@
               @if( Service.Current.Winner is null )
               {
                 <td class="play-card">
-                  <img @onclick="@(() => PlayState.ShowChooseActionDialog( Hand, card ) )"
+                  <img @onclick="@(() => PlayState.Show( Player, card ) )"
                        class="image" title="@card.Comment" src="./img/cards/@card.Image">
                 </td>
               }
@@ -61,11 +61,11 @@
       }
     </div>
 
-    @if( PlayState.ShowingDialog )
+    @if( PlayState.IsOpen )
     {
-      <CardActionsDialog Card="PlayState.ChosenCard"
-                         Player="Player"
-                         OnCancel="PlayState.CancelChooseActionDialog"
+      <CardActionsDialog Options="PlayState.Options"
+                         Service="Service"
+                         OnCancel="PlayState.Cancel"
                          OnPlay="PlayCard"
                          OnPass="PassCard"
                          OnDiscard="Discard" />
