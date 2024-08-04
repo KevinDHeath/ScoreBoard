@@ -14,8 +14,6 @@ public class Samples
 
 		// Put dealt cards back in the stack
 		foreach( Player p in game.PlayOrder ) { BackToStack( game, p.Current.Cards ); }
-		Player? janis = null, john = null, amy = null, bob = null;
-
 		foreach( Player player in game.Players )
 		{
 			Hand hand = player.Current;
@@ -25,7 +23,6 @@ public class Samples
 			switch( player.Name )
 			{
 				case "Janis":
-					janis = player;
 					game.Take( hand, CardInfo.cOpen );
 					game.Take( hand, CardInfo.cClose );
 					game.Take( hand, CardInfo.cBanker );
@@ -36,7 +33,6 @@ public class Samples
 					break;
 
 				case "John":
-					john = player;
 					game.Take( hand, CardInfo.cSoldout );
 					game.Take( hand, CardInfo.cPayFine );
 					game.Take( hand, CardInfo.cStonehigh );
@@ -58,11 +54,10 @@ public class Samples
 					break;
 
 				case "Amy":
-					amy = player;
 					game.Take( hand, CardInfo.cOffFelony );
 					card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cOffFelony );
 					card?.AddComment( "passed by John to Amy (round 5)" );
-					game.Take( hand, CardInfo.cOpen );
+					game.Take( hand, CardInfo.cSteal );
 					game.Take( hand, CardInfo.cOnDetained );
 					game.Take( hand, CardInfo.cEuphoria );
 					game.Take( hand, CardInfo.cStonehigh );
@@ -81,7 +76,6 @@ public class Samples
 					break;
 
 				case "Bob":
-					bob = player;
 					game.Take( hand, CardInfo.cOffSearch );
 					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cOnBust );

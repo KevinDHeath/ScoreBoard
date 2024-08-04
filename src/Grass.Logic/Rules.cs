@@ -155,6 +155,7 @@ internal class Rules
 				if( !wHand.StashPile.Remove( other ) ) { return new( "Card to steal not found." ); }
 				Card.TransferCard( hand.Cards, wHand.HasslePile, card );
 				if( comment ) { card.AddComment( player.Name + $" stole {other.Info.Caption} (round {hand.Round})" ); }
+				RemoveHeat( wHand ); // Must reset Market Open as Steal card added to Hassle pile
 				hand.StashPile.Add( other );
 				//if( comment ) { other.AddComment( $"stole from {with.Name} (round {hand.Round})" ); }
 				break;

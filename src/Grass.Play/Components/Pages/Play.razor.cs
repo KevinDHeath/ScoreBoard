@@ -14,6 +14,8 @@ public partial class Play
 
 	private string? Message { get; set; }
 
+	private string? Info { get; set; } = null;
+
 	// Collapsible sections
 	private readonly CollapseExpand inHand = new();
 	private readonly CollapseExpand stash = new();
@@ -21,7 +23,7 @@ public partial class Play
 
 	// In-hand button
 	private readonly HideShow button = new( hide: false );
-	private readonly HideShow active = new( "it's me" );
+	private readonly HideShow active = new( "In Hand" );
 	private readonly HideShow scores = new( hide: false );
 
 	protected override void OnInitialized()
@@ -50,31 +52,15 @@ public partial class Play
 		}
 	}
 
-	private Card? ResetChosen()
-	{
-		Card? rtn = PlayState.Options.ChosenCard;
-		PlayState.Options.OtherId = 0;
-		PlayState.Options.ChosenCard = null;
-		return rtn;
-	}
-
 	private void PlayCard()
 	{
+		Info = null;
 		if( Player is not null && Player.Play )
 		{
-			PlayResult res = PlayResult.Success!;
-			if( PlayState.Options.OtherId > 0 )
-			{
-				var other = Service.Current.Players.Find( p => p.Id == PlayState.Options.OtherId );
-				if( other is not null )
-				{
-					res = Service.Play( Player, PlayState.Options.ChosenCard!, other, ResetChosen()! );
-				}
-			}
-			else { res = Service.Play( Player, ResetChosen()! ); }
+			var res = Service.Play( PlayState.Options );
 			if( res != PlayResult.Success )
 			{
-				string msg = res.ToString();
+				Info = res.ToString();
 			}
 		}
 	}
@@ -83,16 +69,17 @@ public partial class Play
 	{
 		if( Player is not null && Player.Pass )
 		{
-			Service.CardToPass( Player, ResetChosen()! );
+			Service.CardToPass( PlayState.Options );
 		}
 	}
 
 	private void Discard()
 	{
-		var test = PlayState.Options;
+		Info = null;
 		if( Player is not null && Player.Play )
 		{
-			Service.Discard( Player, ResetChosen()! );
+			bool res = Service.Discard( PlayState.Options );
+			if( !res ) { Info = "Failed to discard."; }
 		}
 	}
 

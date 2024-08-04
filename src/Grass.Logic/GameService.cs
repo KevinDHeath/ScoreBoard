@@ -59,6 +59,7 @@ public class GameService : PassCardHandler
 	/// <remarks><c>await Task.Run()</c> scenarios can be avoided if the created task is returned directly.</remarks>
 	/// <seealso href="https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/async-scenarios">
 	/// Asynchronous programming scenarios</seealso>
+	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Task<bool> GameAsync() => Task.Run( () => { return _game.Play(); } );
 
 	/// <summary>Checks whether a card can be played.</summary>
@@ -115,7 +116,6 @@ public class GameService : PassCardHandler
 						if( total >= 50000 )
 						{
 							rtn.Add( other, total );
-							options.OtherCards.Add( other.Current.HighestUnProtected );
 						}
 					}
 				}
@@ -137,59 +137,62 @@ public class GameService : PassCardHandler
 	#region Action Methods
 
 	/// <summary>Add a card to pass due to paranoia being played.</summary>
-	/// <param name="player">Player object.</param>
-	/// <param name="card">Card object.</param>
+	/// <param name="options">Play card options.</param>
 	/// <returns><see langword="false"/> if the player has already added a card or
 	/// the card is not in the players hand.</returns>
-	public bool CardToPass( Player player, Card card ) => _game.AddCardToPass( player, card );
-
-	/// <summary>Discard a card in the players current hand.</summary>
-	/// <param name="player">Current player.</param>
-	/// <param name="card">Card to discard.</param>
-	/// <returns><see langword="true"/> if the card is successfully discarded.</returns>
-	public bool Discard( Player player, Card card )
+	public bool CardToPass( PlayOptions options )
 	{
-		bool rtn = _game.Discard( player, card );
-		if( rtn ) { _game.SetNextPlayer( player ); }
+		if( options.Player is null || options.ChosenCard is null ) { return false; }
+		bool rtn = _game.AddCardToPass( options.Player, options.ChosenCard );
+		if( rtn ) { options.Reset(); }
 		return rtn;
 	}
 
-	/// <summary>Play a card in the players current hand.</summary>
-	/// <param name="player">Current player.</param>
-	/// <param name="card">Card to play.</param>
-	/// <returns>A <see cref="PlayResult" /> object representing the results
-	/// of the play.</returns>
-	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
-	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
-	public PlayResult Play( Player player, Card card )
+	/// <summary>Discard a card in a players current hand.</summary>
+	/// <param name="options">Play card options.</param>
+	/// <returns><see langword="true"/> if the card is successfully discarded.</returns>
+	public bool Discard( PlayOptions options )
 	{
-		PlayResult rtn = _game.Play( player, card );
-		if( rtn == PlayResult.Success )
+		if( options.Player is null || options.ChosenCard is null ) { return false; }
+		bool rtn = _game.Discard( options.Player, options.ChosenCard );
+		if( rtn )
 		{
-			bool over = false;
-			if( card.Id == CardInfo.cClose ) { over = _game.HandFinished( player ); }
-			else if( card.Type != CardInfo.cParanoia ) { over = _game.SetNextPlayer( player ); }
+			bool over = _game.SetNextPlayer( options.Player );
 			if( over ) { StoreSummary( _game ); }
+			options.Reset();
 		}
 		return rtn;
 	}
 
-	/// <summary>Play a card in the players current hand with another player.</summary>
-	/// <param name="player">Current player.</param>
-	/// <param name="card">Card to play.</param>
-	/// <param name="with">Other player.</param>
-	/// <param name="other">Other players card.</param>
-	/// <returns>A <see cref="PlayResult" /> object representing the results
-	/// of the play.</returns>
+	/// <summary>Play a card in a players current hand.</summary>
+	/// <param name="options">Play card options.</param>
+	/// <returns>A <see cref="PlayResult" /> object representing the play result.</returns>
 	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
 	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
-	public PlayResult Play( Player player, Card card, Player with, Card other )
+	public PlayResult Play( PlayOptions options )
 	{
-		PlayResult rtn = _game.Play( player, card, with, other );
-		if( rtn == PlayResult.Success ) 
+		PlayResult rtn = new( $"Missing player or card." );
+		if( options.Player is null || options.ChosenCard is null ) { return rtn; }
+		Card card = options.ChosenCard;
+
+		if( options.OtherId == 0 ) { rtn = _game.Play( options.Player, card ); }
+		else
 		{
-			bool over = _game.SetNextPlayer( player ); ;
+			Player? other = Current.Players.FirstOrDefault( p => p.Id == options.OtherId );
+			if( other is not null )
+			{
+				Card? oCard = card.Type == CardInfo.cHeatOn ? card : other.Current.HighestUnProtected;
+				if( oCard is not null ) { rtn = _game.Play( options.Player, card, other, oCard ); }
+			}
+		}
+
+		if( rtn == PlayResult.Success )
+		{
+			bool over = false;
+			if( card.Id == CardInfo.cClose ) { over = _game.HandFinished( options.Player ); }
+			else if( card.Type != CardInfo.cParanoia ) { over = _game.SetNextPlayer( options.Player ); }
 			if( over ) { StoreSummary( _game ); }
+			options.Reset();
 		}
 		return rtn;
 	}

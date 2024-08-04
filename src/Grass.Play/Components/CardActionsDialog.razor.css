@@ -1,0 +1,6 @@
+::deep .select-player {
+  width: 300px;
+  background-color: black;
+  color: white;
+  font-size: inherit;
+}

@@ -8,7 +8,8 @@
       <button class="delete is-large" @onclick="OnCancel" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-      <EditForm Model="Options" OnSubmit="OnPlay" FormName="PlayCard">
+      <EditForm Model="Options" OnValidSubmit="OnPlay" FormName="PlayCard">
+        <DataAnnotationsValidator />
         <table class="table" width="100%">
           <tr>
             <td class="game-card"><img class="image" title="@Card?.Comment" src="./img/cards/@Card?.Image"></td>
@@ -17,18 +18,19 @@
               else
               {
                 <div>
-                  <InputSelect @bind-Value="Options.OtherId">
+                  <InputSelect class="select-player" @bind-Value="Options.OtherId">
                     <option value="0">
                       Select other player...
                     </option>
                     @foreach( Player key in Decision.Keys )
                     {
                       int amt = Decision[key];
-                      <option checked="@(Options.OtherId == key.Id)" value="@key.Id">
-                        <span>@key.Name: @Home.FormatAmt( amt )</span>
+                      <option checked="@(Options.OtherId == @key.Id)" value="@key.Id">
+                        @key.Name: @Home.FormatAmt( amt )
                       </option>
                     }
                   </InputSelect>
+                  <ValidationSummary />
                 </div>
               }
             </td>
