@@ -82,5 +82,27 @@ public class Card
 		return cards.OrderByDescending( c => c.Info.Value ).FirstOrDefault();
 	}
 
+	internal static List<Card> GetPeddlesToProtect( List<Card> list, int amount )
+	{
+		List<Card> rtn = [];
+		List<Card> cards = GetUnprotected( list ).OrderByDescending( c => c.Info.Value ).ToList();
+		Card? match = cards.FirstOrDefault( c => c.Info.Value == amount );
+		if( match is not null ) { rtn.Add( match ); }
+		if( rtn.Count == 0 )
+		{
+			int total = 0;
+			foreach( Card card in cards.Where( c => c.Info.Value < amount ).ToList() )
+			{
+				if( card.Info.Value + total <= amount )
+				{
+					total += card.Info.Value;
+					rtn.Add( card );
+					if( total == amount ) { break; }
+				}
+			}
+		}
+		return rtn;
+	}
+
 	#endregion
 }

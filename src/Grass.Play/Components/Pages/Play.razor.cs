@@ -60,7 +60,7 @@ public partial class Play
 			var res = Service.Play( PlayState.Options );
 			if( res != PlayResult.Success )
 			{
-				Info = res.ToString();
+				//Info = res.ToString();
 			}
 		}
 	}

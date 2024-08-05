@@ -8,20 +8,28 @@ public class PlayOptions
 	public Player? Player { get; set; }
 
 	/// <summary>Selected card to play.</summary>
-	public Card? ChosenCard { get; set; }
+	public Card? Card { get; set; }
+
+	/// <summary>Result of whether the chosen card can be played.</summary>
+	public PlayResult CanPlay { get; internal set; } = PlayResult.Success!;
+
+	/// <summary>Indicates whether the chosen card can be discarded.</summary>
+	public bool CanDiscard { get; internal set; }
 
 	/// <summary>Other player involved.</summary>
-	[Range( 1, 6, ErrorMessage = "Need another player to play card." )]
+	[Range( 1, 6, ErrorMessage = "Need another player to play this card." )]
 	public int OtherId { get; set; } = 0;
 
 	/// <summary>Other cards involved.</summary>
-	public List<Card> OtherCards { get; set; } = [];
+	public List<Card> OtherCards { get; internal set; } = [];
 
 	internal void Reset()
 	{
 		Player = null;
-		ChosenCard = null;
+		Card = null;
 		OtherId = 0;
 		OtherCards.Clear();
+		CanDiscard = false;
+		CanPlay = PlayResult.Success!;
 	}
 }

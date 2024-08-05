@@ -62,48 +62,39 @@ public class GameService : PassCardHandler
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Task<bool> GameAsync() => Task.Run( () => { return _game.Play(); } );
 
-	/// <summary>Checks whether a card can be played.</summary>
-	/// <param name="hand">Hand containing the card.</param>
-	/// <param name="card">The card to play.</param>
-	/// <returns>The <c>null</c> value is used to indicate success. Consumers of
-	/// <see cref="PlayResult"/>s should compare the values to
-	/// <see cref="PlayResult.Success" /> rather than checking for <c>null</c>.</returns>
-	public static PlayResult CanPlay( Hand hand, Card card ) => Rules.CanPlay( hand, card );
-
-	/// <summary>Indicates whether a card should be allowed to be discarded.</summary>
-	/// <param name="card">The card to play.</param>
-	/// <returns>False if the card should not be discarded.</returns>
-	/// <remarks>It is assumed that the card has been checked that it can be played.</remarks>
-	[EditorBrowsable( EditorBrowsableState.Never )]
-	public static bool AllowDiscard( Card card )
+	private static bool AllowDiscard( Card card )
 	{
 		bool rtn = true;
-
 		if( card.Id.StartsWith( CardInfo.cParanoia ) ||
 			card.Id.StartsWith( CardInfo.cNirvana ) ||
 			card.Id.Equals( CardInfo.cOpen ) ||
 			card.Id.StartsWith( CardInfo.cPeddle ) ||
 			card.Id.StartsWith( CardInfo.cHeatOff ) )
 		{ rtn = false; }
-
 		return rtn;
 	}
-	/// <summary>Provides decision data.</summary>
+
+	/// <summary>Provides card play decision data.</summary>
 	/// <param name="options">Card play options.</param>
 	/// <returns>Collection of amounts and players that can be used to make a decision.</returns>
-	/// <remarks>It is assumed that the card has been checked that it can be played.</remarks>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Dictionary<Player, int> Decision( PlayOptions options )
 	{
 		Dictionary<Player, int> rtn = [];
-		if( options.Player is null || options.ChosenCard is null ) { return rtn; }
+		if( options.Player is null || options.Card is null ) { return rtn; }
+		Player player = options.Player;
+		Card card = options.Card;
 
-		if( options.ChosenCard.Type == CardInfo.cHeatOn || options.ChosenCard.Id == CardInfo.cSteal )
+		options.CanPlay = Rules.CanPlay( player.Current, card );
+		options.CanDiscard = AllowDiscard( card );
+		if( options.CanPlay != PlayResult.Success ) { return rtn; }
+
+		if( card.Type == CardInfo.cHeatOn || card.Id == CardInfo.cSteal )
 		{
 			foreach( Player other in _game.Players )
 			{
-				if( options.Player == other || !other.Current.MarketIsOpen ) { continue; }
-				if( options.ChosenCard.Type == CardInfo.cHeatOn )
+				if( player == other || !other.Current.MarketIsOpen ) { continue; }
+				if( card.Type == CardInfo.cHeatOn )
 				{
 					int total = other.Total + other.Current.Protected + other.Current.UnProtected;
 					if( total > 0 ) { rtn.Add( other, total ); }
@@ -113,13 +104,18 @@ public class GameService : PassCardHandler
 					if( other.Current.HighestUnProtected is not null )
 					{
 						int total = other.Current.HighestUnProtected.Info.Value;
-						if( total >= 50000 )
+						if( total >= 25000 )
 						{
 							rtn.Add( other, total );
 						}
 					}
 				}
 			}
+			if( rtn.Count == 0 ) { options.CanPlay = new( "No players to hassle." ); }
+		}
+		else if( card.Type == CardInfo.cProtection )
+		{
+			options.OtherCards = Card.GetPeddlesToProtect( player.Current.StashPile, card.Info.Value );
 		}
 		return rtn;
 	}
@@ -142,8 +138,8 @@ public class GameService : PassCardHandler
 	/// the card is not in the players hand.</returns>
 	public bool CardToPass( PlayOptions options )
 	{
-		if( options.Player is null || options.ChosenCard is null ) { return false; }
-		bool rtn = _game.AddCardToPass( options.Player, options.ChosenCard );
+		if( options.Player is null || options.Card is null ) { return false; }
+		bool rtn = _game.AddCardToPass( options.Player, options.Card );
 		if( rtn ) { options.Reset(); }
 		return rtn;
 	}
@@ -153,8 +149,8 @@ public class GameService : PassCardHandler
 	/// <returns><see langword="true"/> if the card is successfully discarded.</returns>
 	public bool Discard( PlayOptions options )
 	{
-		if( options.Player is null || options.ChosenCard is null ) { return false; }
-		bool rtn = _game.Discard( options.Player, options.ChosenCard );
+		if( options.Player is null || options.Card is null ) { return false; }
+		bool rtn = _game.Discard( options.Player, options.Card );
 		if( rtn )
 		{
 			bool over = _game.SetNextPlayer( options.Player );
@@ -172,11 +168,14 @@ public class GameService : PassCardHandler
 	public PlayResult Play( PlayOptions options )
 	{
 		PlayResult rtn = new( $"Missing player or card." );
-		if( options.Player is null || options.ChosenCard is null ) { return rtn; }
-		Card card = options.ChosenCard;
+		if( options.Player is null || options.Card is null ) { return rtn; }
+		Card card = options.Card;
 
-		if( options.OtherId == 0 ) { rtn = _game.Play( options.Player, card ); }
-		else
+		if( options.OtherCards.Count > 0 )
+		{
+			rtn = _game.Protect( options.Player, card, options.OtherCards );
+		}
+		else if( options.OtherId > 0 )
 		{
 			Player? other = Current.Players.FirstOrDefault( p => p.Id == options.OtherId );
 			if( other is not null )
@@ -185,6 +184,7 @@ public class GameService : PassCardHandler
 				if( oCard is not null ) { rtn = _game.Play( options.Player, card, other, oCard ); }
 			}
 		}
+		else { rtn = _game.Play( options.Player, card ); }
 
 		if( rtn == PlayResult.Success )
 		{
@@ -196,17 +196,6 @@ public class GameService : PassCardHandler
 		}
 		return rtn;
 	}
-
-	/// <summary>Protect the players peddle cards.</summary>
-	/// <param name="player">Current player.</param>
-	/// <param name="card">Card to play.</param>
-	/// <param name="peddles">List of peddle cards to protect</param>
-	/// <returns>A <see cref="PlayResult" /> object representing the results
-	/// of the play.</returns>
-	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
-	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
-	public PlayResult Protect( Player player, Card card, List<Card> peddles ) =>
-		_game.Protect( player, card, peddles );
 
 	#endregion
 

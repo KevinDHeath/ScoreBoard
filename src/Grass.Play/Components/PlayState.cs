@@ -5,16 +5,16 @@ internal class PlayState
 {
 	internal PlayOptions Options { get; set; } = new();
 
-	internal bool IsOpen => Options.ChosenCard is not null;
+	internal bool IsOpen => Options.Card is not null;
 
 	internal void Show( Player? player, Card card )
 	{
-		Options.ChosenCard = card;
+		Options.Card = card;
 		Options.Player = player;
 	}
 
 	internal void Cancel()
 	{
-		Options.ChosenCard = null;
+		Options.Card = null;
 	}
 }

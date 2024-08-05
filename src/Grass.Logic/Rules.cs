@@ -42,14 +42,19 @@ internal class Rules
 	private const string cIsActive = "Market is already active.";
 	private const string cNoMoney = "No money to pay fine.";
 	private const string cDiscard = "Can only discard.";
+	private const string cNoPeddle = "No peddle to protect.";
 
 	internal static PlayResult CanPlay( Hand hand, Card card )
 	{
 		switch( card.Type )
 		{
 			case CardInfo.cPeddle:
+				if( !hand.MarketIsOpen ) { return new( cNotOpen ); }
+				break;
 			case CardInfo.cProtection:
 				if( !hand.MarketIsOpen ) { return new( cNotOpen ); }
+				List<Card> peddles = Card.GetPeddlesToProtect( hand.StashPile, card.Info.Value );
+				if( peddles.Count == 0 ) { return new( cNoPeddle ); } // Must have peddles to protect
 				break;
 			case CardInfo.cHeatOff:
 				if( hand.HasslePile.Count == 0 ) { return new( cNotActive ); }
@@ -189,19 +194,6 @@ internal class Rules
 		PlayResult res = game.CheckState( card );
 		if( res != PlayResult.Success ) { return res; }
 		Hand hand = player.Current;
-		res = CanPlay( hand, card );
-		if( res != PlayResult.Success ) { return res; }
-
-		IEnumerable<Card> cards = peddles.Where( c => c.Type != CardInfo.cPeddle );
-		if( cards.Any() ) { return new( "Non peddle cards found in list." ); }
-
-		cards = peddles.Where( c => c.Protected );
-		if( cards.Any() ) { return new( "Protected peddle cards found in list." ); }
-
-		int total = 0;
-		foreach( Card c in peddles ) { total += c.Info.Value; }
-		if( total > card.Info.Value ) { return new( "Peddle value is greater that protection." ); }
-
 		foreach( Card c in peddles )
 		{
 			c.Protected = true;

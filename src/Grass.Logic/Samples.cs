@@ -24,7 +24,7 @@ public class Samples
 			{
 				case "Janis":
 					game.Take( hand, CardInfo.cOpen );
-					game.Take( hand, CardInfo.cClose );
+					game.Take( hand, CardInfo.cCatchaBuzz );
 					game.Take( hand, CardInfo.cBanker );
 					game.Take( hand, CardInfo.cOffFelony );
 					game.Take( hand, CardInfo.cColumbia );
@@ -37,7 +37,7 @@ public class Samples
 					game.Take( hand, CardInfo.cPayFine );
 					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cOffSearch );
-					game.Take( hand, CardInfo.cOpen );
+					game.Take( hand, CardInfo.cLustConquers );
 					game.Take( hand, CardInfo.cOffDetained );
 
 					to = hand.HasslePile;
@@ -49,8 +49,8 @@ public class Samples
 					to = hand.StashPile;
 					Add( game, hand, CardInfo.cMexico, to );
 					Add( game, hand, CardInfo.cHomegrown, to );
-					Add( game, hand, CardInfo.cPanama, to );
-					Add( game, hand, CardInfo.cPanama, to );
+					Add( game, hand, CardInfo.cJamaica, to );
+					Add( game, hand, CardInfo.cJamaica, to );
 					break;
 
 				case "Amy":
@@ -65,7 +65,7 @@ public class Samples
 
 					to = hand.HasslePile;
 					Add( game, hand, CardInfo.cOpen, to, "trade with John (round 7)" );
-					Add( game, hand, CardInfo.cOnSearch, to, "by John stash was 100,000 (round 12)" );
+					Add( game, hand, CardInfo.cOnFelony, to, "by John stash was 100,000 (round 12)" );
 
 					to = hand.StashPile;
 					Add( game, hand, CardInfo.cColumbia, to, "protected (round 9)", protect: true );
