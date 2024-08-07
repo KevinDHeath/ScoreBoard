@@ -187,7 +187,7 @@ public class Game
 		}
 
 		// Check for game winner with the highest total
-		high = Target;
+		high = Target - 1;
 		foreach( Player player in Players ) 
 		{
 			if( player.Total > high ) { high = player.Total; Winner = player; }
@@ -223,12 +223,6 @@ public class Game
 		bool ok = hand.Cards.Remove( card );
 		if( ok )
 		{
-			// TODO: Need to figure out how to trigger the pass cards function
-			// This should raise an event and the Actor class needs to listen for it
-			//if( card.Type == CardInfo.cParanoia )
-			//{
-			//	Play( player, card );
-			//}
 			WastedPile.Add( card );
 			if( Comment ) { card.AddComment( $"{player.Name} discard (round {hand.Round})" ); }
 		}
@@ -335,21 +329,37 @@ public class Game
 
 	#region Interactive-Play
 
-	// Returns true if game over
+	/// <summary>Check for a winner of the game.</summary>
+	/// <param name="player">Player that played card.</param>
+	/// <returns>True if the game is over.</returns>
+	internal bool CheckWinner( Player player )
+	{
+		EndHand( player );
+		player.ToDo = Player.Action.Nothing;
+		if( Winner is null )
+		{
+			StartHand();
+			SetNextPlayer();
+			return false;
+		}
+		return true;
+	}
+
+	/// <summary>Set next player.</summary>
+	/// <param name="current">Current player. Default is null (i.e. first)</param>
+	/// <returns>True if the game is over.</returns>
 	internal bool SetNextPlayer( Player? current = null )
 	{
 		Player? next = null;
 		if( current is null ) { next = PlayOrder.First(); }
 		else
 		{
-			// Check for end of stack
-			if( StackCount == 0 ) { return HandFinished( current ); }
-
+			if( StackCount == 0 ) { return CheckWinner( current ); }
 			if( current.Current.Turns > 0 ) // Extra turns due to playing Nirvana
 			{
 				current.Current.Turns--;
 				Take( current.Current );
-				return false;
+				return false; // Continue
 			}
 
 			current.ToDo = Player.Action.Nothing;
@@ -372,20 +382,6 @@ public class Game
 		Take( next.Current );
 		next.ToDo = Player.Action.Play;
 		return false;
-	}
-
-	// Returns true if game over
-	internal bool HandFinished( Player player )
-	{
-		EndHand( player );
-		player.ToDo = Player.Action.Nothing;
-		if( Winner is null )
-		{
-			StartHand();
-			SetNextPlayer();
-			return false; 
-		}
-		return true;
 	}
 
 	#endregion

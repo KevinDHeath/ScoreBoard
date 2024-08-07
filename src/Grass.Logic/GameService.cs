@@ -54,6 +54,16 @@ public class GameService : PassCardHandler
 		return _game;
 	}
 
+	/// <inheritdoc/>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public override void Dispose()
+	{
+		if( _disposed ) { return; }
+		if( _game.Auto ) { _game.GameChanged -= OnParanoiaPlayed; }
+		GC.SuppressFinalize( this );
+		_disposed = true;
+	}
+
 	/// <summary>Play a game asynchronously.</summary>
 	/// <returns><c>true</c> is returned if the game was completed successfully.</returns>
 	/// <remarks><c>await Task.Run()</c> scenarios can be avoided if the created task is returned directly.</remarks>
@@ -74,17 +84,18 @@ public class GameService : PassCardHandler
 		return rtn;
 	}
 
-	/// <summary>Provides card play decision data.</summary>
+	/// <summary>Checks whether a card can be played.</summary>
 	/// <param name="options">Card play options.</param>
-	/// <returns>Collection of amounts and players that can be used to make a decision.</returns>
+	/// <returns>Collection of amounts and players that can be used to hassle.</returns>
 	[EditorBrowsable( EditorBrowsableState.Never )]
-	public Dictionary<Player, int> Decision( PlayOptions options )
+	public Dictionary<Player, int> CheckPlay( PlayOptions options )
 	{
 		Dictionary<Player, int> rtn = [];
 		if( options.Player is null || options.Card is null ) { return rtn; }
 		Player player = options.Player;
 		Card card = options.Card;
 
+		options.OtherCards.Clear();
 		options.CanPlay = Rules.CanPlay( player.Current, card );
 		options.CanDiscard = AllowDiscard( card );
 		if( options.CanPlay != PlayResult.Success ) { return rtn; }
@@ -112,22 +123,16 @@ public class GameService : PassCardHandler
 				}
 			}
 			if( rtn.Count == 0 ) { options.CanPlay = new( "No players to hassle." ); }
+			else
+			{
+				rtn = rtn.OrderByDescending( p => p.Value ).ToDictionary( p => p.Key, p => p.Value );
+			}
 		}
 		else if( card.Type == CardInfo.cProtection )
 		{
 			options.OtherCards = Card.GetPeddlesToProtect( player.Current.StashPile, card.Info.Value );
 		}
 		return rtn;
-	}
-
-	/// <inheritdoc/>
-	[EditorBrowsable( EditorBrowsableState.Never )]
-	public override void Dispose()
-	{
-		if( _disposed ) { return; }
-		if( _game.Auto ) { _game.GameChanged -= OnParanoiaPlayed; }
-		GC.SuppressFinalize( this );
-		_disposed = true;
 	}
 
 	#region Action Methods
@@ -189,7 +194,7 @@ public class GameService : PassCardHandler
 		if( rtn == PlayResult.Success )
 		{
 			bool over = false;
-			if( card.Id == CardInfo.cClose ) { over = _game.HandFinished( options.Player ); }
+			if( card.Id == CardInfo.cClose ) { over = _game.CheckWinner( options.Player ); }
 			else if( card.Type != CardInfo.cParanoia ) { over = _game.SetNextPlayer( options.Player ); }
 			if( over ) { StoreSummary( _game ); }
 			options.Reset();
@@ -215,6 +220,7 @@ public class GameService : PassCardHandler
 	/// <param name="summary">Summary to export.</param>
 	/// <param name="indent">Indicates whether to use JSON indentation.</param>
 	/// <returns>A string representing the game summary as JSON.</returns>
+	[EditorBrowsable( EditorBrowsableState.Never )]
 	public string ExportSummary( Summary summary, bool indent = false )
 	{
 		options.WriteIndented = indent;

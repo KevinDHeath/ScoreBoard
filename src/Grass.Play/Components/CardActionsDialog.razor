@@ -14,17 +14,17 @@
           <tr>
             <td class="game-card"><img class="image" title="@Options.Card?.Comment" src="./img/cards/@Options.Card?.Image"></td>
             <td>
-              @if( Decision.Count == 0 ) { @Message }
+              @if( SelectOptions.Count == 0 ) { @Message }
               else
               {
                 <div>
                   <InputSelect class="select-player" @bind-Value="Options.OtherId">
                     <option value="0">
-                      Select other player...
+                      Select an option...
                     </option>
-                    @foreach( Player key in Decision.Keys )
+                    @foreach( Player key in SelectOptions.Keys )
                     {
-                      int amt = Decision[key];
+                      int amt = SelectOptions[key];
                       <option checked="@(Options.OtherId == @key.Id)" value="@key.Id">
                         @key.Name: @Home.FormatAmt( amt )
                       </option>
@@ -75,16 +75,16 @@
   private bool CanPlay { get; set; } = false;
   private bool CanPass { get; set; } = false;
   private string Message { get; set; } = string.Empty;
-  private Dictionary<Player, int> Decision { get; set; } = [];
+  private Dictionary<Player, int> SelectOptions { get; set; } = [];
 
   protected override void OnInitialized()
   {
-    if( Decision.Count > 0 ) { Decision.Clear(); }
+    if( SelectOptions.Count > 0 ) { SelectOptions.Clear(); }
     if( Options.Player is null || Options.Card is null ) { return; }
 
     if( Options.Player.Play )
     {
-      Decision = Service.Decision( Options );
+      SelectOptions = Service.CheckPlay( Options );
       CanPlay = Options.CanPlay == PlayResult.Success;
       if( !CanPlay ) { Message = Options.CanPlay.ToString(); }
       else { CanDiscard = Options.CanDiscard; }

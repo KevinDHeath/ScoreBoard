@@ -24,21 +24,21 @@ public class Samples
 			{
 				case "Janis":
 					game.Take( hand, CardInfo.cOpen );
-					game.Take( hand, CardInfo.cCatchaBuzz );
-					game.Take( hand, CardInfo.cBanker );
-					game.Take( hand, CardInfo.cOffFelony );
 					game.Take( hand, CardInfo.cColumbia );
-					game.Take( hand, CardInfo.cPayFine );
+					game.Take( hand, CardInfo.cOffFelony );
+					game.Take( hand, CardInfo.cCatchaBuzz );
+					game.Take( hand, CardInfo.cJamaica );
+					game.Take( hand, CardInfo.cBanker );
 
 					break;
 
 				case "John":
-					game.Take( hand, CardInfo.cSoldout );
 					game.Take( hand, CardInfo.cPayFine );
-					game.Take( hand, CardInfo.cStonehigh );
-					game.Take( hand, CardInfo.cOffSearch );
 					game.Take( hand, CardInfo.cLustConquers );
-					game.Take( hand, CardInfo.cOffDetained );
+					game.Take( hand, CardInfo.cOffBust );
+					game.Take( hand, CardInfo.cSteal );
+					game.Take( hand, CardInfo.cColumbia );
+					game.Take( hand, CardInfo.cStonehigh );
 
 					to = hand.HasslePile;
 					Add( game, hand, CardInfo.cOnBust, to, "by Bob stash was 60,000 (round 9)" );
@@ -54,13 +54,13 @@ public class Samples
 					break;
 
 				case "Amy":
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cOnDetained );
+					game.Take( hand, CardInfo.cSoldout );
 					game.Take( hand, CardInfo.cOffFelony );
 					card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cOffFelony );
 					card?.AddComment( "passed by John to Amy (round 5)" );
-					game.Take( hand, CardInfo.cSteal );
-					game.Take( hand, CardInfo.cOnDetained );
 					game.Take( hand, CardInfo.cEuphoria );
-					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cClose );
 
 					to = hand.HasslePile;
@@ -76,12 +76,12 @@ public class Samples
 					break;
 
 				case "Bob":
+					game.Take( hand, CardInfo.cOffDetained );
 					game.Take( hand, CardInfo.cOffSearch );
+					game.Take( hand, CardInfo.cJamaica );
 					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cOnBust );
 					game.Take( hand, CardInfo.cSteal );
-					game.Take( hand, CardInfo.cJamaica );
-					game.Take( hand, CardInfo.cOffDetained );
 
 					to = hand.HasslePile;
 					Add( game, hand, CardInfo.cOpen, to, "(round 1)" );

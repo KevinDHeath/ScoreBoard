@@ -43,6 +43,5 @@ public abstract class PassCardHandler : IDisposable
 	}
 
 	/// <inheritdoc/>
-	[EditorBrowsable( EditorBrowsableState.Never )]
 	public virtual void Dispose() => GC.SuppressFinalize( this );
 }
