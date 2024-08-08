@@ -1,3 +1,9 @@
+#region Modification History
+// Date         Developer    Description
+// -----------  ------------ -----------
+// 02 Aug 2024  kdheath      Class created.
+#endregion
+
 using System.ComponentModel.DataAnnotations;
 namespace Grass.Logic.Models;
 
@@ -17,7 +23,7 @@ public class PlayOptions
 	public bool CanDiscard { get; internal set; }
 
 	/// <summary>Id of other player involved.</summary>
-	[Range( 1, 6, ErrorMessage = "Select an option for this card." )]
+	[Range( 1, 6, ErrorMessage = "Please select an option for this card." )]
 	public int OtherId { get; set; } = 0;
 
 	/// <summary>Collection of other cards involved.</summary>

@@ -79,8 +79,8 @@ public class Samples
 					game.Take( hand, CardInfo.cOffDetained );
 					game.Take( hand, CardInfo.cOffSearch );
 					game.Take( hand, CardInfo.cJamaica );
-					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cOnBust );
+					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cSteal );
 
 					to = hand.HasslePile;

@@ -1,8 +1,8 @@
-@import "./lib/bulma/v100/bulma.min.css";
+@import "./lib/bulma/v102/bulma.min.css";
 @import "./lib/font-awesome/v611/css/font-awesome.min.css";
 
 html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
-.logo { width: 218px; height: 201px; transform: scale(0.75); float: right; }
+.logo { width: 218px; height: 201px; transform: scale(0.75); float: left; }
 
 .sticky { position: sticky; top: 0px; }
 .table { border: none !important; }
@@ -14,9 +14,6 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .toc-menu a { color: dodgerblue; padding-left: 0.75em; border-radius: 2px; display: block; }
 .toc-menu a:hover { background-color: whitesmoke; color: #363636; }
 .toc-menu a.is-active { font-weight: bold; }
-.toc-menu li ul {
-  /*padding-left: 1em;*/
-}
 
 .card-header { background-color: #0066cc; }
 .game-datetime { font-size: small; }
@@ -35,7 +32,7 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .nav-link { color: dodgerblue; font-weight: bold; }
 
 /* MainLayout overrides */
-.top-row { height: 3.5rem; background-color: #333333; padding-top: 5px; border-bottom: 1px solid groove; }
+.top-row { height: 3.5rem; background-color: #333333; padding-top: 4px; border-bottom: 2px solid groove; }
 
 /* Blazor App */
 a, .btn-link { color: #006bb7; }

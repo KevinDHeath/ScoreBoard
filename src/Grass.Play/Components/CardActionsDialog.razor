@@ -4,8 +4,9 @@
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head is-background-info-dark">
-      <p class="modal-card-title">Card in-hand action</p>
-      <button class="delete is-large" @onclick="OnCancel" aria-label="close"></button>
+      <div class="modal-card-title">Card in-hand action
+        <button class="delete is-large is-pulled-right" @onclick="OnCancel" aria-label="close"></button>
+      </div>
     </header>
     <section class="modal-card-body">
       <EditForm Model="Options" OnValidSubmit="OnPlay" FormName="PlayCard">
@@ -39,16 +40,15 @@
             <td colspan="2">
               @if( CanPlay )
               {
-                <button class="button is-success is-pulled-left" type="submit" style="min-width: 100px;" @onclick="OnPlay">Play</button>
+                <button @onclick="OnPlay" disabled="@(!EnablePlay)" type="submit"
+                  class="button is-success is-pulled-left">Play</button>
               }
               @if( CanPass )
               {
-                <button class="button is-success is-pulled-left" type="button" style="min-width: 100px;" @onclick="OnPass">Pass</button>
+                <button @onclick="OnPass" type="button" class="button is-success is-pulled-left">Pass</button>
               }
-              @if( CanDiscard )
-              {
-                <button class="button is-warning is-pulled-right" type="button" style="min-width: 100px;" @onclick="OnDiscard">Discard</button>
-              }
+              <button @onclick="OnDiscard" disabled="@(!CanDiscard)" type="button"
+                class="button is-warning is-pulled-right">Discard</button>
             </td>
           </tr>
         </table>
@@ -74,6 +74,7 @@
   private bool CanDiscard { get; set; } = true;
   private bool CanPlay { get; set; } = false;
   private bool CanPass { get; set; } = false;
+  private bool EnablePlay => SelectOptions.Count == 0 || ( SelectOptions.Count > 0 && Options.OtherId > 0 );
   private string Message { get; set; } = string.Empty;
   private Dictionary<Player, int> SelectOptions { get; set; } = [];
 

@@ -95,7 +95,7 @@
           @foreach( Player player in Service.Current.PlayOrder )
           {
             @if( player == Player ) { <li><a class="player-current">@player.Name</a></li> }
-            else { <li><a href="@($"play/{@player.Id}#top")">@player.Name</a></li> }
+            else { <li><a href="@($"play/{@player.Id}")">@player.Name</a></li> }
           }
         }
       </ul>

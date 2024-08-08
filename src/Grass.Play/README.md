@@ -7,4 +7,6 @@
 - Implemented `hide-able` sections.
 - Implemented `anchor navigation` for quick links.\
   *See* [Hashed routing to named elements](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#hashed-routing-to-named-elements) for more information.
+- Implemented `SectionOutlet` for top bar.\
+  *See* [ASP.NET Core Blazor sections](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/sections) for more information.
  
