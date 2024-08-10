@@ -3,16 +3,10 @@
 <div id="top" class="page">
   <main>
     <div class="top-row px-4">
-      <div class="level">
+      <div class="level is-mobile">
         <div class="level-left">
           <div class="level-item pt-3">
             <div class="navbar-brand">Grass</div>
-          </div>
-          <div class="level-item pb-4">
-            <a class="nav-link pl-3" href="/">Game</a>
-          </div>
-          <div class="level-item pb-4">
-            <a class="nav-link pl-3" href="http://localhost:8080/score" target="_blank">Rules</a>
           </div>
         </div>
         <div class="level-center">
@@ -27,6 +21,13 @@
         </div>
       </div>
     </div>
+    <nav class="breadcrumb my-1 px-2" role="navigation">
+      <ul>
+        <li><a href="http://localhost:8080/score" target="_docs">Docs</a></li>
+        <li><a href="/">Game</a></li>
+      </ul>
+    </nav>
+    <hr style="margin-top: 10px; margin-bottom: 10px; border-top: 1px solid white;" />
     <article class="content px-4">
       @Body
     </article>

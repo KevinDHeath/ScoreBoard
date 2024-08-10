@@ -12,7 +12,6 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 
 .toc-menu { line-height: 2em; }
 .toc-menu a { color: dodgerblue; padding-left: 0.75em; border-radius: 2px; display: block; }
-.toc-menu a:hover { background-color: whitesmoke; color: #363636; }
 .toc-menu a.is-active { font-weight: bold; }
 
 .card-header { background-color: #0066cc; }
@@ -27,7 +26,7 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 
 /* Bulma overrides */
 .menu-label { color: black; background-color: #FF8C00; padding: 5pt; }
-.menu-label strong { color: black; }
+.menu-label strong { color: black; font-weight:bold; }
 .navbar-brand { padding-right: 1rem; color: LightGreen; font-weight: bold; }
 .nav-link { color: dodgerblue; font-weight: bold; }
 

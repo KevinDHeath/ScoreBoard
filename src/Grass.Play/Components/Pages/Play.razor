@@ -1,5 +1,4 @@
 @page "/play/{id:int}"
-@rendermode InteractiveServer
 @inject GameService Service
 @inject PlayState PlayState
 
@@ -89,7 +88,7 @@
   <div class="column">
     <nav class="menu sticky">
       <p class="menu-label"><strong>Players</strong></p>
-      <ul class="toc-menu" style="list-style-type: none;">
+      <ul class="toc-menu" style="list-style-type: none; margin-left: 0;">
         @if( Service.Current is not null )
         {
           @foreach( Player player in Service.Current.PlayOrder )

@@ -5,10 +5,12 @@ internal class HideShow
 	private bool Hidden => Class == string.Empty;
 	private const string cClass = "is-hidden";
 	private readonly string _text;
+	private readonly bool _hide;
 
 	internal HideShow( string text = "", bool hide = true )
 	{
 		_text = text;
+		_hide = hide;
 		if( hide ) { Class = cClass; }
 	}
 
@@ -21,4 +23,6 @@ internal class HideShow
 	internal void Hide() => Class = cClass;
 
 	internal void Show() => Class = string.Empty;
+
+	internal void Reset() => Class = _hide ? cClass : string.Empty;
 }

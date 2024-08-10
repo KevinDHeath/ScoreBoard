@@ -26,28 +26,29 @@ public partial class Play
 	private readonly HideShow active = new( "In Hand" );
 	private readonly HideShow scores = new( hide: false );
 
-	protected override void OnInitialized()
+	protected override void OnParametersSet()
 	{
-		if( Id > 0 )
+		if( Id != Player?.Id )
 		{
+			if( Id > Service.Current.Players.Count ) { Id = 1; }
 			Player = Service.Current.Players[Id - 1];
-			Hand = Player.Current;
+			active.Reset();
 			SetPage( Player );
 		}
 	}
 
 	private void SetPage( Player player )
 	{
-		// Show the in-hand section when game-over so hide toggle button
+		Hand = player.Current;
 		if( Service.Current.Winner is not null )
 		{
-			button.Hide(); active.Show();
+			button.Hide(); active.Show(); scores.Show();
 			Message = Service.Current.Winner != Player ? Service.Current.Winner.Name + " won" : "You won!";
 		}
-		// Hide the score cards when in-play and on 1st hand
 		else
 		{
-			if( player.Current.Count == 1 ) { scores.Hide(); }
+			// Hide the score cards when in-play and on 1st hand
+			if( player.Current.Count == 1 ) { scores.Hide(); } else { scores.Show(); }
 			Message = string.Empty;
 		}
 	}
@@ -57,10 +58,16 @@ public partial class Play
 		Info = null;
 		if( Player is not null && Player.Play )
 		{
+			int hands = Service.Current.Hand;
 			var res = Service.Play( PlayState.Options );
 			if( res != PlayResult.Success )
 			{
 				//Info = res.ToString();
+			}
+			else if( Service.Current.Winner is not null || hands != Service.Current.Hand )
+			{
+				SetPage( Player );
+				StateHasChanged();
 			}
 		}
 	}
