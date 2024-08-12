@@ -16,7 +16,7 @@ public class GameService : PassCardHandler
 
 	/// <summary>Current game options.</summary>
 	[EditorBrowsable( EditorBrowsableState.Never )]
-	public GameOptions Options => _options;
+	public GameOptions Options { get { return _options; } set { _options = value; } }
 
 	/// <summary>Current game.</summary>
 	[EditorBrowsable( EditorBrowsableState.Never )]
@@ -27,6 +27,11 @@ public class GameService : PassCardHandler
 	/// <returns>An initialized game.</returns>
 	public Game Setup( GameOptions options )
 	{
+		if( options.AutoPlay && options.Players.Count == 0 )
+		{
+			options.Players = Samples.GetPlayers();
+		}
+
 		foreach( var player in options.Players ) { player.Reset(); }
 		_options = options;
 		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );

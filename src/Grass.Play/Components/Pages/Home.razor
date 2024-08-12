@@ -1,10 +1,37 @@
 @page "/"
 @inject NavigationManager Navigation
 @inject GameService Service
+@inject ProtectedSessionStorage ProtectedSessionStore
 
-<PageTitle>Game</PageTitle>
+<PageTitle>Game @userTitle</PageTitle>
 
 <div class="columns m-1 is-multiline">
+
+  @if( AllowStart )
+  {
+    <div class="column is-2">
+      <div class="card">
+        <header class="card-header">
+          <span class="card-header-title is-centered">Players</span>
+        </header>
+        <div class="card mt-0 pt-0">
+          <div class="card-content">
+            @if( !Options.IsMaxPlayers )
+            {
+              <input @bind="playerName" placeholder="Player name" class="mb-2 mt-3" /><br />
+              <button class="button is-link" @onclick="AddPlayer">Login</button><br />
+            }
+            <ol>
+              @foreach( var player in Options.Players )
+              {
+                <li>@player.Name</li>
+              }
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 
   <div class="column is-4">
     <div class="card">
@@ -67,7 +94,7 @@
                   <tr><td><label for="InProgress">In-progress:</label></td><td><InputCheckbox id="InProgress" @bind-Value="Options!.InProgress"></InputCheckbox></td></tr>
                 }
                 <tr><td colspan="2">
-                  <button class="btn btn-primary" style="width: 100px;" type="submit">Start</button>
+                  <button class="button is-link" disabled="@(!AllowStart)" style="width: 100px;" type="submit">Start</button>
                 </td></tr>
               </table>
             </EditForm>

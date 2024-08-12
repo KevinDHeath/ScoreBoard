@@ -1,8 +1,9 @@
 @page "/play/{id:int}"
 @inject GameService Service
 @inject PlayState PlayState
+@inject ProtectedSessionStorage ProtectedSessionStore
 
-<PageTitle>Play</PageTitle>
+<PageTitle>Play @userTitle</PageTitle>
 
 <SectionContent SectionId="MainLayout.MessageSection">
   @Message

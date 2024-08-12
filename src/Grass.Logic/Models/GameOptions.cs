@@ -35,4 +35,30 @@ public class GameOptions
 	public bool InProgress { get; set; } = false;
 
 	#endregion
+
+	/// <summary>Indicates whether the maximum number of players has been reached.</summary>
+	/// <returns><c>true</c> if the number of players is equal to the maximum.</returns>
+	public bool IsMaxPlayers => Players.Count == Rules.cMaxNumber;
+
+	/// <summary>Check if a player can be added to the list.</summary>
+	/// <param name="name">Name of the player.</param>
+	/// <returns><c>false</c> is returned if the maximum number of players has been reached
+	/// or a player with the same name is already present.</returns>
+	public bool CanAddPlayer( string? name = null )
+	{
+		if( IsMaxPlayers || string.IsNullOrEmpty( name ) ) { return false; }
+		if( Players.Any( ( p => p.Name == name ) ) ) { return false; }
+		return true;
+	}
+
+	/// <summary>Add a player to the list.</summary>
+	/// <param name="name">Name of the player.</param>
+	/// <returns><c>true</c> if the player was added.</returns>
+	public bool AddPlayer( string name )
+	{
+		if( !CanAddPlayer( name ) ) { return false; }
+		var player = new Player( name, Players.Count + 1 );
+		Players.Add( player );
+		return true;
+	}
 }

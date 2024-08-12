@@ -8,21 +8,21 @@ public class Samples
 	/// <summary>Populate in-progress testing data</summary>
 	public static void InProgress( Game game )
 	{
-		Player? dealer = game.Players.FirstOrDefault( p => p.Name == "Bob" );
+		Player? dealer = game.Players.FirstOrDefault( p => p.Id == 2 );
 		if( dealer is not null ) { game.Dealer = dealer; }
 		game.StartHand();
 
 		// Put dealt cards back in the stack
-		foreach( Player p in game.PlayOrder ) { BackToStack( game, p.Current.Cards ); }
+		foreach( Player p in game.PlayOrder ) { if( p.Id < 5 ) BackToStack( game, p.Current.Cards ); }
 		foreach( Player player in game.Players )
 		{
 			Hand hand = player.Current;
 			hand.Round = 13;
 			Card? card = null;
 			List<Card> to = [];
-			switch( player.Name )
+			switch( player.Id )
 			{
-				case "Janis":
+				case 3:
 					game.Take( hand, CardInfo.cOpen );
 					game.Take( hand, CardInfo.cColumbia );
 					game.Take( hand, CardInfo.cOffFelony );
@@ -32,7 +32,7 @@ public class Samples
 
 					break;
 
-				case "John":
+				case 4:
 					game.Take( hand, CardInfo.cPayFine );
 					game.Take( hand, CardInfo.cLustConquers );
 					game.Take( hand, CardInfo.cOffBust );
@@ -53,7 +53,7 @@ public class Samples
 					Add( game, hand, CardInfo.cJamaica, to );
 					break;
 
-				case "Amy":
+				case 1:
 					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cOnDetained );
 					game.Take( hand, CardInfo.cSoldout );
@@ -75,7 +75,7 @@ public class Samples
 					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 13)" );
 					break;
 
-				case "Bob":
+				case 2:
 					game.Take( hand, CardInfo.cOffDetained );
 					game.Take( hand, CardInfo.cOffSearch );
 					game.Take( hand, CardInfo.cJamaica );

@@ -26,31 +26,56 @@ public partial class Play
 	private readonly HideShow active = new( "In Hand" );
 	private readonly HideShow scores = new( hide: false );
 
+	private string? user = null;
+	private string? userTitle = null;
+
 	protected override void OnParametersSet()
 	{
 		if( Id != Player?.Id )
 		{
 			if( Id > Service.Current.Players.Count ) { Id = 1; }
 			Player = Service.Current.Players[Id - 1];
-			active.Reset();
-			SetPage( Player );
+			Refresh( Player );
 		}
 	}
 
-	private void SetPage( Player player )
+	protected override async Task OnAfterRenderAsync( bool firstRender )
 	{
+		if( firstRender )
+		{
+			var res = await ProtectedSessionStore.GetAsync<string?>( "user" );
+			if( user is null && res.Value is not null )
+			{
+				user = res.Value;
+				userTitle = "- " + user;
+			}
+			if( Player is not null ) { Refresh( Player ); }
+			var timer = new Timer( e => { InvokeAsync( () => { Refresh( Player! ); } ); }, null, 2000, 2000 );
+		}
+	}
+
+	private void Refresh( Player player )
+	{
+		if( user is not null ) { active.Reset(); }
 		Hand = player.Current;
 		if( Service.Current.Winner is not null )
 		{
 			button.Hide(); active.Show(); scores.Show();
-			Message = Service.Current.Winner != Player ? Service.Current.Winner.Name + " won" : "You won!";
+			Message = Service.Current.Winner != Player ? Service.Current.Winner.Name + " won" : "Winner!";
 		}
 		else
 		{
 			// Hide the score cards when in-play and on 1st hand
 			if( player.Current.Count == 1 ) { scores.Hide(); } else { scores.Show(); }
 			Message = string.Empty;
+			if( user is not null && player.Name == user )
+			{
+				button.Hide(); active.Show();
+				if( player.Play ) { Message = "Play Card"; }
+				else if( player.Pass ) { Message = "Pass Card"; }
+			}
 		}
+		StateHasChanged();
 	}
 
 	private void PlayCard()
@@ -58,17 +83,12 @@ public partial class Play
 		Info = null;
 		if( Player is not null && Player.Play )
 		{
-			int hands = Service.Current.Hand;
 			var res = Service.Play( PlayState.Options );
 			if( res != PlayResult.Success )
 			{
 				//Info = res.ToString();
 			}
-			else if( Service.Current.Winner is not null || hands != Service.Current.Hand )
-			{
-				SetPage( Player );
-				StateHasChanged();
-			}
+			else { Refresh( Player ); }
 		}
 	}
 
@@ -77,6 +97,7 @@ public partial class Play
 		if( Player is not null && Player.Pass )
 		{
 			Service.CardToPass( PlayState.Options );
+			Refresh( Player );
 		}
 	}
 
@@ -85,8 +106,8 @@ public partial class Play
 		Info = null;
 		if( Player is not null && Player.Play )
 		{
-			bool res = Service.Discard( PlayState.Options );
-			if( !res ) { Info = "Failed to discard."; }
+			Service.Discard( PlayState.Options );
+			Refresh( Player );
 		}
 	}
 
