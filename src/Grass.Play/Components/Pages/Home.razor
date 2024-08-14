@@ -1,4 +1,5 @@
 @page "/"
+@implements IDisposable
 @inject NavigationManager Navigation
 @inject GameService Service
 @inject ProtectedSessionStorage ProtectedSessionStore
@@ -19,7 +20,7 @@
             @if( !Options.IsMaxPlayers )
             {
               <input @bind="playerName" placeholder="Player name" class="mb-2 mt-3" /><br />
-              <button class="button is-link" @onclick="AddPlayer">Login</button><br />
+              <button class="button is-link" @onclick="AddPlayer">Register</button><br />
             }
             <ol>
               @foreach( var player in Options.Players )

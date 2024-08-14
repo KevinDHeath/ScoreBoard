@@ -21,6 +21,7 @@ public partial class Home
 
 	private string playerName = string.Empty;
 	private string? userTitle = null;
+	private System.Threading.Timer? timer;
 
 	protected override void OnInitialized()
 	{
@@ -49,7 +50,7 @@ public partial class Home
 			var res = await ProtectedSessionStore.GetAsync<string?>( "user" );
 			if( userTitle is null && res.Value is not null ) { userTitle = "- " + res.Value; }
 			Refresh();
-			var timer = new Timer( e => { InvokeAsync( () => { Refresh(); } ); }, null, 2000, 2000 );
+			timer = new Timer( e => { InvokeAsync( () => { Refresh(); } ); }, null, 2000, 2000 );
 		}
 	}
 
@@ -61,6 +62,12 @@ public partial class Home
 			Title = HasWinner ? "Game over" : "In progress...";
 		}
 		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		timer?.Dispose();
+		GC.SuppressFinalize( this );
 	}
 
 	private async Task AddPlayer()

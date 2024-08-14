@@ -90,8 +90,7 @@ public class CardInfo
 	internal static List<Card> BuildStack()
 	{
 		List<Card> rtn = new();
-		List<CardInfo> list = Info();
-		foreach( CardInfo info in list )
+		foreach( CardInfo info in GameService.sCards )
 		{
 			for( int count = 0; count < info.Count; count++ ) { rtn.Add( new Card( info ) ); }
 		}

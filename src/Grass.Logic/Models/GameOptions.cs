@@ -40,14 +40,16 @@ public class GameOptions
 	/// <returns><c>true</c> if the number of players is equal to the maximum.</returns>
 	public bool IsMaxPlayers => Players.Count == Rules.cMaxNumber;
 
+	private readonly StringComparison strCompare = StringComparison.OrdinalIgnoreCase;
+
 	/// <summary>Check if a player can be added to the list.</summary>
 	/// <param name="name">Name of the player.</param>
 	/// <returns><c>false</c> is returned if the maximum number of players has been reached
 	/// or a player with the same name is already present.</returns>
-	public bool CanAddPlayer( string? name = null )
+	public bool CanAddPlayer( string? name )
 	{
 		if( IsMaxPlayers || string.IsNullOrEmpty( name ) ) { return false; }
-		if( Players.Any( ( p => p.Name == name ) ) ) { return false; }
+		if( Players.Any( p => string.Equals( p.Name, name, strCompare ) ) ) { return false; }
 		return true;
 	}
 

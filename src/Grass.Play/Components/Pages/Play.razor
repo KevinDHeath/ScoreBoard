@@ -1,4 +1,5 @@
 @page "/play/{id:int}"
+@implements IDisposable
 @inject GameService Service
 @inject PlayState PlayState
 @inject ProtectedSessionStorage ProtectedSessionStore
@@ -29,6 +30,12 @@
   </div>
 
   <div class="column content is-8">
+
+    @if( Notify is not null )
+    {
+      <div class="notification is-primary is-dark p-1">@Notify</div>
+    }
+
     <table id="HasslePile" class="table">
       @((MarkupString)HasslePileHtml())
     </table>
@@ -37,7 +44,6 @@
       <h3 class="quickLinkHeader" @onclick="inHand.Toggle"><span class="icon toggleSection @inHand.Class"><i class="fa fa-angle-down"></i></span>In hand</h3>
       @if( Hand is not null )
       {
-        if( Info is not null ) { @Info }
         <table class="table" style="@inHand.Style">
           <tr>
             @foreach( var card in Hand?.InHand! )

@@ -14,7 +14,7 @@ public partial class Play
 
 	private string? Message { get; set; }
 
-	private string? Info { get; set; } = null;
+	private string? Notify { get; set; } = null;
 
 	// Collapsible sections
 	private readonly CollapseExpand inHand = new();
@@ -28,6 +28,7 @@ public partial class Play
 
 	private string? user = null;
 	private string? userTitle = null;
+	private System.Threading.Timer? timer;
 
 	protected override void OnParametersSet()
 	{
@@ -50,7 +51,7 @@ public partial class Play
 				userTitle = "- " + user;
 			}
 			if( Player is not null ) { Refresh( Player ); }
-			var timer = new Timer( e => { InvokeAsync( () => { Refresh( Player! ); } ); }, null, 2000, 2000 );
+			timer = new Timer( e => { InvokeAsync( () => { Refresh( Player! ); } ); }, null, 2000, 2000 );
 		}
 	}
 
@@ -65,22 +66,23 @@ public partial class Play
 		}
 		else
 		{
-			// Hide the score cards when in-play and on 1st hand
-			if( player.Current.Count == 1 ) { scores.Hide(); } else { scores.Show(); }
 			Message = string.Empty;
-			if( user is not null && player.Name == user )
-			{
-				button.Hide(); active.Show();
-				if( player.Play ) { Message = "Play Card"; }
-				else if( player.Pass ) { Message = "Pass Card"; }
-			}
+			if( player.Current.Count == 1 ) { scores.Hide(); } else { scores.Show(); }
+			Notify = player.SetNotification();
+			if( user is not null && player.Name == user ) { button.Hide(); active.Show(); }
 		}
 		StateHasChanged();
 	}
 
+	public void Dispose()
+	{
+		timer?.Dispose();
+		GC.SuppressFinalize( this );
+	}
+
 	private void PlayCard()
 	{
-		Info = null;
+		Notify = null;
 		if( Player is not null && Player.Play )
 		{
 			var res = Service.Play( PlayState.Options );
@@ -103,7 +105,7 @@ public partial class Play
 
 	private void Discard()
 	{
-		Info = null;
+		Notify = null;
 		if( Player is not null && Player.Play )
 		{
 			Service.Discard( PlayState.Options );

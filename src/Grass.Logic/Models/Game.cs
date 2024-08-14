@@ -359,7 +359,7 @@ public class Game
 			{
 				current.Current.Turns--;
 				Take( current.Current );
-				return false; // Continue
+				return false;
 			}
 
 			current.ToDo = Player.Action.Nothing;
@@ -370,6 +370,7 @@ public class Game
 				next = PlayOrder[idx];
 				if( next.Current.Turns < 0 ) // Miss turns due to previously playing Paranoia
 				{
+					next.ToDo = Player.Action.MissTurn;
 					next.Current.Turns++;
 					next.Current.Round++;
 					next = null;

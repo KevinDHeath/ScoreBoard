@@ -22,9 +22,9 @@ public class GameService : PassCardHandler
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Game Current => _game;
 
-	/// <summary>Setup a new Grass game.</summary>
+	/// <summary>Setup and start a new Grass game.</summary>
 	/// <param name="options">Options for the Game.</param>
-	/// <returns>An initialized game.</returns>
+	/// <returns>An initialized game object with the provided options.</returns>
 	public Game Setup( GameOptions options )
 	{
 		if( options.AutoPlay && options.Players.Count == 0 )
@@ -76,6 +76,14 @@ public class GameService : PassCardHandler
 	/// Asynchronous programming scenarios</seealso>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Task<bool> GameAsync() => Task.Run( () => { return _game.Play(); } );
+
+	internal static List<CardInfo> sCards = CardInfo.Info();
+
+	internal static string GetCardCaption( string cardId )
+	{
+		var info = sCards.FirstOrDefault( c => c.Id == cardId );
+		return info is not null ? info.Caption : string.Empty;
+	}
 
 	private static bool AllowDiscard( Card card )
 	{
@@ -144,7 +152,7 @@ public class GameService : PassCardHandler
 
 	/// <summary>Add a card to pass due to paranoia being played.</summary>
 	/// <param name="options">Play card options.</param>
-	/// <returns><see langword="false"/> if the player has already added a card or
+	/// <returns><c>false</c> if the player has already added a card or
 	/// the card is not in the players hand.</returns>
 	public bool CardToPass( PlayOptions options )
 	{
@@ -156,7 +164,7 @@ public class GameService : PassCardHandler
 
 	/// <summary>Discard a card in a players current hand.</summary>
 	/// <param name="options">Play card options.</param>
-	/// <returns><see langword="true"/> if the card is successfully discarded.</returns>
+	/// <returns><c>true</c> if the card is successfully discarded.</returns>
 	public bool Discard( PlayOptions options )
 	{
 		if( options.Player is null || options.Card is null ) { return false; }
@@ -172,7 +180,7 @@ public class GameService : PassCardHandler
 
 	/// <summary>Play a card in a players current hand.</summary>
 	/// <param name="options">Play card options.</param>
-	/// <returns>A <see cref="PlayResult" /> object representing the play result.</returns>
+	/// <returns>An object representing the play result.</returns>
 	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
 	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
 	public PlayResult Play( PlayOptions options )
