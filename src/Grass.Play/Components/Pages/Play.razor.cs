@@ -1,6 +1,7 @@
 using System.Text;
 using Grass.Logic;
 using Grass.Logic.Models;
+using Microsoft.Extensions.Options;
 namespace Grass.Play.Components.Pages;
 
 public partial class Play
@@ -101,6 +102,23 @@ public partial class Play
 			Service.CardToPass( PlayState.Options );
 			Refresh( Player );
 		}
+	}
+
+	private void TradeCard()
+	{
+		if( Player is not null )
+		{
+			if( Player.Trade )
+			{
+				Service.TradeAccept( PlayState.Options );
+				Refresh( Player );
+			}
+			else
+			{
+				Service.TradeRequest( PlayState.Options );
+			}
+		}
+
 	}
 
 	private void Discard()

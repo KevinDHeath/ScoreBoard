@@ -1,6 +1,7 @@
 namespace Grass.Logic.Models;
 
 /// <summary>Playing card type information.</summary>
+[System.Diagnostics.DebuggerDisplay( "{Id}" )]
 public class CardInfo
 {
 	#region Properties
@@ -36,6 +37,8 @@ public class CardInfo
 	private int _width;
 
 	internal string Id { get; private set; }
+
+	private static int Display( int val ) => (int)Math.Ceiling( (double)val * 50 / 100 );
 
 	#endregion
 
@@ -87,10 +90,19 @@ public class CardInfo
 
 	#region Internal Methods
 
+	internal static List<CardInfo> sCards = Info();
+
+	internal static CardInfo GetCardInfo( string cardId )
+	{
+		var info = sCards.FirstOrDefault( c => c.Id == cardId );
+		if( info is null ) { info = sCards[0]; }
+		return info;
+	}
+
 	internal static List<Card> BuildStack()
 	{
 		List<Card> rtn = new();
-		foreach( CardInfo info in GameService.sCards )
+		foreach( CardInfo info in sCards )
 		{
 			for( int count = 0; count < info.Count; count++ ) { rtn.Add( new Card( info ) ); }
 		}
@@ -107,22 +119,20 @@ public class CardInfo
 		return list.FirstOrDefault( c => c.Id.StartsWith( name ) );
 	}
 
-	internal static Card? GetLast( List<Card> list, string name )
+	internal static CardInfo? GetHeatOff( List<Card> list )
 	{
-		return list.LastOrDefault( c => c.Id.StartsWith( name ) );
+		Card? heat = list.LastOrDefault();
+		if( heat is not null && heat.Type == cHeatOn )
+		{
+			return GetCardInfo( heat.Id.Replace( cHeatOn, cHeatOff ) );
+		}
+		return null;
 	}
 
 	internal static IEnumerable<Card> GetCards( List<Card> list, string name )
 	{
 		return list.Where( c => c.Id.StartsWith( name ) );
 	}
-
-	#endregion
-
-	#region Private Methods
-
-	// Roundup to 50% of actual
-	private static int Display( int val ) => (int)Math.Ceiling( (double)val * 50 / 100 );
 
 	internal static List<CardInfo> Info()
 	{
@@ -190,4 +200,11 @@ public class CardInfo
 	}
 
 	#endregion
+
+	/// <inheritdoc/>
+	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
+	public override string ToString()
+	{
+		return Value == 0 ? Caption : $"{Value:$###,##0} {Id.Split( '-' )[0]}".Trim();
+	}
 }

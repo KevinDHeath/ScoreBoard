@@ -356,4 +356,113 @@ internal class Decision
 	}
 
 	#endregion
+
+	#region Interactive
+
+	private static Dictionary<Player, int> GetHasslePlayers( List<Player> others, Card card )
+	{
+		Dictionary<Player, int> rtn = [];
+		foreach( Player other in others )
+		{
+			if( !other.Current.MarketIsOpen ) { continue; }
+			int val = 0;
+			if( card.Type == CardInfo.cHeatOn )
+			{
+				val = other.Total + other.Current.Protected + other.Current.UnProtected;
+			}
+			else
+			{
+				if( other.Current.HighestUnProtected is not null )
+				{
+					val = other.Current.HighestUnProtected.Info.Value;
+				}
+			}
+			if( val >= Rules.cBonusAmount ) { rtn.Add( other, val ); }
+		}
+		if( rtn.Count > 0 ) { rtn = rtn.OrderByDescending( p => p.Value ).ToDictionary( p => p.Key, p => p.Value ); }
+		return rtn;
+	}
+
+	private static List<Player> GetTradePlayers( List<Player> others, CardInfo trade, Card card )
+	{
+		List<Player> rtn = [];
+		foreach( Player player in others )
+		{
+			Hand hand = player.Current;
+			List<Card> cards = CardInfo.GetCards( hand.Cards, trade.Id ).ToList();
+			int count = trade.Id == CardInfo.cOpen && hand.HasslePile.Count == 0 ? 1 : 0;
+			if( cards.Count > count )
+			{
+				PlayResult canPlay = PlayResult.Success!;
+				if( card.Type == CardInfo.cHeatOff ) { canPlay = Rules.CanPlay( hand, card ); }
+				if( canPlay == PlayResult.Success )
+				{
+					rtn.Add( player );
+					player.ToDo = Player.Action.Trade;
+				}
+			}
+		}
+		return rtn;
+	}
+
+	internal static Dictionary<Player, int> CheckPlay( Game game, PlayOptions options )
+	{
+		Dictionary<Player, int> rtn = [];
+		if( options.Player is null || options.Card is null ) { return rtn; }
+		options.OtherCards.Clear();
+		Player player = options.Player;
+		Card card = options.Card;
+
+		if( options.Player.ToDo == Player.Action.Trade )
+		{
+			// Make sure the accept trade has selected the correct card
+			options.TradeFor = null;
+			if( game.TradeRq is not null && game.TradeRq.TradeFor is not null )
+			{
+				if( options.Card.Id == game.TradeRq.TradeFor.Id ) { options.TradeFor = options.Card.Info; }
+			}
+			return [];
+		}
+
+		options.CanPlay = Rules.CanPlay( player.Current, card );
+		List<Player> others = game.Players.Where( p => p != player ).ToList();
+
+		CardInfo? trade = null;
+		if( options.CanPlay != PlayResult.Success )
+		{
+			if( options.CanPlay.ErrorMessage == Rules.cNotActive ) // Try trade for Market Open
+			{
+				trade = CardInfo.GetCardInfo( CardInfo.cOpen );
+				options.TradeFor = GetTradePlayers( others, trade, card ).Count > 0 ? trade : null;
+			}
+			else if( options.CanPlay.ErrorMessage == Rules.cNotOpen ) // Try trade for Heat Off
+			{
+				CardInfo? heatOff = CardInfo.GetHeatOff( player.Current.HasslePile );
+				if( heatOff is not null )
+				{
+					trade = heatOff;
+					options.TradeFor = GetTradePlayers( others, trade, card ).Count > 0 ? trade : null;
+				}
+			}
+			if( options.TradeFor is not null && trade is not null )
+			{
+				options.CanPlay = new( $"Possible trade for {trade.Caption}" );
+			}
+		}
+		else
+		{
+			if( card.Type == CardInfo.cHeatOn || card.Id == CardInfo.cSteal )
+			{
+				rtn = GetHasslePlayers( others, card );
+				if( rtn.Count == 0 ) { options.CanPlay = new( "No players to hassle." ); }
+			}
+			else if( card.Type == CardInfo.cProtection )
+			{
+				options.OtherCards = Card.GetPeddlesToProtect( player.Current.StashPile, card.Info.Value );
+			}
+		}
+		return rtn;
+	}
+
+	#endregion
 }

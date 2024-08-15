@@ -81,7 +81,7 @@ public class Samples
 					game.Take( hand, CardInfo.cJamaica );
 					game.Take( hand, CardInfo.cOnBust );
 					game.Take( hand, CardInfo.cStonehigh );
-					game.Take( hand, CardInfo.cSteal );
+					game.Take( hand, CardInfo.cOpen );
 
 					to = hand.HasslePile;
 					Add( game, hand, CardInfo.cOpen, to, "(round 1)" );

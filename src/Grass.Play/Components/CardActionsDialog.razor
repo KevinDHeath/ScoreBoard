@@ -47,6 +47,10 @@
               {
                 <button @onclick="OnPass" type="button" class="button is-success is-pulled-left">Pass</button>
               }
+              @if( CanTrade )
+              {
+                <button @onclick="OnTrade" type="button" class="button is-success is-pulled-left">Trade</button>
+              }
               <button @onclick="OnDiscard" disabled="@(!CanDiscard)" type="button"
                 class="button is-warning is-pulled-right">Discard</button>
             </td>
@@ -70,10 +74,14 @@
   public EventCallback OnPass { get; set; }
   [Parameter, EditorRequired]
   public EventCallback OnDiscard { get; set; }
+  [Parameter, EditorRequired]
+  public EventCallback OnTrade { get; set; }
 
   private bool CanDiscard { get; set; } = true;
   private bool CanPlay { get; set; } = false;
   private bool CanPass { get; set; } = false;
+  private bool CanTrade { get; set; } = false;
+
   private bool EnablePlay => SelectOptions.Count == 0 || ( SelectOptions.Count > 0 && Options.OtherId > 0 );
   private string Message { get; set; } = string.Empty;
   private Dictionary<Player, int> SelectOptions { get; set; } = [];
@@ -87,13 +95,24 @@
     {
       SelectOptions = Service.CheckPlay( Options );
       CanPlay = Options.CanPlay == PlayResult.Success;
-      if( !CanPlay ) { Message = Options.CanPlay.ToString(); }
+      if( !CanPlay )
+      {
+        Message = Options.CanPlay.ToString();
+        if( Options.TradeFor is not null ) { CanTrade = true; }
+      }
       else { CanDiscard = Options.CanDiscard; }
     }
     else if( Options.Player.Pass )
     {
       CanPass = true;
       CanDiscard = false;
+    }
+    else if( Options.Player.Trade )
+    {
+      Service.CheckPlay( Options );
+      CanDiscard = false;
+      CanTrade = Options.TradeFor != null;
+      if( !CanTrade ) { Message = "This is not the correct card to trade."; }
     }
     else 
     {

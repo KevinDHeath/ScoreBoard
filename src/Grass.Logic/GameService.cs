@@ -27,11 +27,8 @@ public class GameService : PassCardHandler
 	/// <returns>An initialized game object with the provided options.</returns>
 	public Game Setup( GameOptions options )
 	{
-		if( options.AutoPlay && options.Players.Count == 0 )
-		{
-			options.Players = Samples.GetPlayers();
-		}
-
+		//if( options.AutoPlay && options.Players.Count == 0 )
+		if( options.Players.Count == 0 ) { options.Players = Samples.GetPlayers(); }
 		foreach( var player in options.Players ) { player.Reset(); }
 		_options = options;
 		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );
@@ -77,12 +74,19 @@ public class GameService : PassCardHandler
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Task<bool> GameAsync() => Task.Run( () => { return _game.Play(); } );
 
-	internal static List<CardInfo> sCards = CardInfo.Info();
-
-	internal static string GetCardCaption( string cardId )
+	private void Reset( PlayOptions options, Player? ignore = null )
 	{
-		var info = sCards.FirstOrDefault( c => c.Id == cardId );
-		return info is not null ? info.Caption : string.Empty;
+		if( _game is not null )
+		{
+			if( _game.TradeRq is not null ) { _game.TradeRq = null; }
+			foreach( Player player in _game.Players )
+			{
+				if( ignore is not null && player == ignore ) { continue; }
+				if( player.Notify is not null ) { player.Notify = null; }
+				if( player.Trade ) { player.ToDo = Player.Action.Nothing; }
+			}
+		}
+		options.Reset();
 	}
 
 	private static bool AllowDiscard( Card card )
@@ -103,48 +107,9 @@ public class GameService : PassCardHandler
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Dictionary<Player, int> CheckPlay( PlayOptions options )
 	{
-		Dictionary<Player, int> rtn = [];
-		if( options.Player is null || options.Card is null ) { return rtn; }
-		Player player = options.Player;
-		Card card = options.Card;
-
-		options.OtherCards.Clear();
-		options.CanPlay = Rules.CanPlay( player.Current, card );
-		options.CanDiscard = AllowDiscard( card );
-		if( options.CanPlay != PlayResult.Success ) { return rtn; }
-
-		if( card.Type == CardInfo.cHeatOn || card.Id == CardInfo.cSteal )
-		{
-			foreach( Player other in _game.Players )
-			{
-				if( player == other || !other.Current.MarketIsOpen ) { continue; }
-				if( card.Type == CardInfo.cHeatOn )
-				{
-					int total = other.Total + other.Current.Protected + other.Current.UnProtected;
-					if( total > 0 ) { rtn.Add( other, total ); }
-				}
-				else
-				{
-					if( other.Current.HighestUnProtected is not null )
-					{
-						int total = other.Current.HighestUnProtected.Info.Value;
-						if( total >= 25000 )
-						{
-							rtn.Add( other, total );
-						}
-					}
-				}
-			}
-			if( rtn.Count == 0 ) { options.CanPlay = new( "No players to hassle." ); }
-			else
-			{
-				rtn = rtn.OrderByDescending( p => p.Value ).ToDictionary( p => p.Key, p => p.Value );
-			}
-		}
-		else if( card.Type == CardInfo.cProtection )
-		{
-			options.OtherCards = Card.GetPeddlesToProtect( player.Current.StashPile, card.Info.Value );
-		}
+		if( options.Player is null || options.Card is null ) { return []; }
+		Dictionary<Player, int> rtn = Decision.CheckPlay( _game, options );
+		options.CanDiscard = AllowDiscard( options.Card );
 		return rtn;
 	}
 
@@ -158,7 +123,7 @@ public class GameService : PassCardHandler
 	{
 		if( options.Player is null || options.Card is null ) { return false; }
 		bool rtn = _game.AddCardToPass( options.Player, options.Card );
-		if( rtn ) { options.Reset(); }
+		if( rtn ) { Reset( options ); }
 		return rtn;
 	}
 
@@ -173,7 +138,55 @@ public class GameService : PassCardHandler
 		{
 			bool over = _game.SetNextPlayer( options.Player );
 			if( over ) { StoreSummary( _game ); }
-			options.Reset();
+			Reset( options );
+		}
+		return rtn;
+	}
+
+	/// <summary>Request a card in hand trade.</summary>
+	/// <param name="options">Play card options.</param>
+	public void TradeRequest( PlayOptions options )
+	{
+		if( options.Player is null || options.Card is null ) { return; }
+		if( _game is null  ) { return; }
+		Player player = options.Player;
+		Card card = options.Card;
+
+		if( options.TradeFor is not null )
+		{
+			_game.TradeRq = options.SetTradeRq();
+			string notify = $"{player.Name} would like to trade {card.Info} for {options.TradeFor}";
+			foreach( Player other in _game.Players )
+			{
+				if( other == player ) { continue; }
+				other.Notify = notify;
+			}
+		}
+		options.Reset(); // Don't do full reset
+	}
+
+	private static readonly object obj = new();
+
+	/// <summary>Accept a card trade with another player.</summary>
+	/// <param name="options">Play card options.</param>
+	/// <returns>An object representing the play result.</returns>
+	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
+	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
+	public PlayResult TradeAccept( PlayOptions options )
+	{
+		PlayResult rtn = new( $"Missing player or card." );
+		if( options.Player is null || options.Card is null ) { return rtn; }
+		if( _game is null ) { return rtn; }
+		if( _game.TradeRq is null ) { return rtn; }
+		PlayOptions? rq;
+		lock( obj ) { rq = _game.TradeRq; _game.TradeRq = null; }
+		if( rq is null || rq.Player is null || rq.Card is null ) { return rtn; }
+
+		rtn = _game.Play( rq.Player, rq.Card, options.Player, options.Card );
+		if( rtn == PlayResult.Success )
+		{
+			rq.Player.Notify = $"Trade accepted by {options.Player.Name}";
+			Reset( options, rq.Player );
 		}
 		return rtn;
 	}
@@ -210,7 +223,7 @@ public class GameService : PassCardHandler
 			if( card.Id == CardInfo.cClose ) { over = _game.CheckWinner( options.Player ); }
 			else if( card.Type != CardInfo.cParanoia ) { over = _game.SetNextPlayer( options.Player ); }
 			if( over ) { StoreSummary( _game ); }
-			options.Reset();
+			Reset( options );
 		}
 		return rtn;
 	}

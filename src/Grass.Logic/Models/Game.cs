@@ -26,6 +26,8 @@ public class Game
 
 	#region Events
 
+	internal PlayOptions? TradeRq { get; set; }
+
 	private EventHandler<PropertyChangedEventArgs>? _gameChanged;
 
 	internal event EventHandler<PropertyChangedEventArgs>? GameChanged
