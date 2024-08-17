@@ -7,9 +7,10 @@ namespace Grass.Logic;
 /// <summary>Service providing actions to be taken with cards during a Grass game.</summary>
 public class GameService : PassCardHandler
 {
-	internal Game _game;
+	private Game _game;
 	private GameOptions _options = default!;
 	private bool _disposed;
+	private static readonly object _lock = new();
 
 	/// <summary>Initializes a new instance of the <see cref="GameService"/> class.</summary>
 	public GameService() => _game = default!;
@@ -27,10 +28,9 @@ public class GameService : PassCardHandler
 	/// <returns>An initialized game object with the provided options.</returns>
 	public Game Setup( GameOptions options )
 	{
-		//if( options.AutoPlay && options.Players.Count == 0 )
-		if( options.Players.Count == 0 ) { options.Players = Samples.GetPlayers(); }
+		if( options.Players.Count == 0 && options.AllowTests ) { options.Players = Samples.GetPlayers(); }
 		foreach( var player in options.Players ) { player.Reset(); }
-		_options = options;
+		if( options.Players.Count <= 2 ) { return Current; }
 		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );
 
 		// Play the game
@@ -76,15 +76,12 @@ public class GameService : PassCardHandler
 
 	private void Reset( PlayOptions options, Player? ignore = null )
 	{
-		if( _game is not null )
+		if( _game.TradeRq is not null ) { _game.TradeRq = null; }
+		foreach( Player player in _game.Players )
 		{
-			if( _game.TradeRq is not null ) { _game.TradeRq = null; }
-			foreach( Player player in _game.Players )
-			{
-				if( ignore is not null && player == ignore ) { continue; }
-				if( player.Notify is not null ) { player.Notify = null; }
-				if( player.Trade ) { player.ToDo = Player.Action.Nothing; }
-			}
+			if( ignore is not null && player == ignore ) { continue; }
+			if( player.Notify is not null ) { player.Notify = null; }
+			if( player.Trade ) { player.ToDo = Player.Action.Nothing; }
 		}
 		options.Reset();
 	}
@@ -113,13 +110,19 @@ public class GameService : PassCardHandler
 		return rtn;
 	}
 
+	/// <summary>Returns a message for specific card play.</summary>
+	/// <param name="options">Card play options.</param>
+	/// <returns><c>null</c> if there is not message to display.</returns>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public string? GetInfoMessage( PlayOptions options ) => Decision.GetInfoMessage( _game, options );
+
 	#region Action Methods
 
-	/// <summary>Add a card to pass due to paranoia being played.</summary>
+	/// <summary>Pass a card due to paranoia being played.</summary>
 	/// <param name="options">Play card options.</param>
-	/// <returns><c>false</c> if the player has already added a card or
-	/// the card is not in the players hand.</returns>
-	public bool CardToPass( PlayOptions options )
+	/// <returns><c>false</c> if the player has already passed a card or the card is
+	/// not in the players hand.</returns>
+	public bool PassCard( PlayOptions options )
 	{
 		if( options.Player is null || options.Card is null ) { return false; }
 		bool rtn = _game.AddCardToPass( options.Player, options.Card );
@@ -127,33 +130,75 @@ public class GameService : PassCardHandler
 		return rtn;
 	}
 
-	/// <summary>Discard a card in a players current hand.</summary>
+	/// <summary>Play a card on a players turn.</summary>
 	/// <param name="options">Play card options.</param>
-	/// <returns><c>true</c> if the card is successfully discarded.</returns>
-	public bool Discard( PlayOptions options )
+	/// <returns>An object representing the play result.</returns>
+	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be
+	/// compared to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
+	public PlayResult PlayCard( PlayOptions options )
 	{
-		if( options.Player is null || options.Card is null ) { return false; }
-		bool rtn = _game.Discard( options.Player, options.Card );
-		if( rtn )
+		PlayResult rtn = new( Rules.cPlayOption );
+		if( options.Player is null || options.Card is null ) { return rtn; }
+		Card card = options.Card;
+
+		if( options.OtherCards.Count > 0 )
 		{
-			bool over = _game.SetNextPlayer( options.Player );
+			rtn = Rules.Protect( _game, options.Player, card, options.OtherCards );
+		}
+		else if( options.OtherId > 0 )
+		{
+			Player? other = _game.Players.FirstOrDefault( p => p.Id == options.OtherId );
+			if( other is not null )
+			{
+				Card? oCard = card.Type == CardInfo.cHeatOn ? card : other.Current.HighestUnProtected;
+				if( oCard is not null ) { rtn = Rules.Play( _game, options.Player, card, other, oCard ); }
+			}
+		}
+		else { rtn = Rules.Play( _game, options.Player, card ); }
+
+		if( rtn == PlayResult.Success )
+		{
+			bool over = false;
+			if( card.Id == CardInfo.cClose ) { over = _game.CheckWinner( options.Player ); }
+			else if( card.Type != CardInfo.cParanoia ) { over = _game.SetNextPlayer( options.Player ); }
 			if( over ) { StoreSummary( _game ); }
 			Reset( options );
 		}
 		return rtn;
 	}
 
-	/// <summary>Request a card in hand trade.</summary>
+	/// <summary>Trade a card with another player.</summary>
+	/// <param name="options">Play card options.</param>
+	/// <returns>An object representing the trade result.</returns>
+	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be
+	/// compared to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
+	public PlayResult TradeCard( PlayOptions options )
+	{
+		PlayResult rtn = new( Rules.cPlayOption );
+		if( options.Player is null || options.Card is null ) { return rtn; }
+		if( _game.TradeRq is null ) { return rtn; }
+		PlayOptions? rq;
+		lock( _lock ) { rq = _game.TradeRq; _game.TradeRq = null; }
+		if( rq is null || rq.Player is null || rq.Card is null ) { return rtn; }
+
+		rtn = Rules.Play( _game, rq.Player, rq.Card, options.Player, options.Card );
+		if( rtn == PlayResult.Success )
+		{
+			rq.Player.Notify = $"Trade accepted by {options.Player.Name}";
+			Reset( options, rq.Player );
+		}
+		return rtn;
+	}
+
+	/// <summary>Request a card trade on a players turn.</summary>
 	/// <param name="options">Play card options.</param>
 	public void TradeRequest( PlayOptions options )
 	{
 		if( options.Player is null || options.Card is null ) { return; }
-		if( _game is null  ) { return; }
-		Player player = options.Player;
-		Card card = options.Card;
-
 		if( options.TradeFor is not null )
 		{
+			Player player = options.Player;
+			Card card = options.Card;
 			_game.TradeRq = options.SetTradeRq();
 			string notify = $"{player.Name} would like to trade {card.Info} for {options.TradeFor}";
 			foreach( Player other in _game.Players )
@@ -165,63 +210,16 @@ public class GameService : PassCardHandler
 		options.Reset(); // Don't do full reset
 	}
 
-	private static readonly object obj = new();
-
-	/// <summary>Accept a card trade with another player.</summary>
+	/// <summary>Waste a card (discard) on a players turn.</summary>
 	/// <param name="options">Play card options.</param>
-	/// <returns>An object representing the play result.</returns>
-	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
-	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
-	public PlayResult TradeAccept( PlayOptions options )
+	/// <returns><c>true</c> if the card is successfully discarded.</returns>
+	public bool WasteCard( PlayOptions options )
 	{
-		PlayResult rtn = new( $"Missing player or card." );
-		if( options.Player is null || options.Card is null ) { return rtn; }
-		if( _game is null ) { return rtn; }
-		if( _game.TradeRq is null ) { return rtn; }
-		PlayOptions? rq;
-		lock( obj ) { rq = _game.TradeRq; _game.TradeRq = null; }
-		if( rq is null || rq.Player is null || rq.Card is null ) { return rtn; }
-
-		rtn = _game.Play( rq.Player, rq.Card, options.Player, options.Card );
-		if( rtn == PlayResult.Success )
+		if( options.Player is null || options.Card is null ) { return false; }
+		bool rtn = _game.Discard( options.Player, options.Card );
+		if( rtn )
 		{
-			rq.Player.Notify = $"Trade accepted by {options.Player.Name}";
-			Reset( options, rq.Player );
-		}
-		return rtn;
-	}
-
-	/// <summary>Play a card in a players current hand.</summary>
-	/// <param name="options">Play card options.</param>
-	/// <returns>An object representing the play result.</returns>
-	/// <remarks>The <c>null</c> return value is used to indicate success. The result should be compared
-	/// to <see cref="PlayResult.Success"/> rather than checking for <c>null</c>.</remarks>
-	public PlayResult Play( PlayOptions options )
-	{
-		PlayResult rtn = new( $"Missing player or card." );
-		if( options.Player is null || options.Card is null ) { return rtn; }
-		Card card = options.Card;
-
-		if( options.OtherCards.Count > 0 )
-		{
-			rtn = _game.Protect( options.Player, card, options.OtherCards );
-		}
-		else if( options.OtherId > 0 )
-		{
-			Player? other = Current.Players.FirstOrDefault( p => p.Id == options.OtherId );
-			if( other is not null )
-			{
-				Card? oCard = card.Type == CardInfo.cHeatOn ? card : other.Current.HighestUnProtected;
-				if( oCard is not null ) { rtn = _game.Play( options.Player, card, other, oCard ); }
-			}
-		}
-		else { rtn = _game.Play( options.Player, card ); }
-
-		if( rtn == PlayResult.Success )
-		{
-			bool over = false;
-			if( card.Id == CardInfo.cClose ) { over = _game.CheckWinner( options.Player ); }
-			else if( card.Type != CardInfo.cParanoia ) { over = _game.SetNextPlayer( options.Player ); }
+			bool over = _game.SetNextPlayer( options.Player );
 			if( over ) { StoreSummary( _game ); }
 			Reset( options );
 		}
@@ -237,10 +235,7 @@ public class GameService : PassCardHandler
 	/// <summary>Collection of Game summaries.</summary>
 	public List<Summary> Summaries { get; set; } = [];
 
-	internal void StoreSummary( Game game )
-	{
-		Summaries.Add( Summary.BuildSummary( game ) );
-	}
+	internal void StoreSummary( Game game ) => Summaries.Add( Summary.BuildSummary( game ) );
 
 	/// <summary>Export a game summary.</summary>
 	/// <param name="summary">Summary to export.</param>
@@ -251,15 +246,6 @@ public class GameService : PassCardHandler
 	{
 		options.WriteIndented = indent;
 		return JsonSerializer.Serialize( summary, options );
-	}
-
-	/// <summary>Import a game summary.</summary>
-	/// <param name="json">The JSON string.</param>
-	/// <returns>A <c>null</c> is returned if invalid JSON was provided.</returns>
-	internal static Summary? ImportSummary( ref string json )
-	{
-		try { return JsonSerializer.Deserialize<Summary>( json ); }
-		catch { return null; }
 	}
 
 	#endregion

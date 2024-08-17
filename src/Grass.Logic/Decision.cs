@@ -5,6 +5,8 @@ namespace Grass.Logic;
 [System.Diagnostics.DebuggerDisplay( "{Player.Name}" )]
 internal class Decision
 {
+	#region Auto-Play
+
 	private static int TotalHighUnprotected = 0;
 	private static int TotalLowUnprotected = 0;
 	internal static Player? FeelgoodInPlay = null;
@@ -150,7 +152,7 @@ internal class Decision
 		return rtn;
 	}
 
-	internal static Dictionary<Player, Card?> Steal( Decision data, List<Decision> others )
+	internal static Dictionary<Player, Card?> Steal( Decision data )
 	{
 		Dictionary<Player, Card?> rtn = [];
 
@@ -220,7 +222,7 @@ internal class Decision
 		// Process in order of severity, cSoldout, cDoublecross, cWipedOut
 		foreach( Card card in list.OrderByDescending( x => x.Info.Value ).ToList() )
 		{
-			pass = GetWorstCard( data.Hand.Cards, card );
+			pass = Actor.GetWorstCard( data.Hand.Cards, card );
 			bool worse = ( pass is not null ) && ( pass.Id.StartsWith( CardInfo.cParanoia ) ) &&
 				( pass.Info.Value < card.Info.Value );
 
@@ -249,109 +251,6 @@ internal class Decision
 			if( rtn is not null ) { break; }
 		}
 
-		return rtn;
-	}
-
-	#region Card to discard
-
-	internal static bool Discard( Player player, Game game )
-	{
-		Hand hand = player.Current;
-		Card? rtn = GetDiscard( hand.Cards );
-
-#pragma warning disable IDE0074 // Use compound assignment
-#pragma warning disable IDE0270 // Null check can be simplified
-		if( rtn is null ) { rtn = hand.Cards[0]; } // Must not be null
-#pragma warning restore IDE0270 // Null check can be simplified
-#pragma warning restore IDE0074 // Use compound assignment
-
-		bool ok = game.Discard( player, rtn );
-		return ok;
-	}
-
-	private static Card? GetDiscard( List<Card> cards )
-	{
-		Card? rtn = CardInfo.GetFirst( cards, CardInfo.cOnBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnSearch );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffSearch );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPayFine );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOpen );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cClose );
-
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cHomegrown );    // 5,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cMexico );       // 5,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cColumbia );     // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cJamaica );      // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cSteal );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cCatchaBuzz );   // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cGrabaSnack );   // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cLustConquers ); // 50,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPanama );       // 50,000
-
-		// TODO: Need to play these - they cannot be discarded
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cSoldout );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cDoublecross );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cWipedOut );
-
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cStonehigh );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cEuphoria );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cDrFeelgood );   // 100,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cBanker );
-
-		return rtn;
-	}
-
-	#endregion
-
-	#region Card to pass
-
-	internal static Card GetWorstCard( List<Card> cards, Card? ignore = null )
-	{
-		Card? rtn = GetCard( cards, CardInfo.cWipedOut, ignore );
-		rtn ??= GetCard( cards, CardInfo.cDoublecross, ignore );
-		rtn ??= GetCard( cards, CardInfo.cSoldout, ignore );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffSearch );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPayFine );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cClose );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOpen );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cHomegrown );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cMexico );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cColumbia );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cJamaica );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnSearch );
-
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cCatchaBuzz );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cGrabaSnack );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cLustConquers );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cStonehigh );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cSteal );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPanama );
-		// rtn ??= CardInfo.GetFirst( cards, CardInfo.cDrFeelgood );
-		//rtn ??= CardInfo.GetFirst( cards, CardInfo.cEuphoria );
-		//rtn ??= CardInfo.GetFirst( cards, CardInfo.cBanker );
-
-#pragma warning disable IDE0074 // Use compound assignment
-		if( rtn is null ) { rtn = cards[0]; } // Cannot be null
-#pragma warning restore IDE0074 // Use compound assignment
-
-		return rtn;
-	}
-
-	private static Card? GetCard( List<Card> cards, string name, Card? ignore )
-	{
-		Card? rtn = CardInfo.GetFirst( cards, name );
-		if( rtn is not null && ignore is not null && rtn.Equals( ignore ) ) { rtn = null; }
 		return rtn;
 	}
 
@@ -413,17 +312,6 @@ internal class Decision
 		Player player = options.Player;
 		Card card = options.Card;
 
-		if( options.Player.ToDo == Player.Action.Trade )
-		{
-			// Make sure the accept trade has selected the correct card
-			options.TradeFor = null;
-			if( game.TradeRq is not null && game.TradeRq.TradeFor is not null )
-			{
-				if( options.Card.Id == game.TradeRq.TradeFor.Id ) { options.TradeFor = options.Card.Info; }
-			}
-			return [];
-		}
-
 		options.CanPlay = Rules.CanPlay( player.Current, card );
 		List<Player> others = game.Players.Where( p => p != player ).ToList();
 
@@ -437,7 +325,7 @@ internal class Decision
 			}
 			else if( options.CanPlay.ErrorMessage == Rules.cNotOpen ) // Try trade for Heat Off
 			{
-				CardInfo? heatOff = CardInfo.GetHeatOff( player.Current.HasslePile );
+				CardInfo? heatOff = CardInfo.GetHeatOffInfo( player.Current.HasslePile );
 				if( heatOff is not null )
 				{
 					trade = heatOff;
@@ -462,6 +350,28 @@ internal class Decision
 			}
 		}
 		return rtn;
+	}
+
+	internal static string? GetInfoMessage( Game game, PlayOptions options )
+	{
+		if( options.Card is null || options.Player is null ) { return null; }
+		if( options.Player.ToDo == Player.Action.Trade )
+		{
+			options.TradeFor = null;
+			if( game.TradeRq is not null && game.TradeRq.TradeFor is not null )
+			{
+				if( options.Card.Id != game.TradeRq.TradeFor.Id )
+				{ return "This is not the correct card to trade."; }
+			}
+		}
+		if( options.Card.Type == CardInfo.cProtection )
+		{
+			int total = 0;
+			foreach( Card p in options.OtherCards ) { total += p.Info.Value; }
+			if( total < options.Card.Info.Value )
+			{ return $"Warning: Total protected value only {total:$###,##0}"; }
+		}
+		return null;
 	}
 
 	#endregion

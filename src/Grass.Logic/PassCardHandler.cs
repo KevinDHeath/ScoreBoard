@@ -18,7 +18,7 @@ public abstract class PassCardHandler : IDisposable
 				{
 					player.ToDo = Player.Action.Pass;
 					// Assume the paranoia card is already played
-					Card worst = Decision.GetWorstCard( player.Current.Cards );
+					Card worst = Actor.GetWorstCard( player.Current.Cards );
 					game.AddCardToPass( player, worst );
 				}
 			}

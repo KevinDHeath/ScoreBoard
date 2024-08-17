@@ -220,7 +220,7 @@ public class Samples
 		Hand hand = janis.Current;
 		game.Take( hand, CardInfo.cLustConquers ); // Pick-up
 		Card? card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cSoldout );
-		if( card is not null ) { _ = game.Play( janis, card ); }
+		if( card is not null ) { _ = Rules.Play( game, janis, card ); }
 
 		hand = john.Current;
 		game.Take( hand, CardInfo.cMexico ); // Pick-up
@@ -229,7 +229,7 @@ public class Samples
 		hand = amy.Current;
 		game.Take( hand, CardInfo.cSteal ); // Pick-up (turn 1)
 		card = hand.Cards.FirstOrDefault( c => c.Id == CardInfo.cEuphoria );
-		if( card is not null ) { _ = game.Play( amy, card ); } // Play (turn 1)
+		if( card is not null ) { _ = Rules.Play( game, amy, card ); } // Play (turn 1)
 		game.Take( hand, CardInfo.cOnFelony ); // Pick-up (turn 2)
 		Transfer( hand.Cards, hand.HasslePile, CardInfo.cClose, "(round 14)" ); // Play (turn 2)
 

@@ -21,7 +21,7 @@
                 <div>
                   <InputSelect class="select-player" @bind-Value="Options.OtherId">
                     <option value="0">
-                      Select an option...
+                      Select a player to hassle...
                     </option>
                     @foreach( Player key in SelectOptions.Keys )
                     {
@@ -100,7 +100,12 @@
         Message = Options.CanPlay.ToString();
         if( Options.TradeFor is not null ) { CanTrade = true; }
       }
-      else { CanDiscard = Options.CanDiscard; }
+      else
+      {
+        CanDiscard = Options.CanDiscard;
+        var message = Service.GetInfoMessage( Options );
+        if( message is not null ) { Message = message; }
+      }
     }
     else if( Options.Player.Pass )
     {
@@ -109,10 +114,9 @@
     }
     else if( Options.Player.Trade )
     {
-      Service.CheckPlay( Options );
+      Message = Service.GetInfoMessage( Options ) ?? string.Empty;
+      CanTrade = Message.Length == 0;
       CanDiscard = false;
-      CanTrade = Options.TradeFor != null;
-      if( !CanTrade ) { Message = "This is not the correct card to trade."; }
     }
     else 
     {

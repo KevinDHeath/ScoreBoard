@@ -37,6 +37,7 @@ public partial class Home
 			Options = new();
 			if( AllowTests )
 			{
+				Options.AllowTests = true;
 				Options.AutoPlay = true;
 				Options.InProgress = false;
 			}

@@ -231,14 +231,6 @@ public class Game
 		return ok;
 	}
 
-	internal PlayResult Play( Player player, Card card ) => Rules.Play( this, player, card );
-
-	internal PlayResult Play( Player player, Card card, Player with, Card other ) =>
-		Rules.Play( this, player, card, with, other );
-
-	internal PlayResult Protect( Player player, Card card, List<Card> peddles ) =>
-		Rules.Protect( this, player, card, peddles );
-
 	internal bool Take( Hand hand )
 	{
 		if( GrassStack.Count == 0 ) { return false; }

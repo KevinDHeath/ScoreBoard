@@ -7,6 +7,19 @@ internal class Rules
 	internal const int cMaxNumber = 6; // Maximum players and cards in hand
 	internal const int cBonusAmount = 25000;
 
+	private const string cDiscard = "Can only discard.";
+	private const string cIsActive = "Market is already active.";
+	internal const string cPlayOption = "Missing player or card option.";
+	private const string cNoHeatOn = "No heat on.";
+	private const string cNoHeatOnMatch = "No matching heat on.";
+	private const string cNoMoney = "No money to pay fine.";
+	private const string cNoPeddle = "No peddle to protect.";
+	internal const string cNotActive = "Market must be active.";
+	internal const string cNotOpen = "Market is not open.";
+	private const string cNotProtection = "Card is not of type protection.";
+	private const string cStealNotFound = "Card to steal not found.";
+	private const string cTradeNotFound = "Card to trade not found.";
+
 	#region Internal Methods
 
 	internal static bool IsMarketOpen( List<Card> list )
@@ -35,15 +48,6 @@ internal class Rules
 
 	#endregion
 
-	internal const string cNotOpen = "Market is not open.";
-	private const string cNoHeatOn = "No heat on.";
-	private const string cNoHeatOnMatch = "No matching heat on.";
-	internal const string cNotActive = "Market must be active.";
-	private const string cIsActive = "Market is already active.";
-	private const string cNoMoney = "No money to pay fine.";
-	private const string cDiscard = "Can only discard.";
-	private const string cNoPeddle = "No peddle to protect.";
-
 	internal static PlayResult CanPlay( Hand hand, Card card )
 	{
 		switch( card.Type )
@@ -63,7 +67,7 @@ internal class Rules
 				if( hand.MarketIsOpen ) { return new( cNoHeatOn ); }
 				if( card.Id != CardInfo.cPayFine )
 				{
-					var heatoff = CardInfo.GetHeatOff( hand.HasslePile );
+					CardInfo? heatoff = CardInfo.GetHeatOffInfo( hand.HasslePile );
 					if( heatoff is null || heatoff.Id != card.Id ) { return new( cNoHeatOnMatch ); }
 				}
 				else { if( hand.LowestUnProtected is null ) { return new( cNoMoney ); } }
@@ -155,7 +159,7 @@ internal class Rules
 				// Both hands must be hassle free
 				//if( !hand.MarketIsOpen || !otherHand.MarketIsOpen ) { return false; }
 				if( CanPlay( hand, card ) != PlayResult.Success ) { return new( cNotOpen ); }
-				if( !wHand.StashPile.Remove( other ) ) { return new( "Card to steal not found." ); }
+				if( !wHand.StashPile.Remove( other ) ) { return new( cStealNotFound ); }
 				Card.TransferCard( hand.Cards, wHand.HasslePile, card );
 				if( comment ) { card.AddComment( player.Name + $" stole {other.Info.Caption} (round {hand.Round})" ); }
 				RemoveHeat( wHand ); // Must reset Market Open as Steal card added to Hassle pile
@@ -176,8 +180,8 @@ internal class Rules
 				}
 
 				// Trade
-				if( !wHand.Cards.Contains( other ) ) { return new( "Card to trade not found." ); }
-				if( !hand.Cards.Contains( card ) ) { return new( "Card to swap not found." ); }
+				if( !wHand.Cards.Contains( other ) ) { return new( cTradeNotFound ); }
+				if( !hand.Cards.Contains( card ) ) { return new( cTradeNotFound ); }
 				Card.TransferCard( wHand.Cards, hand.Cards, other );
 				Card.TransferCard( hand.Cards, wHand.Cards, card );
 				if( comment ) { other.AddComment( $"trade with {with.Name} (round {hand.Round})" ); }
@@ -188,7 +192,7 @@ internal class Rules
 
 	internal static PlayResult Protect( Game game, Player player, Card card, List<Card> peddles )
 	{
-		if( card.Type != CardInfo.cProtection ) { return new( "Card is not protection." ); }
+		if( card.Type != CardInfo.cProtection ) { return new( cNotProtection ); }
 		PlayResult res = game.CheckState( card );
 		if( res != PlayResult.Success ) { return res; }
 		Hand hand = player.Current;

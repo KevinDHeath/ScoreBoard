@@ -94,9 +94,7 @@ public class CardInfo
 
 	internal static CardInfo GetCardInfo( string cardId )
 	{
-		var info = sCards.FirstOrDefault( c => c.Id == cardId );
-		if( info is null ) { info = sCards[0]; }
-		return info;
+		return sCards.FirstOrDefault( c => c.Id == cardId ) ?? sCards[0];
 	}
 
 	internal static List<Card> BuildStack()
@@ -119,7 +117,7 @@ public class CardInfo
 		return list.FirstOrDefault( c => c.Id.StartsWith( name ) );
 	}
 
-	internal static CardInfo? GetHeatOff( List<Card> list )
+	internal static CardInfo? GetHeatOffInfo( List<Card> list )
 	{
 		Card? heat = list.LastOrDefault();
 		if( heat is not null && heat.Type == cHeatOn )

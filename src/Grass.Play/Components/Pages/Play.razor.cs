@@ -81,26 +81,26 @@ public partial class Play
 		GC.SuppressFinalize( this );
 	}
 
+	private void PassCard()
+	{
+		if( Player is not null && Player.Pass )
+		{
+			_ = Service.PassCard( PlayState.Options );
+			Refresh( Player );
+		}
+	}
+
 	private void PlayCard()
 	{
 		Notify = null;
 		if( Player is not null && Player.Play )
 		{
-			var res = Service.Play( PlayState.Options );
+			var res = Service.PlayCard( PlayState.Options );
 			if( res != PlayResult.Success )
 			{
 				//Info = res.ToString();
 			}
 			else { Refresh( Player ); }
-		}
-	}
-
-	private void PassCard()
-	{
-		if( Player is not null && Player.Pass )
-		{
-			Service.CardToPass( PlayState.Options );
-			Refresh( Player );
 		}
 	}
 
@@ -110,7 +110,7 @@ public partial class Play
 		{
 			if( Player.Trade )
 			{
-				Service.TradeAccept( PlayState.Options );
+				_ = Service.TradeCard( PlayState.Options );
 				Refresh( Player );
 			}
 			else
@@ -118,15 +118,14 @@ public partial class Play
 				Service.TradeRequest( PlayState.Options );
 			}
 		}
-
 	}
 
-	private void Discard()
+	private void WasteCard()
 	{
 		Notify = null;
 		if( Player is not null && Player.Play )
 		{
-			Service.Discard( PlayState.Options );
+			Service.WasteCard( PlayState.Options );
 			Refresh( Player );
 		}
 	}

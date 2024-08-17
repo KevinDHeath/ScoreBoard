@@ -19,6 +19,10 @@ public class GameOptions
 
 	#region Properties for testing
 
+	/// <summary>Indicates whether to allow testing. The default is <c>false</c>.</summary>
+	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
+	public bool AllowTests { get; set; } = false;
+
 	/// <summary>Indicates whether to use auto-play. The default is <c>false</c>.</summary>
 	/// <remarks>
 	/// <b>Important:</b><i> This should only be set as <c>true</c> for testing purposes
