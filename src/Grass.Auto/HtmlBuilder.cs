@@ -6,7 +6,8 @@ namespace Grass.Auto;
 
 internal class HtmlBuilder()
 {
-	const string cSub = @"samples\AutoPlay";
+	private const string cSub = @"samples\AutoPlay";
+	private const string cUrl = "https://KevinDHeath.github.io/score/media/";
 
 	internal static void CreateHtml( Game game )
 	{
@@ -181,7 +182,7 @@ internal class HtmlBuilder()
 	{
 		string caption = card.Comment;
 		string title = caption.Length > 0 ? $"title=\"{card.Comment}\" " : string.Empty;
-		return $"<td class=\"game-card\"><img class=\"image\" {title}src=\"{CardInfo.cUrl}{card.Id}.png\"></td>";
+		return $"<td class=\"game-card\"><img class=\"image\" {title}src=\"{cUrl}{card.Id}.png\"></td>";
 	}
 
 	private static string Format( int amt, bool dollar = false )

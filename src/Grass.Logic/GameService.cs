@@ -4,7 +4,7 @@ using Grass.Logic.Models;
 using System.ComponentModel;
 namespace Grass.Logic;
 
-/// <summary>Service providing actions to be taken with cards during a Grass game.</summary>
+/// <summary>Service providing actions taken by players during a Grass game.</summary>
 public class GameService : PassCardHandler
 {
 	private Game _game;
@@ -14,6 +14,10 @@ public class GameService : PassCardHandler
 
 	/// <summary>Initializes a new instance of the <see cref="GameService"/> class.</summary>
 	public GameService() => _game = default!;
+
+	/// <summary>Game changed event used to trigger page state changed.</summary>
+	public event EventHandler? GameChanged;
+	private void OnGameChanged( EventArgs e ) => GameChanged?.Invoke( this, e );
 
 	/// <summary>Current game options.</summary>
 	[EditorBrowsable( EditorBrowsableState.Never )]
@@ -52,7 +56,7 @@ public class GameService : PassCardHandler
 			_game.StartHand();
 			_game.SetNextPlayer();
 		}
-
+		OnGameChanged( new() );
 		return _game;
 	}
 
@@ -84,6 +88,7 @@ public class GameService : PassCardHandler
 			if( player.Trade ) { player.ToDo = Player.Action.Nothing; }
 		}
 		options.Reset();
+		OnGameChanged( new() );
 	}
 
 	private static bool AllowDiscard( Card card )
@@ -110,7 +115,7 @@ public class GameService : PassCardHandler
 		return rtn;
 	}
 
-	/// <summary>Returns a message for specific card play.</summary>
+	/// <summary>Returns a message for specific card plays.</summary>
 	/// <param name="options">Card play options.</param>
 	/// <returns><c>null</c> if there is not message to display.</returns>
 	[EditorBrowsable( EditorBrowsableState.Never )]
@@ -140,10 +145,14 @@ public class GameService : PassCardHandler
 		PlayResult rtn = new( Rules.cPlayOption );
 		if( options.Player is null || options.Card is null ) { return rtn; }
 		Card card = options.Card;
-
 		if( options.OtherCards.Count > 0 )
 		{
 			rtn = Rules.Protect( _game, options.Player, card, options.OtherCards );
+			if( rtn == PlayResult.Success )
+			{
+				string? comment = Decision.GetInfoMessage( _game, options );
+				if( comment is not null ) { card.AddComment( comment ); }
+			}
 		}
 		else if( options.OtherId > 0 )
 		{
@@ -208,6 +217,7 @@ public class GameService : PassCardHandler
 			}
 		}
 		options.Reset(); // Don't do full reset
+		OnGameChanged( new() );
 	}
 
 	/// <summary>Waste a card (discard) on a players turn.</summary>

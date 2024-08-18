@@ -21,7 +21,8 @@ public partial class Home
 
 	private string playerName = string.Empty;
 	private string? userTitle = null;
-	private System.Threading.Timer? timer;
+
+	private void GameChanged( object? sender, EventArgs e ) => InvokeAsync( Refresh );
 
 	protected override void OnInitialized()
 	{
@@ -51,23 +52,21 @@ public partial class Home
 			var res = await ProtectedSessionStore.GetAsync<string?>( "user" );
 			if( userTitle is null && res.Value is not null ) { userTitle = "- " + res.Value; }
 			Refresh();
-			timer = new Timer( e => { InvokeAsync( () => { Refresh(); } ); }, null, 2000, 2000 );
+			Service.GameChanged += GameChanged;
 		}
 	}
 
 	private void Refresh()
 	{
 		Current = Service.Current;
-		if( Current is not null )
-		{
-			Title = HasWinner ? "Game over" : "In progress...";
-		}
+		if( Current is null ) { return; }
+		Title = HasWinner ? "Game over" : "In progress...";
 		StateHasChanged();
 	}
 
 	public void Dispose()
 	{
-		timer?.Dispose();
+		Service.GameChanged -= GameChanged;
 		GC.SuppressFinalize( this );
 	}
 

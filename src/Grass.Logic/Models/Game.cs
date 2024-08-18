@@ -313,7 +313,7 @@ public class Game
 	{
 		foreach( Player player in players )
 		{
-			Card? card = CardInfo.GetFirst( player.Current.Cards, CardInfo.cBanker );
+			Card? card = Card.GetFirst( player.Current.Cards, CardInfo.cBanker );
 			if( card is not null ) { return player; }
 		}
 		return null;

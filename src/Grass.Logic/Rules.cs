@@ -31,7 +31,7 @@ internal class Rules
 
 	internal static bool RemoveHeat( Hand hand )
 	{
-		Card? card = CardInfo.GetFirst( hand.HasslePile, CardInfo.cOpen );
+		Card? card = Card.GetFirst( hand.HasslePile, CardInfo.cOpen );
 		if( card is null || hand.MarketIsOpen ) { return false; }
 
 		bool rtn = hand.HasslePile.Remove( card );
@@ -45,8 +45,6 @@ internal class Rules
 		int rtn = hand.UnProtected / 100 * 20; // Banker skims 20% of unprotected in stash pile
 		return rtn;
 	}
-
-	#endregion
 
 	internal static PlayResult CanPlay( Hand hand, Card card )
 	{
@@ -207,6 +205,32 @@ internal class Rules
 		return res;
 	}
 
+	internal static void PassCards( Game game, Dictionary<Player, Card> cardsToPass )
+	{
+		if( game.ParanoiaPlayer is null ) { return; }
+		Player player = game.ParanoiaPlayer;
+
+		// Pass in order of play starting with the paranoia player
+		int start = game.PlayOrder.FindIndex( x => x == player );
+		int count = 0;
+		for( int i = start; count < game.PlayOrder.Count; i++ )
+		{
+			count++;
+			if( i == game.PlayOrder.Count ) { i = 0; }
+			Player from = game.PlayOrder[i];
+			Card pass = cardsToPass[from];
+
+			int next = i + 1;
+			if( next == game.PlayOrder.Count ) { next = 0; }
+			Player to = game.PlayOrder[next];
+
+			Card.TransferCard( from.Current.Cards, to.Current.Cards, pass );
+			if( game.Comment ) { pass.AddComment( $"passed by {from.Name} to {to.Name} (round {player.Current.Round})" ); }
+		}
+	}
+
+	#endregion
+
 	private static bool Nirvana( Game game, Player player, Card card, bool comment )
 	{
 		Hand hand = player.Current;
@@ -285,31 +309,7 @@ internal class Rules
 			}
 		}
 
-		game.ParanoiaPlayer = player; // Done this last as it triggers the populating cards to pass
+		game.ParanoiaPlayer = player; // Do this last as it triggers the game change handler
 		return true;
-	}
-
-	internal static void PassCards( Game game, Dictionary<Player, Card> cardsToPass )
-	{
-		if( game.ParanoiaPlayer is null ) { return; }
-		Player player = game.ParanoiaPlayer;
-
-		// Pass in order of play starting with the paranoia player
-		int start = game.PlayOrder.FindIndex( x => x == player );
-		int count = 0;
-		for( int i = start; count < game.PlayOrder.Count; i++ )
-		{
-			count++;
-			if( i == game.PlayOrder.Count ) { i = 0; }
-			Player from = game.PlayOrder[i];
-			Card pass = cardsToPass[from];
-
-			int next = i + 1;
-			if( next == game.PlayOrder.Count ) { next = 0; }
-			Player to = game.PlayOrder[next];
-
-			Card.TransferCard( from.Current.Cards, to.Current.Cards, pass );
-			if( game.Comment ) { pass.AddComment( $"passed by {from.Name} to {to.Name} (round {player.Current.Round})" ); }
-		}
 	}
 }

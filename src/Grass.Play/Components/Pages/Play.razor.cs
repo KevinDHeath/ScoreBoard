@@ -1,7 +1,6 @@
 using System.Text;
 using Grass.Logic;
 using Grass.Logic.Models;
-using Microsoft.Extensions.Options;
 namespace Grass.Play.Components.Pages;
 
 public partial class Play
@@ -29,7 +28,8 @@ public partial class Play
 
 	private string? user = null;
 	private string? userTitle = null;
-	private System.Threading.Timer? timer;
+
+	private void GameChanged( object? sender, EventArgs e ) => InvokeAsync( () => { Refresh( Player! ); } );
 
 	protected override void OnParametersSet()
 	{
@@ -52,12 +52,13 @@ public partial class Play
 				userTitle = "- " + user;
 			}
 			if( Player is not null ) { Refresh( Player ); }
-			timer = new Timer( e => { InvokeAsync( () => { Refresh( Player! ); } ); }, null, 2000, 2000 );
+			Service.GameChanged += GameChanged;
 		}
 	}
 
 	private void Refresh( Player player )
 	{
+		if( player is null ) { return; }
 		if( user is not null ) { active.Reset(); }
 		Hand = player.Current;
 		if( Service.Current.Winner is not null )
@@ -77,7 +78,7 @@ public partial class Play
 
 	public void Dispose()
 	{
-		timer?.Dispose();
+		Service.GameChanged -= GameChanged;
 		GC.SuppressFinalize( this );
 	}
 
@@ -86,7 +87,6 @@ public partial class Play
 		if( Player is not null && Player.Pass )
 		{
 			_ = Service.PassCard( PlayState.Options );
-			Refresh( Player );
 		}
 	}
 
@@ -95,12 +95,7 @@ public partial class Play
 		Notify = null;
 		if( Player is not null && Player.Play )
 		{
-			var res = Service.PlayCard( PlayState.Options );
-			if( res != PlayResult.Success )
-			{
-				//Info = res.ToString();
-			}
-			else { Refresh( Player ); }
+			_ = Service.PlayCard( PlayState.Options );
 		}
 	}
 
@@ -111,7 +106,6 @@ public partial class Play
 			if( Player.Trade )
 			{
 				_ = Service.TradeCard( PlayState.Options );
-				Refresh( Player );
 			}
 			else
 			{
@@ -125,8 +119,7 @@ public partial class Play
 		Notify = null;
 		if( Player is not null && Player.Play )
 		{
-			Service.WasteCard( PlayState.Options );
-			Refresh( Player );
+			_ = Service.WasteCard( PlayState.Options );
 		}
 	}
 

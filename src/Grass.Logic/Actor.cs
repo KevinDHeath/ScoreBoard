@@ -22,12 +22,12 @@ internal class Actor : PassCardHandler
 		base.Dispose();
 	}
 
-	#endregion
-
 	internal bool Play( Hand current )
 	{
 		return PlayRound( _game, current );
 	}
+
+	#endregion
 
 	private static bool PlayRound( Game game, Hand current )
 	{
@@ -75,7 +75,7 @@ internal class Actor : PassCardHandler
 	private static Card? Open( Game game, Decision data, List<Decision> others )
 	{
 		if( !data.NotOpen ) return null; // Already opened
-		Card? card = CardInfo.GetFirst( data.Hand.Cards, CardInfo.cOpen );
+		Card? card = Card.GetFirst( data.Hand.Cards, CardInfo.cOpen );
 		card ??= Trade( game, data, others, CardInfo.cOpen );
 		if( card is null ) { return null; }
 
@@ -89,7 +89,7 @@ internal class Actor : PassCardHandler
 
 		Card? heat = data.Hand.HasslePile.LastOrDefault();
 		if( heat is null ) { return null; }
-		List<Card> list = CardInfo.GetCards( data.Hand.Cards, CardInfo.cHeatOff ).ToList();
+		List<Card> list = Card.GetCards( data.Hand.Cards, CardInfo.cHeatOff ).ToList();
 		if( list.Count == 0 ) // No cards in hand - try and make trade
 		{
 			string name = heat.Id.Replace( CardInfo.cHeatOn, CardInfo.cHeatOff );
@@ -106,7 +106,7 @@ internal class Actor : PassCardHandler
 
 	private static Card? Close( Game game, Decision data )
 	{
-		Card? card = CardInfo.GetFirst( data.Hand.Cards, CardInfo.cClose );
+		Card? card = Card.GetFirst( data.Hand.Cards, CardInfo.cClose );
 		if( card is null ) { return null; } // No card in hand
 		if( !Decision.Close( data, game ) ) { return null; }
 
@@ -142,7 +142,7 @@ internal class Actor : PassCardHandler
 	private static Card? Nirvana( Game game, Decision data )
 	{
 		if( data.NotOpen ) return null; // Never opened
-		List<Card> list = CardInfo.GetCards( data.Hand.Cards, CardInfo.cNirvana ).ToList();
+		List<Card> list = Card.GetCards( data.Hand.Cards, CardInfo.cNirvana ).ToList();
 		if( list.Count == 0 ) { return null; } // No cards in hand
 
 		Card? card = Decision.Nirvana( list );
@@ -157,7 +157,7 @@ internal class Actor : PassCardHandler
 	{
 		//if( !Rules.CanPlayCard( data.Hand, CardInfo.cParanoia ) ) { return null; }
 
-		List<Card> list = CardInfo.Paranoia( data.Hand.Cards ).ToList();
+		List<Card> list = Card.Paranoia( data.Hand.Cards ).ToList();
 		if( list.Count == 0 ) { return null; } // No card in hand
 
 		Card? card = Decision.Paranoia( data, list );
@@ -173,7 +173,7 @@ internal class Actor : PassCardHandler
 
 	private static Card? HeatOn( Game game, Decision data, List<Decision> others )
 	{
-		List<Card> list = CardInfo.GetCards( data.Hand.Cards, CardInfo.cHeatOn ).ToList();
+		List<Card> list = Card.GetCards( data.Hand.Cards, CardInfo.cHeatOn ).ToList();
 		if( list.Count == 0 ) { return null; } // No card in hand
 
 		Decision? other = Decision.HeatOn( others );
@@ -186,7 +186,7 @@ internal class Actor : PassCardHandler
 
 	private static Card? Steal( Game game, Decision data, List<Decision> others )
 	{
-		Card? rtn = CardInfo.GetFirst( data.Hand.Cards, CardInfo.cSteal );
+		Card? rtn = Card.GetFirst( data.Hand.Cards, CardInfo.cSteal );
 		if( rtn is null ) { return null; } // No card in hand
 		PlayResult res = Rules.CanPlay( data.Player.Current, rtn );
 		if( res != PlayResult.Success ) { return null; } // Cannot play
@@ -213,7 +213,7 @@ internal class Actor : PassCardHandler
 
 		Card? low = Card.GetLowPeddle( data.Hand.Cards );
 		if( low is null ) { return null; } // No low unprotected
-		Card? card = CardInfo.GetFirst( other.Hand.Cards, cardName );
+		Card? card = Card.GetFirst( other.Hand.Cards, cardName );
 		if( card is null ) { return null; }
 
 		PlayResult res = Rules.Play( game, data.Player, low, other.Player, card );
@@ -241,37 +241,37 @@ internal class Actor : PassCardHandler
 
 	private static Card? GetDiscard( List<Card> cards )
 	{
-		Card? rtn = CardInfo.GetFirst( cards, CardInfo.cOnBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnSearch );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffSearch );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPayFine );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOpen );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cClose );
+		Card? rtn = Card.GetFirst( cards, CardInfo.cOnBust );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOnDetained );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOnFelony );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOnSearch );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffBust );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffDetained );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffFelony );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffSearch );
+		rtn ??= Card.GetFirst( cards, CardInfo.cPayFine );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOpen );
+		rtn ??= Card.GetFirst( cards, CardInfo.cClose );
 
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cHomegrown );    // 5,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cMexico );       // 5,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cColumbia );     // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cJamaica );      // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cSteal );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cCatchaBuzz );   // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cGrabaSnack );   // 25,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cLustConquers ); // 50,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPanama );       // 50,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cHomegrown );    // 5,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cMexico );       // 5,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cColumbia );     // 25,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cJamaica );      // 25,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cSteal );
+		rtn ??= Card.GetFirst( cards, CardInfo.cCatchaBuzz );   // 25,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cGrabaSnack );   // 25,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cLustConquers ); // 50,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cPanama );       // 50,000
 
 		// TODO: Need to play these - they cannot be discarded
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cSoldout );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cDoublecross );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cWipedOut );
+		rtn ??= Card.GetFirst( cards, CardInfo.cSoldout );
+		rtn ??= Card.GetFirst( cards, CardInfo.cDoublecross );
+		rtn ??= Card.GetFirst( cards, CardInfo.cWipedOut );
 
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cStonehigh );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cEuphoria );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cDrFeelgood );   // 100,000
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cBanker );
+		rtn ??= Card.GetFirst( cards, CardInfo.cStonehigh );
+		rtn ??= Card.GetFirst( cards, CardInfo.cEuphoria );
+		rtn ??= Card.GetFirst( cards, CardInfo.cDrFeelgood );   // 100,000
+		rtn ??= Card.GetFirst( cards, CardInfo.cBanker );
 
 		return rtn;
 	}
@@ -285,31 +285,31 @@ internal class Actor : PassCardHandler
 		Card? rtn = GetCard( cards, CardInfo.cWipedOut, ignore );
 		rtn ??= GetCard( cards, CardInfo.cDoublecross, ignore );
 		rtn ??= GetCard( cards, CardInfo.cSoldout, ignore );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOffSearch );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPayFine );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cClose );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOpen );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cHomegrown );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cMexico );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cColumbia );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cJamaica );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnBust );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnDetained );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnFelony );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cOnSearch );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffBust );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffDetained );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffFelony );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOffSearch );
+		rtn ??= Card.GetFirst( cards, CardInfo.cPayFine );
+		rtn ??= Card.GetFirst( cards, CardInfo.cClose );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOpen );
+		rtn ??= Card.GetFirst( cards, CardInfo.cHomegrown );
+		rtn ??= Card.GetFirst( cards, CardInfo.cMexico );
+		rtn ??= Card.GetFirst( cards, CardInfo.cColumbia );
+		rtn ??= Card.GetFirst( cards, CardInfo.cJamaica );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOnBust );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOnDetained );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOnFelony );
+		rtn ??= Card.GetFirst( cards, CardInfo.cOnSearch );
 
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cCatchaBuzz );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cGrabaSnack );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cLustConquers );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cStonehigh );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cSteal );
-		rtn ??= CardInfo.GetFirst( cards, CardInfo.cPanama );
-		// rtn ??= CardInfo.GetFirst( cards, CardInfo.cDrFeelgood );
-		//rtn ??= CardInfo.GetFirst( cards, CardInfo.cEuphoria );
-		//rtn ??= CardInfo.GetFirst( cards, CardInfo.cBanker );
+		rtn ??= Card.GetFirst( cards, CardInfo.cCatchaBuzz );
+		rtn ??= Card.GetFirst( cards, CardInfo.cGrabaSnack );
+		rtn ??= Card.GetFirst( cards, CardInfo.cLustConquers );
+		rtn ??= Card.GetFirst( cards, CardInfo.cStonehigh );
+		rtn ??= Card.GetFirst( cards, CardInfo.cSteal );
+		rtn ??= Card.GetFirst( cards, CardInfo.cPanama );
+		// rtn ??= Card.GetFirst( cards, CardInfo.cDrFeelgood );
+		//rtn ??= Card.GetFirst( cards, CardInfo.cEuphoria );
+		//rtn ??= Card.GetFirst( cards, CardInfo.cBanker );
 
 #pragma warning disable IDE0074 // Use compound assignment
 		if( rtn is null ) { rtn = cards[0]; } // Cannot be null
@@ -320,7 +320,7 @@ internal class Actor : PassCardHandler
 
 	private static Card? GetCard( List<Card> cards, string name, Card? ignore )
 	{
-		Card? rtn = CardInfo.GetFirst( cards, name );
+		Card? rtn = Card.GetFirst( cards, name );
 		if( rtn is not null && ignore is not null && rtn.Equals( ignore ) ) { rtn = null; }
 		return rtn;
 	}

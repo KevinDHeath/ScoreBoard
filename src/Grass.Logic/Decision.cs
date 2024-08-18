@@ -55,7 +55,7 @@ internal class Decision
 		// Another player must have the card to trade
 		foreach( Decision trade in others )
 		{
-			List<Card> res = CardInfo.GetCards( trade.Hand.Cards, required ).ToList();
+			List<Card> res = Card.GetCards( trade.Hand.Cards, required ).ToList();
 			if( res.Count == 0 ) { continue; }
 			switch( required )
 			{
@@ -86,18 +86,18 @@ internal class Decision
 	internal static Card? HeatOff( Decision data, Card? heatOn )
 	{
 		if( heatOn is null ) { return null; }
-		List<Card> list = CardInfo.GetCards( data.Hand.Cards, CardInfo.cHeatOff ).ToList();
+		List<Card> list = Card.GetCards( data.Hand.Cards, CardInfo.cHeatOff ).ToList();
 		if( list.Count == 0 ) { return null; } // No cards in hand
 
 		// Match heat-off card with heat-on
 		Card? rtn = heatOn.Id switch
 		{
-			CardInfo.cOnBust => CardInfo.GetFirst( list, CardInfo.cOffBust ),
-			CardInfo.cOnDetained => CardInfo.GetFirst( list, CardInfo.cOffDetained ),
-			CardInfo.cOnFelony => CardInfo.GetFirst( list, CardInfo.cOffFelony ),
-			CardInfo.cOnSearch => CardInfo.GetFirst( list, CardInfo.cOffSearch ),
+			CardInfo.cOnBust => Card.GetFirst( list, CardInfo.cOffBust ),
+			CardInfo.cOnDetained => Card.GetFirst( list, CardInfo.cOffDetained ),
+			CardInfo.cOnFelony => Card.GetFirst( list, CardInfo.cOffFelony ),
+			CardInfo.cOnSearch => Card.GetFirst( list, CardInfo.cOffSearch ),
 			_ => null
-		} ?? CardInfo.GetFirst( list, CardInfo.cPayFine ); // Check for pay fine
+		} ?? Card.GetFirst( list, CardInfo.cPayFine ); // Check for pay fine
 		if( rtn is null ) { return null; }
 
 		// cPayFine - Must have small unprotected card in stash
@@ -113,7 +113,7 @@ internal class Decision
 
 	internal static Card? Protect( Decision data, List<Card> peddles )
 	{
-		List<Card> cards = CardInfo.GetCards( data.Hand.Cards, CardInfo.cProtection ).ToList();
+		List<Card> cards = Card.GetCards( data.Hand.Cards, CardInfo.cProtection ).ToList();
 		if( cards.Count == 0 ) { return null; }
 
 		// Must have unprotected card in stash with same value
@@ -162,7 +162,7 @@ internal class Decision
 		// Currently only works for Dr. Feelgood 
 		if( FeelgoodInPlay is null ) { return rtn; }
 		Player other = FeelgoodInPlay;
-		Card? steal = CardInfo.GetFirst( other.Current.StashPile, CardInfo.cDrFeelgood );
+		Card? steal = Card.GetFirst( other.Current.StashPile, CardInfo.cDrFeelgood );
 
 		// My official rules state other CAN have heat on
 		if( other.Current.MarketIsOpen ) { return rtn; }
@@ -288,7 +288,7 @@ internal class Decision
 		foreach( Player player in others )
 		{
 			Hand hand = player.Current;
-			List<Card> cards = CardInfo.GetCards( hand.Cards, trade.Id ).ToList();
+			List<Card> cards = Card.GetCards( hand.Cards, trade.Id ).ToList();
 			int count = trade.Id == CardInfo.cOpen && hand.HasslePile.Count == 0 ? 1 : 0;
 			if( cards.Count > count )
 			{

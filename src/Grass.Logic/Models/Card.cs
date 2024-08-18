@@ -37,14 +37,14 @@ public class Card
 
 	#endregion
 
-	#region Methods
-
 	/// <inheritdoc/>
 	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 	public override string ToString()
 	{
 		return Info.Value == 0 ? Id : $"{Id} {Info.Value:###,##0}".Trim();
 	}
+
+	#region Internal Methods
 
 	internal void AddComment( string text )
 	{
@@ -60,15 +60,23 @@ public class Card
 		return true;
 	}
 
-	internal static List<Card> GetProtected( List<Card> list )
+	internal static Card? GetFirst( List<Card> list, string name )
 	{
-		return list.Where( c => c.Id.StartsWith( CardInfo.cPeddle ) && c.Protected ).ToList();
+		if( list is null || name is null || name.Length == 0 ) { return null; }
+		return list.FirstOrDefault( c => c.Id.StartsWith( name ) );
 	}
 
+	internal static IEnumerable<Card> GetCards( List<Card> list, string name )
+		=> list.Where( c => c.Id.StartsWith( name ) );
+
+	internal static IEnumerable<Card> Paranoia( List<Card> list )
+		=> GetCards( list, CardInfo.cParanoia );
+
+	internal static List<Card> GetProtected( List<Card> list )
+		=> list.Where( c => c.Id.StartsWith( CardInfo.cPeddle ) && c.Protected ).ToList();
+
 	internal static List<Card> GetUnprotected( List<Card> list )
-	{
-		return list.Where( c => c.Id.StartsWith( CardInfo.cPeddle ) && !c.Protected ).ToList();
-	}
+		=> list.Where( c => c.Id.StartsWith( CardInfo.cPeddle ) && !c.Protected ).ToList();
 
 	internal static Card? GetLowPeddle( List<Card> list, bool protect = false )
 	{

@@ -71,7 +71,7 @@ public class Hand
 	internal void EndHand( Player? banker )
 	{
 		int work = 0;
-		foreach( Card card in CardInfo.Paranoia( Cards ) ) { work += card.Info.Value; }
+		foreach( Card card in Card.Paranoia( Cards ) ) { work += card.Info.Value; }
 		ParanoiaFines = work;
 
 		if( banker is not null )
@@ -88,7 +88,7 @@ public class Hand
 	internal int CurrentNet()
 	{
 		int rtn = 0;
-		foreach( Card card in CardInfo.Paranoia( Cards ) ) { rtn += card.Info.Value; }
+		foreach( Card card in Card.Paranoia( Cards ) ) { rtn += card.Info.Value; }
 		rtn -= HighestPeddle;
 		// TODO: Included current skimmed amount
 		return rtn;
@@ -103,7 +103,7 @@ public class Hand
 	private static int TotalStash( List<Card> list, bool protect )
 	{
 		int rtn = 0;
-		IEnumerable<Card> peddle = CardInfo.GetCards( list, CardInfo.cPeddle );
+		IEnumerable<Card> peddle = Card.GetCards( list, CardInfo.cPeddle );
 		foreach( Card card in peddle ) { if( card.Protected == protect ) { rtn += card.Info.Value; } }
 		return rtn;
 	}
