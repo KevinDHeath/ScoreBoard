@@ -8,7 +8,7 @@
 
 <div class="columns m-1 is-multiline">
 
-  @if( AllowStart )
+  @if( Current == null || HasWinner )
   {
     <div class="column is-2">
       <div class="card">
@@ -19,8 +19,8 @@
           <div class="card-content">
             @if( !Options.IsMaxPlayers )
             {
-              <input @bind="playerName" placeholder="Player name" class="mb-2 mt-3" /><br />
-              <button class="button is-link is-small" @onclick="AddPlayer">Register</button><br />
+              <input @bind="playerName" placeholder="Player name" class="mb-2 input is-link" /><br />
+              <button class="button is-link is-small" disabled="@(!AllowRegister)" @onclick="AddPlayer">Register</button><br />
             }
             <ol>
               @foreach( var player in Options.Players )
@@ -94,9 +94,17 @@
                   <tr><td><label for="AutoPlay">Auto-Play:</label></td><td><InputCheckbox id="AutoPlay" @bind-Value="Options!.AutoPlay"></InputCheckbox></td></tr>
                   <tr><td><label for="InProgress">In-progress:</label></td><td><InputCheckbox id="InProgress" @bind-Value="Options!.InProgress"></InputCheckbox></td></tr>
                 }
-                <tr><td colspan="2">
-                  <button class="button is-link" disabled="@(!AllowStart)" style="width: 100px;" type="submit">Start</button>
-                </td></tr>
+                <tr>
+                  <td><button class="button is-link is-small" disabled="@(!AllowStart)"
+                    style="width: 100px;" type="submit">Start</button></td>
+                  <td>
+                    @if( AllowTests )
+                    {
+                      <button class="button is-danger is-dark is-small" @onclick="Service.ResetGame"
+                      style="width: 100px;" type="button" title="For testing only">Reset</button>
+                    }
+                  </td>
+                </tr>
               </table>
             </EditForm>
           </div>

@@ -6,3 +6,4 @@
 .negative-value { color: red; }
 .hassle-history { font-size: smaller; margin: 0px !important; color: darkgray; }
 .fixedheader { padding-bottom: 5px; }
+.pageHeader { height: 3.5rem; background-color: #333333; padding-top: 4px; }

@@ -18,7 +18,7 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .game-datetime { font-size: small; }
 .hassle-history { font-size: smaller; margin: 0px !important; color: darkgray; }
 .negative-value { color: red; }
-.player-current { font-style: italic; font-weight: bold; }
+.player-current { font-style: italic; color: white; margin-left: 12px; }
 .score-card .align-right { text-align: right; }
 .table .game-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
 .table .play-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */

@@ -34,7 +34,7 @@ public class GameService : PassCardHandler
 	{
 		if( options.Players.Count == 0 && options.AllowTests ) { options.Players = Samples.GetPlayers(); }
 		foreach( var player in options.Players ) { player.Reset(); }
-		if( options.Players.Count <= 2 ) { return Current; }
+		if( options.Players.Count < 2 ) { return Current; }
 		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );
 
 		// Play the game
@@ -65,9 +65,26 @@ public class GameService : PassCardHandler
 	public override void Dispose()
 	{
 		if( _disposed ) { return; }
-		if( _game.Auto ) { _game.GameChanged -= OnParanoiaPlayed; }
+		RemoveListeners();
 		GC.SuppressFinalize( this );
 		_disposed = true;
+	}
+
+	private void RemoveListeners()
+	{
+		if( _game is null ) { return; }
+		if( _game.Auto ) { _game.GameChanged -= OnParanoiaPlayed; }
+		else { _game.GameChanged -= OnParanoiaInteractive; }
+	}
+
+	/// <summary>Reset the game.</summary>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public void ResetGame()
+	{
+		RemoveListeners();
+		_game = default!;
+		if( Options.AllowTests ) { Options.Players.Clear(); }
+		OnGameChanged( new() );
 	}
 
 	/// <summary>Play a game asynchronously.</summary>

@@ -25,15 +25,16 @@
         <div class="level-right game-datetime">June 19, 2024 07:58 PM</div>
       </div>
     </div>
+    <hr style="margin-top: 10px; margin-bottom: 10px; border-top: 1px solid white;" />
     <div class="fixedContent">
-      <nav id="showInPlay" class="my-1 px-2" role="navigation">
-        <a id="inPlay" class="button" onclick="toggleInPlay()">Show in hand</a>
-      </nav>
       <div class="columns pl-2 pr-2 fixedContent">
         <div id="Resizer" class="is-hidden"></div>
         <div class="column">
           <nav class="menu sticky">
             <p class="menu-label"><strong>Amy</strong></p>
+            <nav id="showInPlay" class="my-1 px-2" role="navigation">
+              <a id="inPlay" class="button is-danger is-dark" onclick="toggleInPlay()">Show in hand</a>
+            </nav>
             <ul id="InThisArticleMenu" class="menu-list">
               <li><a id="inHandLink" class="quickLink is-hidden">In hand</a></li>
               <li><a class="quickLink">Stash pile</a></li>

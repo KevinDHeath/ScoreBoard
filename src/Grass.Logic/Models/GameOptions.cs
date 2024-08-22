@@ -42,6 +42,7 @@ public class GameOptions
 
 	/// <summary>Indicates whether the maximum number of players has been reached.</summary>
 	/// <returns><c>true</c> if the number of players is equal to the maximum.</returns>
+	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 	public bool IsMaxPlayers => Players.Count == Rules.cMaxNumber;
 
 	private readonly StringComparison strCompare = StringComparison.OrdinalIgnoreCase;
@@ -50,6 +51,7 @@ public class GameOptions
 	/// <param name="name">Name of the player.</param>
 	/// <returns><c>false</c> is returned if the maximum number of players has been reached
 	/// or a player with the same name is already present.</returns>
+	[System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
 	public bool CanAddPlayer( string? name )
 	{
 		if( IsMaxPlayers || string.IsNullOrEmpty( name ) ) { return false; }

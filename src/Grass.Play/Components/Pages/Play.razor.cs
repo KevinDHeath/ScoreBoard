@@ -58,7 +58,7 @@ public partial class Play
 
 	private void Refresh( Player player )
 	{
-		if( player is null ) { return; }
+		if( Service.Current is null || player is null ) { return; }
 		if( user is not null ) { active.Reset(); }
 		Hand = player.Current;
 		if( Service.Current.Winner is not null )

@@ -19,18 +19,20 @@
               else
               {
                 <div>
-                  <InputSelect class="select-player" @bind-Value="Options.OtherId">
-                    <option value="0">
-                      Select a player to hassle...
-                    </option>
-                    @foreach( Player key in SelectOptions.Keys )
-                    {
-                      int amt = SelectOptions[key];
-                      <option checked="@(Options.OtherId == @key.Id)" value="@key.Id">
-                        @key.Name: @Home.FormatAmt( amt )
+                  <div class="select">
+                    <InputSelect @bind-Value="Options.OtherId">
+                      <option value="0">
+                        Select a player to hassle...
                       </option>
-                    }
-                  </InputSelect>
+                      @foreach( Player key in SelectOptions.Keys )
+                      {
+                        int amt = SelectOptions[key];
+                        <option checked="@(Options.OtherId == @key.Id)" value="@key.Id">
+                          @key.Name: @Home.FormatAmt( amt )
+                        </option>
+                      }
+                      </InputSelect>
+                    </div>
                   <ValidationSummary />
                 </div>
               }

@@ -8,7 +8,8 @@ public class Samples
 	/// <summary>Populate in-progress testing data</summary>
 	public static void InProgress( Game game )
 	{
-		Player? dealer = game.Players.FirstOrDefault( p => p.Id == 2 );
+		if( game.Players.Count != 4 ) { return; } // Can only have 4 players
+		Player? dealer = game.Players.FirstOrDefault( p => p.Id == 2 ); // Bob
 		if( dealer is not null ) { game.Dealer = dealer; }
 		game.StartHand();
 
@@ -22,8 +23,8 @@ public class Samples
 			List<Card> to = [];
 			switch( player.Id )
 			{
-				case 3:
-					game.Take( hand, CardInfo.cOpen );
+				case 3: // Janis
+					game.Take( hand, CardInfo.cHomegrown );
 					game.Take( hand, CardInfo.cColumbia );
 					game.Take( hand, CardInfo.cOffFelony );
 					game.Take( hand, CardInfo.cCatchaBuzz );
@@ -32,7 +33,7 @@ public class Samples
 
 					break;
 
-				case 4:
+				case 4: // John
 					game.Take( hand, CardInfo.cPayFine );
 					game.Take( hand, CardInfo.cLustConquers );
 					game.Take( hand, CardInfo.cOffBust );
@@ -53,7 +54,7 @@ public class Samples
 					Add( game, hand, CardInfo.cJamaica, to );
 					break;
 
-				case 1:
+				case 1: // Amy
 					game.Take( hand, CardInfo.cStonehigh );
 					game.Take( hand, CardInfo.cOnDetained );
 					game.Take( hand, CardInfo.cSoldout );
@@ -75,7 +76,7 @@ public class Samples
 					Add( game, hand, CardInfo.cGrabaSnack, to, "played (round 13)" );
 					break;
 
-				case 2:
+				case 2: // Bob
 					game.Take( hand, CardInfo.cOffDetained );
 					game.Take( hand, CardInfo.cOffSearch );
 					game.Take( hand, CardInfo.cJamaica );

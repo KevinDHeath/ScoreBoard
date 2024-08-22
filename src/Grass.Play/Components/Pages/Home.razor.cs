@@ -9,13 +9,15 @@ public partial class Home
 
 	private bool AllowTests { get; set; } = false;
 
-	private GameOptions Options { get { return Service.Options; } set { Service.Options = value; } }
+	private bool AllowRegister => Options.Players.Count < 6;
 
-	private Game? Current { get; set; }
+	private bool AllowStart => HasWinner || (!AllowTests && Options.Players.Count > 1) || AllowTests;
 
 	private bool HasWinner => Current is not null && Current.Winner is not null;
 
-	private bool AllowStart => Current is null || HasWinner;
+	private GameOptions Options { get { return Service.Options; } set { Service.Options = value; } }
+
+	private Game? Current { get; set; }
 
 	private string Title { get; set; } = "Not started";
 
@@ -29,7 +31,7 @@ public partial class Home
 		if( Configuration is not null )
 		{
 			string? val = Configuration["AllowTests"];
-			AllowTests = val != null && bool.Parse( val );
+			AllowTests = val != null && bool.Parse( val ); // comment out to switch off tests
 			Configuration = null;
 		}
 		Options = Service.Options;
