@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grass.Logic", "src\Grass.Lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grass.Play", "src\Grass.Play\Grass.Play.csproj", "{73FA0917-470F-4E72-A12D-FDABF05560E9}"
 EndProject
-Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Grass.Rules", "doc\Grass.Rules.shfbproj", "{3F32F5A0-10F2-4976-AD97-A20BDAC00816}"
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Grass.Rules", "docs\Grass.Rules.shfbproj", "{3F32F5A0-10F2-4976-AD97-A20BDAC00816}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
