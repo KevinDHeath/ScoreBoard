@@ -6,15 +6,11 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 
 .sticky { position: sticky; top: 0px; }
 .table { border: none !important; }
-.toggleSection { transition: transform .35s ease; transform-origin: center; margin-right: 0.25em; cursor: pointer; }
-.toggleCollapsed { transform: rotate(-90deg) }
-.quickLink { line-height: .75; }
-
 .toc-menu { line-height: 2em; }
 .toc-menu a { color: dodgerblue; padding-left: 0.75em; border-radius: 2px; display: block; }
 .toc-menu a.is-active { font-weight: bold; }
-
-.card-header { background-color: #0066cc; }
+.toc-menu a:hover { background-color: whitesmoke; }
+.quickLink { line-height: .75; }
 .game-datetime { font-size: small; }
 .hassle-history { font-size: smaller; margin: 0px !important; color: darkgray; }
 .negative-value { color: red; }
@@ -24,9 +20,12 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .table .play-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
 .play-card > img:hover { transform: scale(1.04); }
 
+.card-header { background-color: #0066cc; }
+.toggleSection { transition: transform .35s ease; transform-origin: center; margin-right: 0.25em; cursor: pointer; }
+.toggleCollapsed { transform: rotate(-90deg) }
+
 /* Bulma overrides */
 .menu-label { color: black; background-color: #FF8C00; padding: 5pt; }
-.menu-label strong { color: black; font-weight:bold; }
 .navbar-brand { padding-right: 1rem; color: LightGreen; font-weight: bold; }
 .nav-link { color: dodgerblue; font-weight: bold; }
 

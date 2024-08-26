@@ -6,6 +6,8 @@
 *.docx
 *.zip
 *.pdf
+docs/mods/css/bulma.css
+docs/mods/css/presentationStyle.css
 src/samples/
 
 # User-specific files

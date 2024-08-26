@@ -8,16 +8,22 @@
       visible to all players and the cards in their own hand.</para>
       <list class="bullet">
         <listItem><para><externalLink><linkText>Game over</linkText>
-          <linkUri>./samples/GameOver/Amy.html</linkUri></externalLink><lineBreak/>
+          <linkUri>./samples/GameOver/Amy.html</linkUri>
+          <linkTarget>_self</linkTarget></externalLink><lineBreak/>
           Always shows the cards in hand for all players at the end of the game, and
-          the score cards for each hand played in the game.</para></listItem>
+          the score cards for each hand played in the game. The target was set to
+          $250,000</para></listItem>
         <listItem><para><externalLink><linkText>In progress</linkText>
-          <linkUri>./samples/InProgress/Amy.html</linkUri></externalLink><lineBreak/>
-          Only shows the specific players cards in hand, and the score cards for any
-          previous hands completed in the game. A button is provided to simulate what
-          the player would see when they display there own details.</para></listItem>
+          <linkUri>./samples/InProgress/Janis.html</linkUri>
+          <linkTarget>_self</linkTarget></externalLink><lineBreak/>
+          A button is provided to show the in-hand cards that a player would normally
+          see in the game when they display their own details. The cards in the players
+          stash are shown but no score cards because it is the first hand of the game.
+          The order of the players is also different to show the effect of automatically
+          selecting the Dealer for a game.</para></listItem>
         <listItem><para><externalLink><linkText>Long game</linkText>
-          <linkUri>./samples/LongGame/Amy.html</linkUri></externalLink><lineBreak/>
+          <linkUri>./samples/LongGame/Amy.html</linkUri>
+          <linkTarget>_self</linkTarget></externalLink><lineBreak/>
           This is another completed game, however the target was set to $500,000 which
           resulted in more hands having to be played.</para></listItem>
       </list>

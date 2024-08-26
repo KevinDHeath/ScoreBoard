@@ -17,7 +17,7 @@
 
   <div class="column">
     <nav class="menu sticky">
-      <p class="menu-label"><strong>@Player?.Name</strong></p>
+      <p class="menu-label">@Player?.Name</p>
       <nav class="my-1 px-2 @button.Class" role="navigation" title="For testing only">
         <a class="button is-danger is-dark" @onclick="active.Toggle">@active.Text</a>
       </nav>
@@ -95,7 +95,7 @@
 
   <div class="column">
     <nav class="menu sticky">
-      <p class="menu-label"><strong>Players</strong></p>
+      <p class="menu-label">Players</p>
       <ul class="toc-menu" style="list-style-type: none; margin-left: 0;">
         @if( Service.Current is not null )
         {

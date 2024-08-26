@@ -1,9 +1,23 @@
-.table { border: none !important; }
-.table .game-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
-.score-card .align-right { text-align: right; }
-.player-current { font-style: italic; font-weight: bold; }
-.game-datetime { font-size: small; }
-.negative-value { color: red; }
-.hassle-history { font-size: smaller; margin: 0px !important; color: darkgray; }
-.fixedheader { padding-bottom: 5px; }
+/* SHFB overrides */
 .pageHeader { height: 3.5rem; background-color: #333333; padding-top: 4px; }
+.fixedheader { padding-bottom: 5px; }   /* used in place of px-4 on main.top-row and article in MainLayout.razor */
+html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
+
+/* Grass.Play */
+.sticky { position: sticky; top: 0px; }
+.table { border: none !important; }
+.toc-menu { line-height: 2em; }
+.toc-menu a { color: dodgerblue; padding-left: 0.75em; border-radius: 2px; display: block; }
+.toc-menu a.is-active { font-weight: bold; }
+.toc-menu a:hover { background-color: whitesmoke; }
+.quickLink { line-height: .75; }
+.game-datetime { font-size: small; }
+.hassle-history { font-size: smaller; margin: 0px !important; color: darkgray; }
+.negative-value { color: red; }
+.player-current { font-style: italic; color: white; margin-left: 12px; }
+.score-card .align-right { text-align: right; }
+.table .game-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
+.table .play-card { text-align: center; padding: 3px; width: 123px; height: 172px; } /* 70% of actual image size */
+.play-card > img:hover { transform: scale(1.04); }
+
+.player-totals { margin-bottom: 0px; font-size: larger; }

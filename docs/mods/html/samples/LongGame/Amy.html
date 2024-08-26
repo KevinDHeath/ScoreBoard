@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-  <title>Long game</title>
+  <title>Long game - Amy</title>
   <meta name="Title" content="Grass game" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,13 +20,17 @@
   <div class="fixedLayout">
     <div class="fixedHeader">
       <div class="pageHeader level mb-0 py-2 px-4">
-        <div class="level-left">Game target: $500,000</div>
+        <div class="level-left"><div class="level-item">Grass</div></div>
         <div class="level-center">John won</div>
-        <div class="level-right game-datetime">July 2, 2024 10:05 PM</div>
+        <div class="level-right"><div class="level-item game-datetime">July 2, 2024 10:05 PM</div></div>
       </div>
     </div>
+    <nav class="breadcrumb my-1 px-2" role="navigation">
+      <ul><li><a href="../../f3d1fbdd-238f-4154-b8c3-ae5ca8bd54b9.htm">Docs</a></li><li class="is-active"><a href="#">Long game</a></li></ul>
+    </nav>
     <hr style="margin-top: 10px; margin-bottom: 10px; border-top: 1px solid white;" />
-    <div class="fixedContent">
+
+    <div class="fixedContent px-4">
       <nav id="showInPlay" class="my-1 px-2 is-hidden" role="navigation">
         <a id="inPlay" class="button" onclick="toggleInPlay()">Show in hand</a>
       </nav>
@@ -35,7 +39,7 @@
         <div class="column">
           <nav class="menu sticky">
             <p class="menu-label"><strong>Amy</strong></p>
-            <ul id="InThisArticleMenu" class="menu-list">
+            <ul id="InThisArticleMenu" class="menu-list" style="list-style-type: none; margin-left: .25em;">
               <li><a id="inHandLink" class="quickLink is-hidden">In hand</a></li>
               <li><a class="quickLink">Stash pile</a></li>
               <li><a id="scoreCardsLink" class="quickLink is-hidden">Score cards</a></li>
@@ -43,36 +47,36 @@
           </nav>
         </div>
         <div class="column content is-8">
-          <table class="table">
-            <tr>
-              <td class="game-card"><img class="image" title="played (round 6)" src="..\..\..\media\Market-Open.png"></td>
-              <td><p style="margin-bottom: 0px;">Game total: $417,000<br/>Stash total:  $25,000</p></td>
-            </tr>
-          </table>
+          <table class="table"><tr>
+            <td class="game-card"><img class="image" src="..\..\..\media\Market-Open.png"></td>
+            <td><span class="player-totals">Game total: $417,000<br/>Stash total:  $25,000</span>
+              <div style="height: 110px; overflow: auto;"><table style="height: 110px;" class="table"><tr>
+                <td><ul style="margin-left: 9px; margin-top: 0px;">
+                  <li class="hassle-history">Market Open (round 6)</li>
+                </ul></td>
+              </tr></table></div>
+            </td>
+          </tr></table>
           <div id="inHand" class="is-hidden">
-            <h2 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>In hand</h2>
-            <table class="table">
-              <tr>
-                <td class="game-card"><img class="image" src="..\..\..\media\Skim-TheBanker.png"></td>
-                <td class="game-card"><img class="image" src="..\..\..\media\Nirvana-Stonehigh.png"></td>
-                <td class="game-card"><img class="image" src="..\..\..\media\Protection-LustConquersAll.png"></td>
-                <td class="game-card"><img class="image" src="..\..\..\media\Market-Open.png"></td>
-                <td class="game-card"><img class="image" src="..\..\..\media\Market-Open.png"></td>
-                <td class="game-card"><img class="image" src="..\..\..\media\HeatOff-Felony.png"></td>
-              </tr>
-            </table>
+            <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>In hand</h3>
+            <table class="table"><tr>
+              <td class="game-card"><img class="image" src="..\..\..\media\Skim-TheBanker.png"></td>
+              <td class="game-card"><img class="image" src="..\..\..\media\Nirvana-Stonehigh.png"></td>
+              <td class="game-card"><img class="image" src="..\..\..\media\Protection-LustConquersAll.png"></td>
+              <td class="game-card"><img class="image" src="..\..\..\media\Market-Open.png"></td>
+              <td class="game-card"><img class="image" src="..\..\..\media\Market-Open.png"></td>
+              <td class="game-card"><img class="image" src="..\..\..\media\HeatOff-Felony.png"></td>
+            </tr></table>
           </div>
-          <h2 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Stash pile</h2>
-          <table class="table">
-            <tr>
-              <td class="game-card"><img class="image" title="played (round 8)" src="..\..\..\media\Protection-CatchaBuzz.png"></td>
-            </tr>
-          </table>
+          <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Stash pile</h3>
+          <table class="table"><tr>
+            <td class="game-card"><img class="image" title="played (round 8)" src="..\..\..\media\Protection-CatchaBuzz.png"></td>
+          </tr></table>
           <div id="scoreCards" class="">
-            <h2 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Score cards</h2>
+            <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Score cards</h3>
             <div class="columns is-multiline">
             <div class="column">
-              <table class="score-card">
+              <table class="table score-card">
                 <tr><th colspan='2'>4th Hand</th></tr>
                 <tr><td>Protected profit</td><td class="align-right">25,000</td></tr>
                 <tr><td>+ At risk profit</td><td class="align-right">0</td></tr>
@@ -85,7 +89,7 @@
               </table>
             </div>
             <div class="column">
-              <table class="score-card">
+              <table class="table score-card">
                 <tr><th colspan='2'>3rd Hand</th></tr>
                 <tr><td>Protected profit</td><td class="align-right">0</td></tr>
                 <tr><td>+ At risk profit</td><td class="align-right">180,000</td></tr>
@@ -98,7 +102,7 @@
               </table>
             </div>
             <div class="column">
-              <table class="score-card">
+              <table class="table score-card">
                 <tr><th colspan='2'>2nd Hand</th></tr>
                 <tr><td>Protected profit</td><td class="align-right">150,000</td></tr>
                 <tr><td>+ At risk profit</td><td class="align-right">30,000</td></tr>
@@ -111,7 +115,7 @@
               </table>
             </div>
             <div class="column">
-              <table class="score-card">
+              <table class="table score-card">
                 <tr><th colspan='2'>1st Hand</th></tr>
                 <tr><td>Protected profit</td><td class="align-right">0</td></tr>
                 <tr><td>+ At risk profit</td><td class="align-right">160,000</td></tr>
@@ -129,8 +133,8 @@
         <div class="column">
           <nav class="menu sticky">
             <p class="menu-label"><strong>Players</strong></p>
-            <ul class="toc-menu">
-              <li><a class="player-current">Amy</a></li>
+            <ul class="toc-menu" style="list-style-type: none; margin-left: 0px;">
+              <li class="player-current">Amy</li>
               <li><a href="Bob.html">Bob</a></li>
               <li><a href="Janis.html">Janis</a></li>
               <li><a href="John.html">John</a></li>
@@ -139,8 +143,8 @@
         </div>
       </div>
     </div>
-  </div>
 
+  </div>
   <script>$(function () {
     initializePage();
     InitializeQuickLinks();
