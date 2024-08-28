@@ -11,7 +11,9 @@ public partial class Home
 
 	private bool AllowRegister => Options.Players.Count < 6;
 
-	private bool AllowStart => HasWinner || (!AllowTests && Options.Players.Count > 1) || AllowTests;
+	private bool AllowStart => (CanStart && !AllowTests && Options.Players.Count > 1) || AllowTests;
+
+	private bool CanStart => Current == null || HasWinner;
 
 	private bool HasWinner => Current is not null && Current.Winner is not null;
 
@@ -60,6 +62,7 @@ public partial class Home
 
 	private void Refresh()
 	{
+		if( userTitle is not null ) { AllowTests = false; }
 		Current = Service.Current;
 		if( Current is null ) { return; }
 		Title = HasWinner ? "Game over" : "In progress...";
@@ -82,6 +85,8 @@ public partial class Home
 				Options.AddPlayer( playerName );
 				await ProtectedSessionStore.SetAsync( "user", playerName );
 				userTitle = "- " + playerName;
+				playerName = string.Empty;
+				Refresh();
 			}
 		}
 	}

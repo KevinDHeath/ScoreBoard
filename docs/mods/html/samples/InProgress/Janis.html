@@ -8,7 +8,6 @@
   <link rel="shortcut icon" href="../../../icons/favicon.ico" />
   <link rel="stylesheet" href="../../../css/bulma.css" />
   <link rel="stylesheet" href="../../../css/font-awesome.min.css" />
-  <link rel="stylesheet" href="../../../css/presentationStyle.css" />
   <link rel="stylesheet" href="../../../css/vs.min.css" />
   <link rel="stylesheet" href="../samples.css" />
   <script src="../../../scripts/jquery-3.5.1.min.js"></script>
@@ -17,45 +16,49 @@
   <script language="javascript" type="text/javascript">var hands = 0;</script>
 </head>
 <body>
-  <div class="fixedLayout">
-    <div class="fixedHeader">
-      <div class="pageHeader level mb-0 py-2 px-4">
-        <div class="level-left"><div class="level-item">Grass</div></div>
-        <div class="level-center">* <i>Playing round 14</i></div>
-        <div class="level-right"><div class="level-item game-datetime">June 19, 2024 07:58 PM</div></div>
-      </div>
+  <div class="fixedHeader">
+    <div class="pageHeader level is-mobile mb-0 py-2 px-4">
+      <div class="level-left"><div class="level-item">Grass</div></div>
+      <div class="level-center"></div>
+      <div class="level-right"><div class="level-item game-datetime">June 19, 2024 07:58 PM</div></div>
     </div>
-    <nav class="breadcrumb my-1 px-2" role="navigation">
-      <ul><li><a href="../../f3d1fbdd-238f-4154-b8c3-ae5ca8bd54b9.htm">Docs</a></li><li class="is-active"><a href="#">In progress</a></li></ul>
-    </nav>
-    <hr style="margin-top: 10px; margin-bottom: 10px; border-top: 1px solid white;" />
+  </div>
+  <nav class="breadcrumb my-1 px-2" role="navigation">
+    <ul><li><a href="../../f3d1fbdd-238f-4154-b8c3-ae5ca8bd54b9.htm">Docs</a></li><li class="is-active"><a href="#">In progress</a></li></ul>
+  </nav>
+  <hr style="margin-top: 10px; margin-bottom: 10px; border-top: 1px solid white;" />
 
-    <div class="fixedContent px-4">
-      <div class="columns pl-2 pr-2 fixedContent">
-        <div id="Resizer" class="is-hidden"></div>
-        <div class="column">
-          <nav class="menu sticky">
-            <p class="menu-label"><strong>Janis</strong></p>
-            <nav id="showInPlay" class="my-1 px-2" role="navigation" title="For testing only">
-              <a id="inPlay" class="button is-danger is-dark" onclick="toggleInPlay()">Show in hand</a>
-            </nav>
-            <ul id="InThisArticleMenu" class="menu-list" style="list-style-type: none; margin-left: .25em;">
-              <li><a id="inHandLink" class="quickLink is-hidden">In hand</a></li>
-              <li><a class="quickLink">Stash pile</a></li>
-              <li><a id="scoreCardsLink" class="quickLink is-hidden">Score cards</a></li>
-            </ul>
+  <div class="fixedContent px-4">
+    <div class="columns pl-2 pr-2 fixedContent">
+      <div id="Resizer" class="is-hidden"></div>
+      <div class="column">
+        <nav class="menu sticky">
+          <p class="menu-label">Janis</p>
+          <nav id="showInPlay" class="my-1 px-2" role="navigation" title="For testing only">
+            <a id="inPlay" class="button is-danger is-dark" onclick="toggleInPlay()">Show in hand</a>
           </nav>
-        </div>
-        <div class="column content is-8">
-          <table class="table"><tr>
+          <ul id="InThisArticleMenu" class="menu-list" style="list-style-type: none; margin-left: .25em;">
+            <li><a id="inHandLink" class="quickLink is-hidden">In hand</a></li>
+            <li><a class="quickLink">Stash pile</a></li>
+            <li><a id="scoreCardsLink" class="quickLink is-hidden">Score cards</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="column content is-8">
+        <div class="notification is-primary is-dark p-1 mb-1">Playing round 14</div>
+        <table class="table">
+          <tr>
             <td class='game-card' style='vertical-align: middle; border: 1px solid;'><i>Market not Active</i></td>
-            <td><span class="player-totals">Game total: $0<br>Stash total: $0</span>
+            <td>
+              <span class="player-totals">Game total: $0<br>Stash total: $0</span>
               <div style="height: 110px; overflow: auto;"><table style="height: 110px;" class="table"><tr><td></td></tr></table></div>
             </td>
-          </tr></table>
-          <div id="inHand" class="is-hidden">
-            <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>In hand</h3>
-            <table class="table"><tr>
+          </tr>
+        </table>
+        <div id="inHand" class="is-hidden">
+          <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>In hand</h3>
+          <table class="table">
+            <tr>
               <td class="play-card"><img class="image" title="" src="..\..\..\media\Peddle-Homegrown.png" /></td>
               <td class="play-card"><img class="image" title="" src="..\..\..\media\Peddle-Columbia.png" /></td>
               <td class="play-card"><img class="image" title="" src="..\..\..\media\HeatOff-Felony.png" /></td>
@@ -63,33 +66,34 @@
               <td class="play-card"><img class="image" title="" src="..\..\..\media\Peddle-Jamaica.png" /></td>
               <td class="play-card"><img class="image" title="" src="..\..\..\media\Skim-TheBanker.png" /></td>
               <td class="play-card"><img class="image" title="" src="..\..\..\media\HeatOn-Felony.png" /></td>
-            </tr></table>
-          </div>
-          <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Stash pile</h3>
-          <table class="table"><tr>
+            </tr>
+          </table>
+        </div>
+        <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Stash pile</h3>
+        <table class="table">
+          <tr>
             <td><i>Nothing</i></td>
-          </tr></table>
-          <div id="scoreCards" class="is-hidden">
-            <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Score cards</h3>
-            <div class="column">
-            </div>
+          </tr>
+        </table>
+        <div id="scoreCards" class="is-hidden">
+          <h3 class="quickLinkHeader"><span class="icon toggleSection"><i class="fa fa-angle-down"></i></span>Score cards</h3>
+          <div class="column">
           </div>
         </div>
-        <div class="column">
-          <nav class="menu sticky">
-            <p class="menu-label"><strong>Players</strong></p>
-            <ul class="toc-menu" style="list-style-type: none; margin-left: 0px;">
-              <li class="player-current">Janis</li>
-              <li><a href="John.html">John</a></li>
-              <li><a href="Amy.html">Amy</a></li>
-              <li><a href="Bob.html">Bob</a></li>
-            </ul>
-          </nav>
-        </div>
+      </div>
+      <div class="column">
+        <nav class="menu sticky">
+          <p class="menu-label">Players</p>
+          <ul class="toc-menu" style="list-style-type: none; margin-left: 0px;">
+            <li class="player-current">Janis</li>
+            <li><a href="John.html">John</a></li>
+            <li><a href="Amy.html">Amy</a></li>
+            <li><a href="Bob.html">Bob</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
-
   <script>$(function () {
     initializePage();
     InitializeQuickLinks();

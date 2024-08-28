@@ -21,3 +21,8 @@ html, body { font-family: 'Lucida Sans', Helvetica, Arial, sans-serif; }
 .play-card > img:hover { transform: scale(1.04); }
 
 .player-totals { margin-bottom: 0px; font-size: larger; }
+.toggleSection { transition: transform .35s ease; transform-origin: center; margin-right: 0.25em; cursor: pointer; }
+.toggleCollapsed { transform: rotate(-90deg) }
+
+/* Bulma overrides */
+.menu-label { color: black; background-color: #FF8C00; padding: 5pt; }
