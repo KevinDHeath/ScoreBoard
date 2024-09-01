@@ -23,6 +23,18 @@ public class GameService : PassCardHandler
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public GameOptions Options { get { return _options; } set { _options = value; } }
 
+	/// <summary>Register player.</summary>
+	/// <param name="playerName">Player name.</param>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public void RegisterPlayer( string playerName )
+	{
+		if( _options is not null )
+		{
+			Options.AddPlayer( playerName );
+			OnGameChanged( new() );
+		}
+	}
+
 	/// <summary>Current game.</summary>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Game Current => _game;

@@ -45,10 +45,10 @@ public partial class Play
 	{
 		if( firstRender )
 		{
-			var res = await ProtectedSessionStore.GetAsync<string?>( "user" );
-			if( user is null && res.Value is not null )
+			string? name = await Home.GetName( JS );
+			if( user is null && name is not null )
 			{
-				user = res.Value;
+				user = name;
 				userTitle = "- " + user;
 			}
 			if( Player is not null ) { Refresh( Player ); }

@@ -1,14 +1,14 @@
 @page "/"
 @implements IDisposable
+@inject IJSRuntime JS
 @inject NavigationManager Navigation
 @inject GameService Service
-@inject ProtectedSessionStorage ProtectedSessionStore
 
 <PageTitle>Game @userTitle</PageTitle>
 
 <div class="columns m-1 is-multiline">
 
-  @if( CanStart )
+  @if( CanStart || AllowTests )
   {
     <div class="column is-2">
       <div class="card">

@@ -1,15 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Grass.Logic.Models;
+using Microsoft.JSInterop;
 namespace Grass.Play.Components.Pages;
 
 public partial class Home
 {
-	[Inject]
-	private IConfiguration? Configuration { get; set; }
-
 	private bool AllowTests { get; set; } = false;
 
-	private bool AllowRegister => Options.Players.Count < 6;
+	private bool AllowRegister => !Options.IsMaxPlayers && userTitle is null;
 
 	private bool AllowStart => (CanStart && !AllowTests && Options.Players.Count > 1) || AllowTests;
 
@@ -25,36 +23,22 @@ public partial class Home
 
 	private string playerName = string.Empty;
 	private string? userTitle = null;
+	private const string cTest = "allow-tests";
 
 	private void GameChanged( object? sender, EventArgs e ) => InvokeAsync( Refresh );
 
 	protected override void OnInitialized()
 	{
-		if( Configuration is not null )
-		{
-			string? val = Configuration["AllowTests"];
-			AllowTests = val != null && bool.Parse( val ); // comment out to switch off tests
-			Configuration = null;
-		}
 		Options = Service.Options;
-		if( Options is null )
-		{
-			Options = new();
-			if( AllowTests )
-			{
-				Options.AllowTests = true;
-				Options.AutoPlay = true;
-				Options.InProgress = false;
-			}
-		}
+		Options ??= new();
 	}
 
 	protected override async Task OnAfterRenderAsync( bool firstRender )
 	{
 		if( firstRender )
 		{
-			var res = await ProtectedSessionStore.GetAsync<string?>( "user" );
-			if( userTitle is null && res.Value is not null ) { userTitle = "- " + res.Value; }
+			string? name = await GetName( JS );
+			if( userTitle is null && name is not null && name != cTest ) { userTitle = "- " + name; }
 			Refresh();
 			Service.GameChanged += GameChanged;
 		}
@@ -62,10 +46,8 @@ public partial class Home
 
 	private void Refresh()
 	{
-		if( userTitle is not null ) { AllowTests = false; }
 		Current = Service.Current;
-		if( Current is null ) { return; }
-		Title = HasWinner ? "Game over" : "In progress...";
+		if( Current is not null ) { Title = HasWinner ? "Game over" : "In progress..."; }
 		StateHasChanged();
 	}
 
@@ -75,19 +57,34 @@ public partial class Home
 		GC.SuppressFinalize( this );
 	}
 
+	internal static async Task<string?> GetName( IJSRuntime JS ) =>
+		JS != null ? await JS.InvokeAsync<string?>( "PlayApp.getName" ) : null;
+
+	private async Task<bool> SetName( string name ) =>
+		JS != null && await JS.InvokeAsync<bool>( "PlayApp.setName", name );
+
 	private async Task AddPlayer()
 	{
-		if( Options is not null && Options.CanAddPlayer( playerName ) )
+		bool ok = false;
+		if( string.Equals( playerName, cTest, StringComparison.OrdinalIgnoreCase ) )
 		{
-			var res = await ProtectedSessionStore.GetAsync<string?>( "user" );
-			if( res.Value is null )
+			ok = true;
+			AllowTests = ok;
+			Options.AllowTests = AllowTests;
+		}
+		else if( Options is not null && Options.CanAddPlayer( playerName ) )
+		{
+			ok = await SetName( playerName );
+			if( ok )
 			{
-				Options.AddPlayer( playerName );
-				await ProtectedSessionStore.SetAsync( "user", playerName );
+				Service.RegisterPlayer( playerName );
 				userTitle = "- " + playerName;
-				playerName = string.Empty;
-				Refresh();
 			}
+		}
+		if( ok )
+		{
+			playerName = string.Empty;
+			StateHasChanged();
 		}
 	}
 

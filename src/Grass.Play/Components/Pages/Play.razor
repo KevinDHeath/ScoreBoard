@@ -1,8 +1,8 @@
 @page "/play/{id:int}"
 @implements IDisposable
+@inject IJSRuntime JS
 @inject GameService Service
 @inject PlayState PlayState
-@inject ProtectedSessionStorage ProtectedSessionStore
 
 <PageTitle>Play @userTitle</PageTitle>
 
