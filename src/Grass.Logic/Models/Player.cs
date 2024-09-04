@@ -7,7 +7,7 @@ namespace Grass.Logic.Models;
 [System.Diagnostics.DebuggerDisplay( "{Name}" )]
 public class Player( string name, int id = 0 )
 {
-	private const string cPlay = "Take a turn";
+	private const string cPlay = "Play a card";
 	private const string cPass = "Pass a card";
 	private const string cMiss = "Miss a turn";
 
@@ -88,7 +88,7 @@ public class Player( string name, int id = 0 )
 		if( Notify is not null ) { return Notify; }
 		return ToDo switch
 		{
-			Action.Play => cPlay,
+			Action.Play => cPlay + $" for round {Current.Round}",
 			Action.Pass => cPass,
 			Action.MissTurn => cMiss,
 			_ => Notify,

@@ -71,6 +71,8 @@ public partial class Home
 			ok = true;
 			AllowTests = ok;
 			Options.AllowTests = AllowTests;
+			Options.AutoPlay = AllowTests;
+			Options.InProgress = AllowTests;
 		}
 		else if( Options is not null && Options.CanAddPlayer( playerName ) )
 		{

@@ -19,6 +19,10 @@ public class GameService : PassCardHandler
 	public event EventHandler? GameChanged;
 	private void OnGameChanged( EventArgs e ) => GameChanged?.Invoke( this, e );
 
+	/// <summary>Current game.</summary>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public Game Current => _game;
+
 	/// <summary>Current game options.</summary>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public GameOptions Options { get { return _options; } set { _options = value; } }
@@ -35,13 +39,10 @@ public class GameService : PassCardHandler
 		}
 	}
 
-	/// <summary>Current game.</summary>
-	[EditorBrowsable( EditorBrowsableState.Never )]
-	public Game Current => _game;
-
 	/// <summary>Setup and start a new Grass game.</summary>
 	/// <param name="options">Options for the Game.</param>
 	/// <returns>An initialized game object with the provided options.</returns>
+	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Game Setup( GameOptions options )
 	{
 		if( options.Players.Count == 0 && options.AllowTests ) { options.Players = Samples.GetPlayers(); }
@@ -82,13 +83,6 @@ public class GameService : PassCardHandler
 		_disposed = true;
 	}
 
-	private void RemoveListeners()
-	{
-		if( _game is null ) { return; }
-		if( _game.Auto ) { _game.GameChanged -= OnParanoiaPlayed; }
-		else { _game.GameChanged -= OnParanoiaInteractive; }
-	}
-
 	/// <summary>Reset the game.</summary>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public void ResetGame()
@@ -107,18 +101,23 @@ public class GameService : PassCardHandler
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Task<bool> GameAsync() => Task.Run( () => { return _game.Play(); } );
 
-	private void Reset( PlayOptions options, Player? ignore = null )
+	/// <summary>Checks whether a card can be played.</summary>
+	/// <param name="options">Card play options.</param>
+	/// <returns>Collection of amounts and players that can be used to hassle.</returns>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public Dictionary<Player, int> CheckPlay( PlayOptions options )
 	{
-		if( _game.TradeRq is not null ) { _game.TradeRq = null; }
-		foreach( Player player in _game.Players )
-		{
-			if( ignore is not null && player == ignore ) { continue; }
-			if( player.Notify is not null ) { player.Notify = null; }
-			if( player.Trade ) { player.ToDo = Player.Action.Nothing; }
-		}
-		options.Reset();
-		OnGameChanged( new() );
+		if( options.Player is null || options.Card is null ) { return []; }
+		Dictionary<Player, int> rtn = Decision.CheckPlay( _game, options );
+		options.CanDiscard = AllowDiscard( options.Card );
+		return rtn;
 	}
+
+	/// <summary>Returns a message for a specific card plays.</summary>
+	/// <param name="options">Card play options.</param>
+	/// <returns><c>null</c> if there is not message to display.</returns>
+	[EditorBrowsable( EditorBrowsableState.Never )]
+	public string? GetInfoMessage( PlayOptions options ) => Decision.GetInfoMessage( _game, options );
 
 	private static bool AllowDiscard( Card card )
 	{
@@ -132,23 +131,25 @@ public class GameService : PassCardHandler
 		return rtn;
 	}
 
-	/// <summary>Checks whether a card can be played.</summary>
-	/// <param name="options">Card play options.</param>
-	/// <returns>Collection of amounts and players that can be used to hassle.</returns>
-	[EditorBrowsable( EditorBrowsableState.Never )]
-	public Dictionary<Player, int> CheckPlay( PlayOptions options )
+	private void RemoveListeners()
 	{
-		if( options.Player is null || options.Card is null ) { return []; }
-		Dictionary<Player, int> rtn = Decision.CheckPlay( _game, options );
-		options.CanDiscard = AllowDiscard( options.Card );
-		return rtn;
+		if( _game is null ) { return; }
+		if( _game.Auto ) { _game.GameChanged -= OnParanoiaPlayed; }
+		else { _game.GameChanged -= OnParanoiaInteractive; }
 	}
 
-	/// <summary>Returns a message for specific card plays.</summary>
-	/// <param name="options">Card play options.</param>
-	/// <returns><c>null</c> if there is not message to display.</returns>
-	[EditorBrowsable( EditorBrowsableState.Never )]
-	public string? GetInfoMessage( PlayOptions options ) => Decision.GetInfoMessage( _game, options );
+	private void Reset( PlayOptions options, Player? ignore = null )
+	{
+		if( _game.TradeRq is not null ) { _game.TradeRq = null; }
+		foreach( Player player in _game.Players )
+		{
+			if( ignore is not null && player == ignore ) { continue; }
+			if( player.Notify is not null ) { player.Notify = null; }
+			if( player.Trade ) { player.ToDo = Player.Action.Nothing; }
+		}
+		options.Reset();
+		OnGameChanged( new() );
+	}
 
 	#region Action Methods
 
@@ -271,7 +272,7 @@ public class GameService : PassCardHandler
 
 	private readonly JsonSerializerOptions options = new() { WriteIndented = false };
 
-	/// <summary>Collection of Game summaries.</summary>
+	/// <summary>Collection of completed Game summaries.</summary>
 	public List<Summary> Summaries { get; set; } = [];
 
 	internal void StoreSummary( Game game ) => Summaries.Add( Summary.BuildSummary( game ) );
