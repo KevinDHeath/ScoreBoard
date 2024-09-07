@@ -176,15 +176,23 @@ internal class Rules
 					}
 					break;
 				}
-
-				// Trade
-				if( !wHand.Cards.Contains( other ) ) { return new( cTradeNotFound ); }
-				if( !hand.Cards.Contains( card ) ) { return new( cTradeNotFound ); }
-				Card.TransferCard( wHand.Cards, hand.Cards, other );
-				Card.TransferCard( hand.Cards, wHand.Cards, card );
-				if( comment ) { other.AddComment( $"trade with {with.Name} (round {hand.Round})" ); }
 				break;
 		}
+		return PlayResult.Success!;
+	}
+
+	internal static PlayResult Trade( Game game, Player player, Card card, Player with, Card other )
+	{
+		bool comment = game.Comment;
+		Hand hand = player.Current;
+		Hand wHand = with.Current;
+
+		if( !wHand.Cards.Contains( other ) ) { return new( cTradeNotFound ); }
+		if( !hand.Cards.Contains( card ) ) { return new( cTradeNotFound ); }
+		Card.TransferCard( wHand.Cards, hand.Cards, other );
+		Card.TransferCard( hand.Cards, wHand.Cards, card );
+		if( comment ) { other.AddComment( $"trade with {with.Name} (round {hand.Round})" ); }
+
 		return PlayResult.Success!;
 	}
 

@@ -220,7 +220,7 @@ public class GameService : PassCardHandler
 		lock( _lock ) { rq = _game.TradeRq; _game.TradeRq = null; }
 		if( rq is null || rq.Player is null || rq.Card is null ) { return rtn; }
 
-		rtn = Rules.Play( _game, rq.Player, rq.Card, options.Player, options.Card );
+		rtn = Rules.Trade( _game, rq.Player, rq.Card, options.Player, options.Card );
 		if( rtn == PlayResult.Success )
 		{
 			rq.Player.Notify = $"Trade accepted by {options.Player.Name}";
