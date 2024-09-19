@@ -132,11 +132,14 @@ public partial class Play
 		string wrk = card is not null
 			? GameCard( card, showTitle: false )
 			: "<td class='game-card' style='vertical-align: middle; border: 1px solid;'><i>Market not Active</i></td>";
-		_ = rtn.AppendLine( wrk ) 
+		_ = rtn.AppendLine( wrk )
 
-		.Append( $"<td><p style=\"margin-bottom: 0px; font-size: larger;\">Game total: {Home.FormatAmt( Player?.Total, true )}<br>" )
-		.Append( $"Stash total: {( Hand.Protected + Hand.UnProtected ):$###,##0}</p>" );
-
+		.Append( $"<td><p style=\"margin-bottom: 0px; font-size: larger;\">Game total: {Home.FormatAmt( Player?.Total, true )}" );
+		if( Service.Current.Winner is null )
+		{
+			rtn.Append( "<br>" )
+			.Append( $"Stash total: {( Hand.Protected + Hand.UnProtected ):$###,##0}</p>" );
+		}
 		if( Hand.HasslePile.Count < 1 ) { _ = rtn.Append( "</td>" ); }
 		else
 		{

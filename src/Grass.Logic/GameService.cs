@@ -46,6 +46,7 @@ public class GameService : PassCardHandler
 	public Game Setup( GameOptions options )
 	{
 		if( options.Players.Count == 0 && options.AllowTests ) { options.Players = Samples.GetPlayers(); }
+		//if( options.Players.Count == 0 && options.AllowTests ) { options.Players = Samples.GetMinPlayers(); }
 		foreach( var player in options.Players ) { player.Reset(); }
 		if( options.Players.Count < 2 ) { return Current; }
 		_game = new( options.Players, options.Target, options.ReversePlay, options.CardComments, options.AutoPlay );
@@ -55,6 +56,7 @@ public class GameService : PassCardHandler
 		{
 			_game.Auto = false; // switch off auto-play when populating in-progress sample
 			Samples.InProgress( _game );
+			//Samples.TestParanoia( _game );
 			_game.GameChanged += OnParanoiaInteractive;
 			_game.SetNextPlayer();
 		}
@@ -65,7 +67,7 @@ public class GameService : PassCardHandler
 		}
 		else
 		{
-			_game.GameChanged += OnParanoiaInteractive; 
+			_game.GameChanged += OnParanoiaInteractive;
 			_game.StartHand();
 			_game.SetNextPlayer();
 		}

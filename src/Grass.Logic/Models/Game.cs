@@ -214,8 +214,8 @@ public class Game
 		Dictionary<Player, Card> dict = new( cardsToPass );
 		if( dict.ContainsKey( player ) ) { return false; }
 		if( !player.Current.Cards.Contains( card ) ) { return false; }
+		player.ToDo = Player.Action.Nothing; // Must do before adding card to collection
 		cardsToPass.Add( new KeyValuePair<Player, Card>( player, card ) );
-		player.ToDo = Player.Action.Nothing;
 		return true;
 	}
 
@@ -355,8 +355,8 @@ public class Game
 				Take( current.Current );
 				return false;
 			}
-
 			current.ToDo = Player.Action.Nothing;
+
 			int idx = PlayOrder.FindIndex( x => x == current ) + 1;
 			while( next is null )
 			{
@@ -364,8 +364,8 @@ public class Game
 				next = PlayOrder[idx];
 				if( next.Current.Turns < 0 ) // Miss turns due to previously playing Paranoia
 				{
-					next.ToDo = Player.Action.MissTurn;
 					next.Current.Turns++;
+					next.ToDo = Player.Action.MissTurn;
 					next.Current.Round++;
 					next = null;
 					idx++;

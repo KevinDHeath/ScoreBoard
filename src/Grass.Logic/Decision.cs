@@ -276,7 +276,7 @@ internal class Decision
 					val = other.Current.HighestUnProtected.Info.Value;
 				}
 			}
-			if( val >= Rules.cBonusAmount ) { rtn.Add( other, val ); }
+			if( val > 0 ) { rtn.Add( other, val ); }
 		}
 		if( rtn.Count > 0 ) { rtn = rtn.OrderByDescending( p => p.Value ).ToDictionary( p => p.Key, p => p.Value ); }
 		return rtn;

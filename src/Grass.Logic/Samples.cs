@@ -274,12 +274,54 @@ public class Samples
 	#endregion
 
 	/// <summary>Get players</summary>
-	public static List<Player> GetPlayers() => [
+	public static List<Player> GetMinPlayers() => [
 			new( "Amy", 1 ),
-			new( "Bob", 2 ),
-			new( "Janis", 3 ),
-			new( "John", 4 ),
+			new( "Bob", 2 )
 		];
+
+	/// <summary>Populate dealt cards</summary>
+	public static void TestParanoia( Game game )
+	{
+		if( game.Players.Count != 2 ) { return; } // Can only have 2 players
+		Player? dealer = game.Players.FirstOrDefault( p => p.Id == 2 ); // Bob
+		if( dealer is not null ) { game.Dealer = dealer; }
+		game.StartHand();
+
+		// Put dealt cards back in the stack
+		foreach( Player p in game.PlayOrder ) { if( p.Id < 3 ) BackToStack( game, p.Current.Cards ); }
+		foreach( Player player in game.Players )
+		{
+			Hand hand = player.Current;
+			switch( player.Id )
+			{
+				case 1: // Amy
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cOnDetained );
+					game.Take( hand, CardInfo.cSoldout );
+					game.Take( hand, CardInfo.cOffFelony );
+					game.Take( hand, CardInfo.cDoublecross );
+					game.Take( hand, CardInfo.cClose );
+					break;
+
+				case 2: // Bob
+					game.Take( hand, CardInfo.cDoublecross );
+					game.Take( hand, CardInfo.cOffSearch );
+					game.Take( hand, CardInfo.cJamaica );
+					game.Take( hand, CardInfo.cOnBust );
+					game.Take( hand, CardInfo.cStonehigh );
+					game.Take( hand, CardInfo.cOpen );
+					break;
+			}		
+		}
+	}
+
+	/// <summary>Get players</summary>
+	public static List<Player> GetPlayers() => [
+		new( "Amy", 1 ),
+		new( "Bob", 2 ),
+		new( "Janis", 3 ),
+		new( "John", 4 ),
+	];
 
 	#region Results to Console
 
