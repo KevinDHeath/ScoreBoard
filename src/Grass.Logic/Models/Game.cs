@@ -181,11 +181,13 @@ public class Game
 				high = player.Current.NetScore;
 				bonus = player;
 			}
+			player.AddScore( this, last, player.Current );
 		}
 		if( bonus is not null )
 		{
 			bonus.Current.Bonus = Rules.cBonusAmount;
 			bonus.Total += bonus.Current.Bonus;
+			bonus.AddScore( this, last, bonus.Current, Rules.cBonusAmount );
 		}
 
 		// Check for game winner with the highest total

@@ -54,6 +54,9 @@ public class Player( string name, int id = 0 )
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public List<Hand> Completed { get; private set; } = [];
 
+	/// <summary>Score of hands completed for the player.</summary>
+	public List<Score> Scores { get; private set; } = [];
+
 	/// <summary>Current hand for the player.</summary>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public Hand Current
@@ -79,6 +82,34 @@ public class Player( string name, int id = 0 )
 	/// <inheritdoc/>
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public override string ToString() => $"{Name} game total {Total:$###,##0}";
+
+	internal void AddScore( Game game, Player? last, Hand hand, int bonus = 0 )
+	{
+		if( bonus == 0 )
+		{
+			string by = last is not null ? "by " + last.Name : string.Empty;
+			string reason = game.StackCount == 0 ? "Stack ran out" : $"Market closed {by}".Trim();
+
+			Score score = new()
+			{
+				Number = hand.Count,
+				Protected = hand.Protected,
+				UnProtected = hand.UnProtected,
+				Skimmed = hand.Skimmed,
+				HighestPeddle = -hand.HighestPeddle,
+				ParanoiaFines = hand.ParanoiaFines,
+				NetProfit = hand.NetScore,
+				Bonus = bonus,
+				Reason = reason
+			};
+			Scores.Add( score );
+		}
+		if( bonus > 0 )
+		{
+			Score? score = Scores.Find( s => s.Number == hand.Count );
+			if( score is not null ) { score.Bonus = bonus; }
+		}
+	}
 
 	/// <summary>Set the notification message for the player.</summary>
 	/// <returns><c>null</c> if there is no notification message.</returns>

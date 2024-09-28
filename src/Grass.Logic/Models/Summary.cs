@@ -58,24 +58,8 @@ public class Summary
 
 		foreach( Player player in game.PlayOrder )
 		{
-			List<Score> scoreList = new();
-			List<Hand> reverse = player.Completed.OrderByDescending( h => h.Count ).ToList();
-			foreach( Hand hand in reverse )
-			{
-				Score score = new()
-				{
-					Number = hand.Count,
-					Protected = hand.Protected,
-					UnProtected = hand.UnProtected,
-					Skimmed = hand.Skimmed,
-					HighestPeddle = -hand.HighestPeddle,
-					ParanoiaFines = hand.ParanoiaFines,
-					NetProfit = hand.NetScore,
-					Bonus = hand.Bonus
-				};
-				scoreList.Add( score );
-			}
-			rtn.Players.Add( player.Name, scoreList );
+			List<Score> scores = player.Scores.OrderByDescending( s => s.Number ).ToList();
+			rtn.Players.Add( player.Name, scores );
 		}
 
 		return rtn;

@@ -42,4 +42,7 @@ public class Score
 
 	/// <summary>Total for the player's hand.</summary>
 	public int Total => NetProfit + Bonus;
+
+	/// <summary>End of hand reason.</summary>
+	public string Reason { get; internal set; } = string.Empty;
 }

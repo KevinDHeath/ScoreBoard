@@ -19,7 +19,7 @@ public partial class Home
 
 	private Game? Current { get; set; }
 
-	private string Title { get; set; } = "Not started";
+	private string Title { get; set; } = string.Empty;
 
 	private string playerName = string.Empty;
 	private string? userTitle = null;
@@ -47,7 +47,8 @@ public partial class Home
 	private void Refresh()
 	{
 		Current = Service.Current;
-		if( Current is not null ) { Title = HasWinner ? "Game over" : "In progress..."; }
+		if( Current is null ) { Title = "Not started"; }
+		else { Title = HasWinner ? "Game over" : "In progress..."; }
 		StateHasChanged();
 	}
 

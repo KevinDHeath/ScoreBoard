@@ -185,28 +185,28 @@ public partial class Play
 	private string ScoreCardsHtml()
 	{
 		if( Hand is null ) { return string.Empty; }
-		List<Hand> scores = [];
-		if( Player is not null && Player.Completed.Count > 0 )
+		List<Score> scores = [];
+		if( Player is not null && Player.Scores.Count > 0 )
 		{
-			scores = Player.Completed.OrderByDescending( h => h.Count ).ToList();
+			scores = Player.Scores.OrderByDescending( s => s.Number ).ToList();
 		}
 
 		string sep = "</td><td class=\"align-right\">";
 		StringBuilder rtn = new();
-		foreach( Hand hand in scores )
+		foreach( Score score in scores )
 		{
-			int total = hand.NetScore + hand.Bonus;
-			int peddle = -hand.HighestPeddle;
+			int total = score.NetProfit + score.Bonus;
+			int peddle = -score.HighestPeddle;
 			_ = rtn.AppendLine( "<div class=\"column\">" )
 			.AppendLine( "<table class=\"score-card\">" )
-			.AppendLine( $"<tr><th colspan=\"2\">{hand.Count.DisplayWithSuffix()} Hand</th></tr>" )
-			.AppendLine( $"<tr><td>Protected profit{sep}{Home.FormatAmt( hand.Protected )}</td></tr>" )
-			.AppendLine( $"<tr><td>+ At risk profit{sep}{Home.FormatAmt( hand.UnProtected )}</td></tr>" )
-			.AppendLine( $"<tr><td>- Banker's skim /+ bonus{sep}{Home.FormatAmt( hand.Skimmed )}</td></tr>" )
+			.AppendLine( $"<tr><th colspan=\"2\">{score.Number.DisplayWithSuffix()} Hand - {score.Reason}</th></tr>" )
+			.AppendLine( $"<tr><td>Protected profit{sep}{Home.FormatAmt( score.Protected )}</td></tr>" )
+			.AppendLine( $"<tr><td>+ At risk profit{sep}{Home.FormatAmt( score.UnProtected )}</td></tr>" )
+			.AppendLine( $"<tr><td>- Banker's skim /+ bonus{sep}{Home.FormatAmt( score.Skimmed )}</td></tr>" )
 			.AppendLine( $"<tr><td>- Highest Peddle in hand{sep}{Home.FormatAmt( peddle )}</td></tr>" )
-			.AppendLine( $"<tr><td>- Paranoia{sep}{Home.FormatAmt( hand.ParanoiaFines )}</td></tr>" )
-			.AppendLine( $"<tr><td>= Net profit{sep}{Home.FormatAmt( hand.NetScore )}</td></tr>" )
-			.AppendLine( $"<tr><td nowrap>+ Bonus for winner of hand{sep}{Home.FormatAmt( hand.Bonus )}</td></tr>" )
+			.AppendLine( $"<tr><td>- Paranoia{sep}{Home.FormatAmt( score.ParanoiaFines )}</td></tr>" )
+			.AppendLine( $"<tr><td>= Net profit{sep}{Home.FormatAmt( score.NetProfit )}</td></tr>" )
+			.AppendLine( $"<tr><td nowrap>+ Bonus for winner of hand{sep}{Home.FormatAmt( score.Bonus )}</td></tr>" )
 			.AppendLine( $"<tr><td>Total{sep}{Home.FormatAmt( total )}</td></tr>" )
 			.AppendLine( $"</table>" )
 			.AppendLine( $"</div>" );
