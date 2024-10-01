@@ -334,7 +334,7 @@ public class Samples
 		if( winner is not null )
 		{
 			Console.WriteLine( $"{winner.Name} won with {winner.Total:$#,###,##0}" );
-			Console.WriteLine( $"{winner.Completed.Count} hand(s) played" );
+			Console.WriteLine( $"{winner.Scores.Count} hand(s) played" );
 			Console.WriteLine( $"{winner.Current.Round} rounds played in final hand - {game.EndReason}" );
 		}
 		Console.WriteLine( $"{game.Dealer.Name} was the Dealer" );
@@ -349,7 +349,7 @@ public class Samples
 		ConsoleColor dftColor = Console.ForegroundColor;
 		foreach( Player player in game.PlayOrder )
 		{
-			Hand? hand = player.Completed.LastOrDefault();
+			Hand? hand = player.Current;
 			if( hand is null ) { continue; }
 			Console.WriteLine();
 			Console.WriteLine( "------------------------------" );

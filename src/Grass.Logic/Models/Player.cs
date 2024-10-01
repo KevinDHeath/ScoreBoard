@@ -50,10 +50,6 @@ public class Player( string name, int id = 0 )
 	/// <summary>Name of the player.</summary>
 	public string Name { get; set; } = name;
 
-	/// <summary>List of hands completed for the player.</summary>
-	[EditorBrowsable( EditorBrowsableState.Never )]
-	public List<Hand> Completed { get; private set; } = [];
-
 	/// <summary>Score of hands completed for the player.</summary>
 	public List<Score> Scores { get; private set; } = [];
 
@@ -63,7 +59,7 @@ public class Player( string name, int id = 0 )
 	{
 		get
 		{
-			_currentHand ??= new Hand { Player = Name, Count = Completed.Count + 1 };
+			_currentHand ??= new Hand { Player = Name, Count = Scores.Count + 1 };
 			return _currentHand;
 		}
 	}
@@ -130,7 +126,7 @@ public class Player( string name, int id = 0 )
 	{
 		Total = 0;
 		ResetCurrent();
-		Completed.Clear();
+		Scores.Clear();
 		ToDo = Action.Nothing;
 	}
 

@@ -23,13 +23,13 @@ internal class HtmlBuilder()
 		{
 			StringBuilder html = new( File.ReadAllText( fi.FullName ) );
 			_ = html.Replace( "{title}", "Auto play" );
-			_ = html.Replace( "{hand-count}", $"{p.Completed.Count}" );
+			_ = html.Replace( "{hand-count}", $"{p.Scores.Count}" );
 			_ = html.Replace( "{page-header}", PageHeader( game, p ) );
 			_ = html.Replace( "{menu-label}",  MenuLabel( p ) );
 			_ = html.Replace( "{hassle-pile}", HasslePile( p ) );
 			_ = html.Replace( "{in-hand}",     InHand( p ) );
 			_ = html.Replace( "{stash-pile}",  StashPile( p.Current ) );
-			_ = html.Replace( "{score-cards}", ScoreCards( p.Completed ) );
+			_ = html.Replace( "{score-cards}", ScoreCards( p.Scores ) );
 			_ = html.Replace( "{player-list}", PlayerList( game.Players, p.Name ) );
 
 			string outFile = p.Name + ".html";
@@ -129,28 +129,27 @@ internal class HtmlBuilder()
 		return rtn.ToString();
 	}
 
-	private static string ScoreCards( List<Hand> hands )
+	private static string ScoreCards( List<Score> scores )
 	{
-		if( hands.Count == 0 ) { return string.Empty; }
+		if( scores.Count == 0 ) { return string.Empty; }
 		StringBuilder rtn = new();
 		string indent = new( ' ', 8 );
 		string row = indent + @"      <tr><td";
 
-		List<Hand> list = hands.OrderByDescending( h => h.Count ).ToList();
 		_ = rtn.AppendLine( indent + "<div class=\"columns is-multiline\">" );
-		foreach( Hand hand in list )
+		foreach( Score score in scores )
 		{
-			int total = hand.NetScore + hand.Bonus;
+			int total = score.NetProfit + score.Bonus;
 			_ = rtn.AppendLine( indent + "  <div class=\"column\">" );
 			_ = rtn.AppendLine( indent + "    " + "<table class=\"score-card\">" );
-			_ = rtn.AppendLine( indent + @$"      <tr><th colspan='2'>{hand.Count.DisplayWithSuffix()} Hand</th></tr>" );
-			_ = rtn.AppendLine( row + $">Protected profit</td><td class=\"align-right\">{Format( hand.Protected )}</td></tr>" );
-			_ = rtn.AppendLine( row + $">+ At risk profit</td><td class=\"align-right\">{Format( hand.UnProtected )}</td></tr>" );
-			_ = rtn.AppendLine( row + $">- Banker's skim /+ bonus</td><td class=\"align-right\">{Format( hand.Skimmed )}</td></tr>" );
-			_ = rtn.AppendLine( row + $">- Highest Peddle in hand</td><td class=\"align-right\">{Format( hand.HighestPeddle )}</td></tr>" );
-			_ = rtn.AppendLine( row + $">- Paranoia</td><td class=\"align-right\">{Format( hand.ParanoiaFines )}</td></tr>" );
-			_ = rtn.AppendLine( row + $">= Net profit</td><td class=\"align-right\">{Format( hand.NetScore )}</td></tr>" );
-			_ = rtn.AppendLine( row + @$" nowrap>+ Bonus for winner of hand</td><td class='align-right'>{Format( hand.Bonus )}</td></tr>" );
+			_ = rtn.AppendLine( indent + @$"      <tr><th colspan='2'>{score.Number.DisplayWithSuffix()} Hand - {score.Reason}</th></tr>" );
+			_ = rtn.AppendLine( row + $">Protected profit</td><td class=\"align-right\">{Format( score.Protected )}</td></tr>" );
+			_ = rtn.AppendLine( row + $">+ At risk profit</td><td class=\"align-right\">{Format( score.UnProtected )}</td></tr>" );
+			_ = rtn.AppendLine( row + $">- Banker's skim /+ bonus</td><td class=\"align-right\">{Format( score.Skimmed )}</td></tr>" );
+			_ = rtn.AppendLine( row + $">- Highest Peddle in hand</td><td class=\"align-right\">{Format( score.HighestPeddle )}</td></tr>" );
+			_ = rtn.AppendLine( row + $">- Paranoia</td><td class=\"align-right\">{Format( score.ParanoiaFines )}</td></tr>" );
+			_ = rtn.AppendLine( row + $">= Net profit</td><td class=\"align-right\">{Format( score.NetProfit )}</td></tr>" );
+			_ = rtn.AppendLine( row + @$" nowrap>+ Bonus for winner of hand</td><td class='align-right'>{Format( score.Bonus )}</td></tr>" );
 			_ = rtn.AppendLine( row + $">Total</td><td class=\"align-right\">{Format( total )}</td></tr>" );
 			_ = rtn.AppendLine( indent + "    " + "</table>" );
 			_ = rtn.AppendLine( indent + "  </div>" );

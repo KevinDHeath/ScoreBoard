@@ -166,7 +166,6 @@ public class Game
 		foreach( Player player in Players )
 		{
 			player.Current.EndHand( banker );
-			player.Completed.Add( player.Current );
 		}
 		banker?.Current.EndHand( null ); // Recalculate the banker net score after all skims
 
